@@ -3,107 +3,1213 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Бот записи для СТО</title>
-<meta name="description" content="Попробуйте Telegram-бота записи на ремонт: клиент записывается сам, мастер получает заявку.">
+<title>Мотор СТО: демо Telegram-бота для записи на ремонт</title>
+<meta name="description" content="Демонстрация Telegram-бота для автосервиса: клиент записывается сам, владелец получает готовую заявку.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#e9edf3;--panel:#ffffff;--ink:#1b2433;--mute:#667085;--blue:#2b78c5;--bubble:#ffffff;--mine:#d8ecff;--chat:#c9d6e3;--amber:#f2a33a;--line:#d4dbe5}
-*{box-sizing:border-box;margin:0}
-body{font-family:"Golos Text",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px}
-:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
-.demo-bar{background:var(--ink);color:#cfd6e2;font-size:13px;text-align:center;padding:8px 16px}
-.wrap{max-width:1080px;margin:0 auto;padding:36px 20px 60px;display:grid;grid-template-columns:380px 1fr;gap:48px;align-items:start}
-@media(max-width:880px){.wrap{grid-template-columns:1fr;gap:32px}}
-h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;letter-spacing:-.03em;font-weight:800;margin-bottom:14px}
-.lead{color:var(--mute);font-size:18px;max-width:520px;margin-bottom:26px}
+/* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio, geometry.
+   Put this @layer first; product CSS outside the layer wins ordinary layout rules.
+   Native hidden and closed-dialog states take precedence over component display rules. */
+@layer od-layout {
+  [hidden]:not([hidden="until-found" i]) { display: none !important; }
+  dialog:not([open]) { display: none !important; }
 
-.phone{background:var(--ink);border-radius:38px;padding:12px;box-shadow:0 30px 60px -28px rgba(27,36,51,.55)}
-.scr{background:var(--chat);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;height:640px}
-@media(max-width:880px){.scr{height:560px}}
-.top{background:var(--panel);padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
-.ava{width:40px;height:40px;border-radius:50%;background:var(--amber);display:grid;place-items:center;font-weight:800;color:var(--ink)}
-.top b{display:block;font-size:15px}.top span{font-size:12px;color:var(--mute)}
-.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
-.m{max-width:84%;padding:9px 12px;border-radius:14px;font-size:15px;white-space:pre-line;box-shadow:0 1px 0 rgba(0,0,0,.06)}
-.m.bot{background:var(--bubble);align-self:flex-start;border-bottom-left-radius:4px}
-.m.me{background:var(--mine);align-self:flex-end;border-bottom-right-radius:4px}
-.kb{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 10px 12px}
-.kb button{background:rgba(255,255,255,.85);border:0;border-radius:10px;padding:11px 8px;font:500 14px "Golos Text";color:var(--blue);cursor:pointer}
-.kb button:hover{background:#fff}
-.kb button.wide{grid-column:1/-1}
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
 
-.owner{background:var(--panel);border-radius:22px;padding:22px;margin-bottom:28px}
-.owner h2{font-size:18px;margin-bottom:4px}
-.owner p.s{color:var(--mute);font-size:14px;margin-bottom:14px}
-.empty{color:var(--mute);font-size:15px;border:1px dashed var(--line);border-radius:14px;padding:16px}
-.order{border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:12px 14px;font-size:15px;white-space:pre-line;margin-bottom:10px;animation:in .35s ease-out}
-@keyframes in{from{opacity:0;transform:translateY(-6px)}}
-@media (prefers-reduced-motion:reduce){.order{animation:none}}
-.feat{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}
-@media(max-width:520px){.feat{grid-template-columns:1fr}}
-.feat b{display:block;margin-bottom:2px}
-.feat p{color:var(--mute);font-size:15px}
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-fill    { flex: 1 1 0; min-width: 0; }
+  .od-fixed   { flex: none; }
+  .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+
+  .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+
+  .od-icon { display: inline-block; inline-size: var(--od-icon-size, 1em); block-size: var(--od-icon-size, 1em); flex: none; }
+
+  .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .od-clamp-2 { -webkit-line-clamp: 2; }
+  .od-clamp-3 { -webkit-line-clamp: 3; }
+  .od-lines-2 { min-height: calc(2 * 1.4em); }
+  .od-nowrap  { white-space: nowrap; }
+  .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
+
+  .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+
+  .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+             padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+  .od-rail::-webkit-scrollbar { display: none; }
+  :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+  :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+
+  .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+:root [hidden]:where(:not([hidden="until-found" i])) { display: none; }
+/* /OD-LAYOUT-PRIMITIVES v1 */
+
+:root{
+  --bg:#0C0D0E; --bg-2:#121416; --surface:#171A1D; --surface-2:#1E2226; --surface-3:#262B30;
+  --line:#2A2F34; --line-2:#3A4047;
+  --text:#EDEEEF; --muted:#A9AFB5; --dim:#868D94;
+  --accent:#F5B800; --accent-ink:#141414; --accent-soft:rgba(245,184,0,.14);
+  --ok:#45D993; --ok-soft:rgba(69,217,147,.14); --bad:#FF7F6B; --bad-soft:rgba(255,127,107,.14);
+  --chat-bg:#0F1519; --bubble-bot:#1E272E; --bubble-me:#F5B800;
+
+  --f-display:"Unbounded", "Onest", system-ui, sans-serif;
+  --f-body:"Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-body:1.0625rem; --fs-small:.9375rem; --fs-xs:.8125rem;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px; --s10:128px;
+  --r-sm:8px; --r-md:14px; --r-lg:20px;
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in:cubic-bezier(.55,0,1,.45); --spring:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:160ms; --dur:240ms; --dur-exit:160ms;
+  --wrap:1320px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--f-body); font-size:var(--fs-body); line-height:1.55;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:100; opacity:.07; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+main{ overflow-x:hidden; width:100%; max-width:100%; }
+img{ max-width:100%; }
+a{ color:inherit; }
+button{ font:inherit; color:inherit; }
+h1,h2,h3,p{ margin:0; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:6px; }
+.wrap{ width:100%; max-width:var(--wrap); margin-inline:auto; padding-inline:var(--s6); }
+.mono{ font-family:var(--f-mono); }
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.skip{ position:absolute; left:var(--s4); top:-60px; z-index:200; background:var(--accent); color:var(--accent-ink); padding:var(--s3) var(--s4); border-radius:var(--r-sm); font-weight:600; text-decoration:none; }
+.skip:focus{ top:var(--s4); }
+
+/* ---------- top strip ---------- */
+.strip{
+  background:var(--accent); color:var(--accent-ink);
+  font-size:var(--fs-small); font-weight:600; line-height:1.4;
+}
+.strip .wrap{ display:flex; align-items:center; gap:var(--s3); min-height:44px; padding-block:var(--s2); }
+.strip-tape{ flex:none; width:28px; height:12px; border-radius:2px;
+  background:repeating-linear-gradient(-45deg,var(--accent-ink) 0 5px,transparent 5px 10px); }
+
+/* ---------- nav ---------- */
+.nav{ position:sticky; top:0; z-index:50; background:rgba(12,13,14,.86); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+.nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:var(--s4); min-height:64px; }
+.brand{ display:flex; align-items:center; gap:var(--s3); text-decoration:none; }
+.brand-mark{ width:36px; height:36px; border-radius:10px; background:var(--accent); color:var(--accent-ink); display:grid; place-items:center; font-family:var(--f-display); font-weight:800; font-size:1rem; }
+.brand-name{ display:block; font-family:var(--f-display); font-weight:700; font-size:1rem; letter-spacing:.01em; line-height:1.2; }
+.brand-sub{ display:block; font-family:var(--f-mono); font-size:var(--fs-xs); color:var(--muted); line-height:1.3; }
+.nav-links{ display:flex; align-items:center; gap:var(--s2); }
+.nav-link{ display:inline-flex; align-items:center; min-height:44px; padding:0 var(--s3); text-decoration:none; color:var(--text); font-size:var(--fs-small); border-radius:var(--r-sm); transition:background-color var(--dur-fast) var(--ease-out); }
+@media (hover:hover){ .nav-link:hover{ background:var(--surface-2); } }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+  min-height:48px; padding:0 var(--s5); border-radius:999px; border:1px solid transparent;
+  font-weight:600; font-size:var(--fs-small); text-decoration:none; cursor:pointer; white-space:nowrap;
+  transition:transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.btn:active{ transform:scale(.97); }
+.btn-primary{ background:var(--accent); color:var(--accent-ink); }
+@media (hover:hover){ .btn-primary:hover{ background:#FFC825; color:var(--accent-ink); } }
+.btn-ghost{ background:transparent; color:var(--text); border-color:var(--line-2); }
+@media (hover:hover){ .btn-ghost:hover{ background:var(--surface-2); color:var(--text); border-color:#4D545C; } }
+.btn .od-icon{ --od-icon-size:18px; }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; padding:var(--s8) 0 var(--s9); isolation:isolate; }
+.hero::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px; opacity:.35;
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 60% 40%,#000 20%,transparent 75%);
+  mask-image:radial-gradient(ellipse 70% 60% at 60% 40%,#000 20%,transparent 75%);
+}
+.hero-grid{
+  display:grid; gap:var(--s7) var(--s6);
+  grid-template-columns:minmax(0,1fr) auto auto;
+  grid-template-areas:"text phone owner";
+  align-items:start;
+}
+.hero-text{ grid-area:text; padding-top:var(--s6); max-width:560px; }
+.hero-loc{ display:flex; align-items:center; gap:var(--s2); font-family:var(--f-mono); font-size:var(--fs-xs); color:var(--muted); letter-spacing:.04em; }
+.hero-loc .od-icon{ --od-icon-size:16px; color:var(--accent); }
+.hero h1{
+  margin-top:var(--s5);
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(2rem, 3.1vw, 2.75rem); line-height:1.12; letter-spacing:-.015em;
+}
+.hero h1 em{ font-style:normal; color:var(--accent); }
+.hero-lead{ margin-top:var(--s5); color:var(--muted); font-size:1.125rem; line-height:1.6; max-width:46ch; }
+.hero-hint{ margin-top:var(--s6); display:flex; gap:var(--s3); align-items:flex-start; padding:var(--s4); border:1px dashed var(--line-2); border-radius:var(--r-md); color:var(--text); font-size:var(--fs-small); max-width:46ch; }
+.hero-hint .od-icon{ --od-icon-size:20px; color:var(--accent); margin-top:2px; }
+.hero-actions{ margin-top:var(--s5); display:flex; flex-wrap:wrap; gap:var(--s3); }
+
+/* ---------- phone ---------- */
+.phone-col{ grid-area:phone; display:flex; justify-content:center; }
+.phone{
+  position:relative; width:372px; max-width:100%; height:768px; padding:11px; border-radius:60px;
+  background:linear-gradient(150deg,#646a71 0%,#2a2d31 22%,#43484e 48%,#1d1f22 74%,#565c63 100%);
+  box-shadow:inset 0 0 0 1.5px #7b818a, inset 0 0 0 4px #0b0b0c, 0 50px 90px -40px rgba(0,0,0,.9), 0 0 0 1px #000;
+}
+.phone-key{ position:absolute; width:4px; border-radius:2px; background:linear-gradient(90deg,#2b2e33,#5a6067); }
+.phone-key.power{ right:-4px; top:196px; height:96px; }
+.phone-key.vol1{ left:-4px; top:170px; height:56px; }
+.phone-key.vol2{ left:-4px; top:238px; height:56px; }
+.phone-key.mute{ left:-4px; top:116px; height:30px; }
+.screen{
+  position:relative; height:100%; border-radius:49px; overflow:hidden; background:var(--chat-bg);
+  display:grid; grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+.screen::before{ /* subtle chat wallpaper */
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.05) 1px,transparent 0); background-size:18px 18px;
+}
+.island{ position:absolute; top:11px; left:50%; width:116px; height:33px; margin-left:-58px; background:#000; border-radius:20px; z-index:3; }
+.island::after{ content:""; position:absolute; right:16px; top:11px; width:11px; height:11px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#2b3a4a,#06080a 70%); }
+.statusbar{ position:relative; z-index:2; height:54px; padding:16px 30px 0 34px; display:flex; justify-content:space-between; align-items:flex-start; font-weight:600; font-size:.9375rem; }
+.statusbar-time{ font-variant-numeric:tabular-nums; }
+.statusbar-icons{ display:flex; gap:6px; align-items:center; padding-top:2px; }
+.statusbar-icons .od-icon{ --od-icon-size:17px; }
+.statusbar-icons .batt{ --od-icon-size:26px; }
+
+.chat-head{ position:relative; z-index:2; display:flex; align-items:center; gap:var(--s3); padding:var(--s2) var(--s4) var(--s3) var(--s2); border-bottom:1px solid rgba(255,255,255,.06); background:rgba(15,21,25,.92); }
+.chat-back{ display:grid; place-items:center; width:44px; height:44px; color:var(--accent); }
+.chat-back .od-icon{ --od-icon-size:22px; }
+.avatar{ flex:none; width:40px; height:40px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:grid; place-items:center; font-family:var(--f-display); font-weight:800; font-size:.95rem; }
+.chat-title{ display:block; font-weight:600; font-size:.9375rem; line-height:1.25; }
+.chat-status{ display:block; font-size:var(--fs-xs); color:var(--muted); line-height:1.3; }
+.chat-status.is-typing{ color:var(--accent); }
+
+.messages{ position:relative; z-index:1; padding:var(--s4) var(--s3) var(--s3); display:flex; flex-direction:column; gap:var(--s2); }
+.msg{ max-width:84%; padding:9px 12px 8px; border-radius:16px; font-size:.9375rem; line-height:1.45; overflow-wrap:anywhere; transform-origin:left bottom; }
+.msg.bot{ align-self:flex-start; background:var(--bubble-bot); border-bottom-left-radius:5px; }
+.msg.me{ align-self:flex-end; background:var(--bubble-me); color:var(--accent-ink); border-bottom-right-radius:5px; transform-origin:right bottom; font-weight:500; }
+.msg-time{ display:block; text-align:right; font-family:var(--f-mono); font-size:.6875rem; opacity:.62; margin-top:2px; }
+.msg-list{ display:grid; gap:4px; margin-top:6px; }
+.msg-list div{ display:flex; justify-content:space-between; gap:var(--s3); }
+.msg-list dt,.msg-list .k{ color:var(--muted); }
+.msg-list .v{ font-family:var(--f-mono); font-size:.8125rem; text-align:right; white-space:nowrap; }
+.msg-sum{ display:grid; gap:2px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,.08); }
+.msg-sum .k{ display:block; color:var(--muted); font-size:.75rem; }
+.msg-sum .v{ display:block; margin-bottom:4px; }
+.msg-contact{ display:flex; align-items:center; gap:var(--s3); }
+.msg-contact .ico{ flex:none; width:36px; height:36px; border-radius:50%; background:var(--accent-ink); color:var(--accent); display:grid; place-items:center; }
+.msg-contact .ico .od-icon{ --od-icon-size:18px; }
+.msg-contact .n{ display:block; font-weight:600; }
+.msg-contact .p{ display:block; font-family:var(--f-mono); font-size:.8125rem; }
+.msg-day{ align-self:center; font-family:var(--f-mono); font-size:.6875rem; color:var(--muted); background:rgba(255,255,255,.06); padding:3px 10px; border-radius:999px; margin-bottom:var(--s1); }
+
+.typing{ align-self:flex-start; background:var(--bubble-bot); border-radius:16px; border-bottom-left-radius:5px; padding:12px 14px; display:flex; gap:5px; }
+.typing i{ width:7px; height:7px; border-radius:50%; background:var(--muted); animation:dot 1s infinite var(--ease-out); }
+.typing i:nth-child(2){ animation-delay:.15s; } .typing i:nth-child(3){ animation-delay:.3s; }
+@keyframes dot{ 0%,60%,100%{ transform:translateY(0); opacity:.45; } 30%{ transform:translateY(-4px); opacity:1; } }
+
+.keys-wrap{ position:relative; z-index:2; background:rgba(15,21,25,.96); border-top:1px solid rgba(255,255,255,.06); padding:var(--s2) var(--s2) 0; }
+.keys{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; min-height:0; }
+.keys:empty{ display:none; }
+.key{
+  min-height:44px; padding:8px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.07); color:var(--text); font-size:.875rem; font-weight:500; line-height:1.25; cursor:pointer;
+  transition:transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  display:flex; align-items:center; justify-content:center; gap:6px; text-align:center;
+}
+.key.wide{ grid-column:1 / -1; }
+.key.primary{ background:var(--accent); color:var(--accent-ink); border-color:transparent; font-weight:600; }
+.key .od-icon{ --od-icon-size:18px; }
+.key:active{ transform:scale(.96); }
+@media (hover:hover){ .key:hover{ background:rgba(255,255,255,.13); color:var(--text); } .key.primary:hover{ background:#FFC825; color:var(--accent-ink); } }
+.inputbar{ display:flex; align-items:center; gap:var(--s2); padding:var(--s2) var(--s2) 0; }
+.inputbar-field{ flex:1; min-height:36px; display:flex; align-items:center; padding:0 var(--s4); border-radius:999px; background:rgba(255,255,255,.06); color:var(--dim); font-size:.875rem; }
+.inputbar-mic{ width:36px; height:36px; border-radius:50%; display:grid; place-items:center; color:var(--muted); }
+.inputbar-mic .od-icon{ --od-icon-size:20px; }
+.homebar{ height:30px; display:grid; place-items:center; }
+.homebar::after{ content:""; width:128px; height:5px; border-radius:3px; background:#e9eaeb; opacity:.9; }
+
+/* ---------- owner panel ---------- */
+.owner{
+  grid-area:owner; width:340px; height:768px; border:1px solid var(--line); border-radius:var(--r-lg);
+  background:var(--surface); display:grid; grid-template-rows:auto minmax(0,1fr) auto; overflow:hidden;
+}
+.owner-head{ display:flex; align-items:center; gap:var(--s3); padding:var(--s4) var(--s4); border-bottom:1px solid var(--line); background:var(--surface-2); }
+.owner-avatar{ flex:none; width:40px; height:40px; border-radius:50%; background:var(--surface-3); border:1px solid var(--line-2); display:grid; place-items:center; color:var(--accent); }
+.owner-avatar .od-icon{ --od-icon-size:20px; }
+.owner-title{ display:block; font-weight:600; font-size:.9375rem; line-height:1.25; }
+.owner-sub{ display:block; font-size:var(--fs-xs); color:var(--muted); line-height:1.35; }
+.owner-count{ flex:none; min-width:28px; height:28px; padding:0 8px; border-radius:999px; background:var(--surface-3); color:var(--muted); display:grid; place-items:center; font-family:var(--f-mono); font-size:.8125rem; font-weight:600; transition:background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out); }
+.owner-count.has-new{ background:var(--accent); color:var(--accent-ink); }
+.owner-feed{ padding:var(--s4); display:flex; flex-direction:column; gap:var(--s3); }
+.owner-empty{ margin:auto 0; text-align:center; color:var(--muted); font-size:var(--fs-small); padding:var(--s6) var(--s4); }
+.owner-empty .od-icon{ --od-icon-size:32px; color:var(--dim); margin-bottom:var(--s3); }
+.owner-foot{ padding:var(--s3) var(--s4); border-top:1px solid var(--line); font-size:var(--fs-xs); color:var(--muted); }
+
+.booking{
+  position:relative; border-radius:var(--r-md); background:var(--surface-2); border:1px solid var(--line-2);
+  padding:var(--s4); transform-origin:center top;
+}
+.booking::after{ content:""; position:absolute; inset:-1px; border-radius:inherit; border:2px solid var(--accent); opacity:0; pointer-events:none; }
+.booking.is-fresh::after{ animation:ring 1.4s var(--ease-out) .25s; }
+@keyframes ring{ 0%{ opacity:1; } 100%{ opacity:0; } }
+.booking-top{ display:flex; justify-content:space-between; align-items:center; gap:var(--s2); margin-bottom:var(--s3); }
+.booking-tag{ display:inline-flex; align-items:center; gap:6px; font-size:var(--fs-xs); font-weight:600; color:var(--accent); }
+.booking-tag .od-icon{ --od-icon-size:14px; }
+.booking-at{ font-family:var(--f-mono); font-size:var(--fs-xs); color:var(--muted); }
+.booking-rows{ display:grid; gap:var(--s2); }
+.booking-row{ display:grid; grid-template-columns:76px minmax(0,1fr); gap:var(--s2); font-size:var(--fs-small); line-height:1.4; }
+.booking-row .k{ color:var(--muted); }
+.booking-row .v{ font-weight:500; }
+.booking-row .v.mono{ font-family:var(--f-mono); font-size:.875rem; }
+.booking-actions{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s2); margin-top:var(--s4); }
+.booking-actions .btn{ min-height:44px; padding:0 var(--s3); border-radius:12px; }
+.btn-ok{ background:var(--ok); color:#06150D; }
+@media (hover:hover){ .btn-ok:hover{ background:#5EE6A5; color:#06150D; } }
+.btn-cancel{ background:transparent; color:var(--bad); border-color:rgba(255,127,107,.45); }
+@media (hover:hover){ .btn-cancel:hover{ background:var(--bad-soft); color:var(--bad); } }
+.booking-ask{ margin-top:var(--s4); font-size:var(--fs-small); }
+.booking-ask p{ margin-bottom:var(--s2); }
+.booking-status{ margin-top:var(--s4); display:flex; align-items:center; gap:var(--s2); padding:10px var(--s3); border-radius:10px; font-size:var(--fs-small); font-weight:600; }
+.booking-status .od-icon{ --od-icon-size:18px; }
+.booking-status.ok{ background:var(--ok-soft); color:var(--ok); }
+.booking-status.bad{ background:var(--bad-soft); color:var(--bad); }
+
+/* ---------- photo band ---------- */
+.band{ position:relative; isolation:isolate; overflow:hidden; padding:var(--s10) 0; border-block:1px solid var(--line); }
+.band-img{ position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; filter:grayscale(.7) contrast(1.1) brightness(.62); transform-origin:center; }
+.band::after{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg,rgba(12,13,14,.92) 0%,rgba(12,13,14,.74) 55%,rgba(12,13,14,.45) 100%); }
+.band-text{ font-family:var(--f-display); font-weight:600; font-size:clamp(1.5rem, 3vw, 2.5rem); line-height:1.3; letter-spacing:-.01em; max-width:30ch; }
+.band-text .w{ display:inline-block; }
+.band-text .hl{ color:var(--accent); }
+
+/* ---------- section heads ---------- */
+.section{ padding:var(--s10) 0; }
+.sec-head{ display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:var(--s5) var(--s7); align-items:end; margin-bottom:var(--s8); }
+.sec-head h2{ font-family:var(--f-display); font-weight:700; font-size:clamp(1.875rem, 3.4vw, 3rem); line-height:1.12; letter-spacing:-.015em; }
+.sec-head p{ color:var(--muted); font-size:1.0625rem; max-width:46ch; }
+
+/* ---------- vignettes ---------- */
+.vgrid{ display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-flow:dense; gap:var(--s4); }
+.vcard{ position:relative; isolation:isolate; overflow:hidden; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); padding:var(--s6); display:grid; grid-template-rows:minmax(0,1fr) auto; gap:var(--s6); min-height:440px; }
+.vcard.span7{ grid-column:span 7; } .vcard.span5{ grid-column:span 5; }
+.vcard-bg{ position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; filter:grayscale(.8) contrast(1.1) brightness(.5); transition:transform 700ms var(--ease-out); }
+.vcard.has-bg::before{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(23,26,29,.78),rgba(23,26,29,.94) 60%); }
+@media (hover:hover){ .vcard.has-bg:hover .vcard-bg{ transform:scale(1.05); } }
+.vstage{ display:flex; align-items:center; justify-content:center; min-height:240px; }
+.vfoot{ display:flex; justify-content:space-between; align-items:flex-end; gap:var(--s4); }
+.vfoot h3{ font-family:var(--f-display); font-weight:600; font-size:1.25rem; line-height:1.25; }
+.vfoot p{ margin-top:var(--s2); color:var(--muted); font-size:var(--fs-small); max-width:42ch; }
+.replay{ flex:none; display:inline-grid; place-items:center; width:44px; height:44px; border-radius:50%; border:1px solid var(--line-2); background:transparent; color:var(--muted); cursor:pointer; transition:transform var(--dur) var(--ease-out), color var(--dur-fast), border-color var(--dur-fast); }
+.replay .od-icon{ --od-icon-size:18px; }
+@media (hover:hover){ .replay:hover{ color:var(--text); border-color:#59616A; transform:rotate(-45deg); } }
+
+/* shared mini chat */
+.mini{ width:100%; max-width:380px; display:flex; flex-direction:column; gap:var(--s2); }
+.mini .msg{ max-width:92%; }
+.mini-keys{ display:flex; gap:6px; flex-wrap:wrap; }
+.mini-keys .key{ flex:1 1 auto; }
+.fx{ opacity:0; transform:translateY(10px) scale(.96); transition:opacity var(--dur-exit) var(--ease-in), transform var(--dur-exit) var(--ease-in); }
+.fx.is-in{ opacity:1; transform:none; transition:opacity 320ms var(--ease-out), transform 420ms var(--spring); }
+
+/* V1 night */
+.night{ width:100%; max-width:320px; text-align:center; }
+.night-date{ font-size:var(--fs-small); color:var(--muted); }
+.night-clock{ font-family:var(--f-display); font-weight:600; font-size:clamp(3.5rem, 7vw, 5rem); line-height:1; letter-spacing:-.02em; margin:var(--s2) 0 var(--s5); font-variant-numeric:tabular-nums; }
+.notif{ display:flex; gap:var(--s3); text-align:left; padding:var(--s3); border-radius:16px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.08); margin-top:var(--s2); }
+.notif .avatar{ width:36px; height:36px; font-size:.8rem; }
+.notif-t{ display:block; font-size:var(--fs-xs); color:var(--muted); }
+.notif-b{ display:block; font-size:var(--fs-small); font-weight:500; line-height:1.4; }
+.night-moon{ color:var(--accent); --od-icon-size:22px; }
+
+/* V3 price */
+.price-keys{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.price-keys .key[aria-pressed="true"]{ background:var(--accent); color:var(--accent-ink); border-color:transparent; }
+.price-out{ margin-top:var(--s3); padding:var(--s4); border-radius:16px; background:var(--bubble-bot); min-height:84px; }
+.price-out .k{ display:block; font-size:var(--fs-xs); color:var(--muted); }
+.price-out .v{ display:block; font-family:var(--f-mono); font-weight:600; font-size:1.375rem; color:var(--text); margin-top:2px; }
+
+/* V4 six months */
+.months{ width:100%; max-width:520px; }
+.track{ position:relative; height:4px; border-radius:2px; background:var(--line-2); margin:var(--s6) 10px var(--s3); }
+.track-fill{ position:absolute; inset:0; border-radius:2px; background:var(--accent); transform-origin:left center; transform:scaleX(0); }
+.runner{ position:absolute; inset:0; transform:translateX(-100%); }
+.runner::after{ content:""; position:absolute; right:-9px; top:-7px; width:18px; height:18px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 5px rgba(245,184,0,.18); }
+#messages:focus{ outline:none; }
+.mlabels{ display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); font-family:var(--f-mono); font-size:.75rem; color:var(--muted); text-align:center; }
+.mlabels span:first-child{ text-align:left; } .mlabels span:last-child{ text-align:right; color:var(--accent); }
+.months-tags{ display:flex; justify-content:space-between; gap:var(--s3); font-size:var(--fs-xs); color:var(--muted); margin-bottom:var(--s2); }
+.months .mini{ margin-top:var(--s5); max-width:none; }
+.months.run .track-fill{ transform:scaleX(1); transition:transform 1600ms cubic-bezier(.65,0,.35,1); }
+.months.run .runner{ transform:translateX(0); transition:transform 1600ms cubic-bezier(.65,0,.35,1); }
+
+/* ---------- steps ---------- */
+.steps-grid{ display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--s7); align-items:stretch; }
+.steps-photo{ position:relative; border-radius:var(--r-lg); overflow:hidden; min-height:520px; border:1px solid var(--line); }
+.steps-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(.75) contrast(1.1) brightness(.75); transition:transform 700ms var(--ease-out); }
+@media (hover:hover){ .steps-photo:hover img{ transform:scale(1.05); } }
+.order{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden; }
+.order-head{ display:flex; justify-content:space-between; gap:var(--s4); padding:var(--s4) var(--s6); border-bottom:1px dashed var(--line-2); font-family:var(--f-mono); font-size:var(--fs-xs); color:var(--muted); }
+.step{ display:grid; grid-template-columns:72px minmax(0,1fr); gap:var(--s5); padding:var(--s6); border-bottom:1px solid var(--line); }
+.step:last-child{ border-bottom:0; }
+.step-n{ font-family:var(--f-mono); font-weight:500; font-size:2.5rem; line-height:1; color:var(--accent); }
+.step h3{ font-family:var(--f-display); font-weight:600; font-size:1.25rem; line-height:1.3; }
+.step p{ margin-top:var(--s2); color:var(--muted); max-width:52ch; }
+
+/* ---------- close ---------- */
+.close{ position:relative; isolation:isolate; overflow:hidden; padding:var(--s10) 0; border-top:1px solid var(--line); }
+.close-img{ position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; filter:grayscale(.85) contrast(1.15) brightness(.45); }
+.close::after{ content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(ellipse 80% 70% at 30% 50%,rgba(12,13,14,.55),rgba(12,13,14,.95) 75%); }
+.close h2{ font-family:var(--f-display); font-weight:800; font-size:clamp(2.25rem, 6.2vw, 5.75rem); line-height:1.02; letter-spacing:-.025em; max-width:15ch; }
+.close h2 span{ color:var(--accent); }
+.close p{ margin-top:var(--s6); color:var(--muted); font-size:1.125rem; max-width:48ch; }
+.close-actions{ margin-top:var(--s7); display:flex; flex-wrap:wrap; gap:var(--s3); }
+.close-actions .btn{ min-height:56px; padding:0 var(--s6); font-size:1rem; }
+
+.foot{ border-top:1px solid var(--line); padding:var(--s6) 0; color:var(--muted); font-size:var(--fs-xs); }
+.foot .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--s3); }
+
+/* ---------- responsive ---------- */
+@media (max-width:1240px){
+  .hero-grid{ grid-template-columns:auto auto; grid-template-areas:"text text" "phone owner"; justify-content:center; }
+  .hero-text{ max-width:760px; padding-top:0; }
+}
+@media (max-width:1023px){
+  .sec-head{ grid-template-columns:1fr; }
+  .vcard.span7,.vcard.span5{ grid-column:span 12; }
+  .steps-grid{ grid-template-columns:1fr; }
+  .steps-photo{ min-height:360px; }
+}
+@media (max-width:820px){
+  .wrap{ padding-inline:var(--s4); }
+  .hero{ padding:var(--s6) 0 var(--s8); }
+  .hero-grid{ grid-template-columns:minmax(0,1fr); grid-template-areas:"text" "phone" "owner"; gap:var(--s6); }
+  .owner{ width:100%; max-width:420px; height:auto; min-height:320px; max-height:620px; justify-self:center; }
+  .nav-links .nav-link{ display:none; }
+  .section{ padding:var(--s9) 0; }
+  .band{ padding:var(--s9) 0; }
+  .close{ padding:var(--s9) 0; }
+  .vcard{ padding:var(--s5); min-height:0; }
+  .step{ grid-template-columns:48px minmax(0,1fr); gap:var(--s4); padding:var(--s5); }
+  .step-n{ font-size:1.75rem; }
+  .order-head{ padding:var(--s3) var(--s5); }
+}
+@media (max-width:480px){
+  .phone{ height:700px; border-radius:52px; padding:9px; }
+  .screen{ border-radius:43px; }
+  .statusbar{ padding:15px 26px 0 30px; }
+  .brand-sub{ display:none; }
+  .nav .btn{ padding:0 var(--s4); }
+  .hero-actions .btn{ flex:1 1 auto; }
+  .close-actions .btn{ width:100%; }
+  .price-keys{ grid-template-columns:1fr; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  .typing i{ animation:none; opacity:.8; }
+}
 </style>
 </head>
 <body>
-<div class="demo-bar">Демо Telegram-бота. Сервис вымышленный, нажимайте кнопки в телефоне.</div>
-<div class="wrap">
-  <div class="phone" aria-label="Демо чата с ботом">
-    <div class="scr">
-      <div class="top"><div class="ava">М</div><div><b>Мотор СТО · запись</b><span>бот</span></div></div>
-      <div class="msgs" id="msgs" aria-live="polite"></div>
-      <div class="kb" id="kb"></div>
-    </div>
-  </div>
+<a class="skip" href="#demo">К демо бота</a>
 
-  <div>
-    <h1>Клиент записывается сам, мастер видит заявку сразу</h1>
-    <p class="lead">Попробуйте записаться на ремонт в телефоне слева. Справа появится то, что получит владелец СТО.</p>
-    <div class="owner">
-      <h2>Чат владельца</h2>
-      <p class="s">Сюда приходит каждая заявка с номером клиента</p>
-      <div id="orders"><div class="empty">Пока заявок нет. Запишитесь в боте слева.</div></div>
-    </div>
-    <div class="feat">
-      <div><b>Работает ночью</b><p>Клиент записывается в 23:00, утром запись уже в списке.</p></div>
-      <div><b>Напоминание</b><p>За день до визита бот сам напомнит клиенту о записи.</p></div>
-      <div><b>Прайс в кнопках</b><p>Цены на замену масла, шиномонтаж и диагностику без звонков.</p></div>
-      <div><b>Рассылка</b><p>Через полгода бот предложит клиенту следующее ТО.</p></div>
-    </div>
+<div class="strip" role="note">
+  <div class="wrap">
+    <span class="strip-tape" aria-hidden="true"></span>
+    <span>Демо Telegram-бота. Сервис вымышленный, нажимайте кнопки в телефоне.</span>
   </div>
 </div>
 
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Мотор СТО, в начало страницы">
+      <span class="brand-mark" aria-hidden="true">М</span>
+      <span>
+        <span class="brand-name">Мотор СТО</span>
+        <span class="brand-sub">бот для записи на ремонт</span>
+      </span>
+    </a>
+    <nav class="nav-links" aria-label="Разделы">
+      <a class="nav-link" href="#can">Что умеет</a>
+      <a class="nav-link" href="#need">Что нужно от вас</a>
+      <a class="btn btn-primary" href="#demo">Попробовать</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO / DEMO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="hero-loc"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Бишкек, Жибек Жолу</p>
+        <h1 id="hero-title">Бот записывает клиентов, пока вы <em>чините машины</em></h1>
+        <p class="hero-lead">Клиент сам выбирает услугу, машину и время прямо в Telegram. Вам приходит готовая заявка, и вы подтверждаете её одной кнопкой.</p>
+        <div class="hero-hint">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10"/><path d="M12 10V8.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11v-1a1.5 1.5 0 0 1 3 0v4.5A6.5 6.5 0 0 1 11.5 21h-.6a5 5 0 0 1-3.9-1.9L4.6 16a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg>
+          <span>Запишитесь сами: нажимайте кнопки в телефоне. Заявка тут же придёт в чат владельца, а там её можно подтвердить или отменить.</span>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-ghost" type="button" id="restart">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Начать демо заново
+          </button>
+        </div>
+      </div>
+
+      <div class="phone-col" id="demo">
+        <div class="phone" role="region" aria-label="Телефон клиента: чат с ботом СТО «Мотор»">
+          <span class="phone-key mute" aria-hidden="true"></span>
+          <span class="phone-key vol1" aria-hidden="true"></span>
+          <span class="phone-key vol2" aria-hidden="true"></span>
+          <span class="phone-key power" aria-hidden="true"></span>
+          <div class="screen">
+            <div class="island" aria-hidden="true"></div>
+            <div class="statusbar" aria-hidden="true">
+              <span class="statusbar-time" data-clock>12:00</span>
+              <span class="statusbar-icons">
+                <svg class="od-icon" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="15" width="3.5" height="6" rx="1"/><rect x="7.5" y="11.5" width="3.5" height="9.5" rx="1"/><rect x="13" y="8" width="3.5" height="13" rx="1"/><rect x="18.5" y="4" width="3.5" height="17" rx="1"/></svg>
+                <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M6 12.6a9 9 0 0 1 12 0"/><path d="M9.4 16.1a4 4 0 0 1 5.2 0"/><circle cx="12" cy="19.4" r="1.2" fill="currentColor" stroke="none"/></svg>
+                <svg class="od-icon batt" viewBox="0 0 30 14" fill="none"><rect x=".75" y=".75" width="25" height="12.5" rx="3.5" stroke="currentColor" stroke-opacity=".5" stroke-width="1.5"/><rect x="3" y="3" width="17" height="8" rx="2" fill="currentColor"/><rect x="27.3" y="4.5" width="2" height="5" rx="1" fill="currentColor" fill-opacity=".5"/></svg>
+              </span>
+            </div>
+            <div class="chat-head">
+              <span class="chat-back" aria-hidden="true"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span>
+              <span class="avatar" aria-hidden="true">М</span>
+              <span class="od-fill">
+                <span class="chat-title">СТО «Мотор»</span>
+                <span class="chat-status" id="chat-status">бот</span>
+              </span>
+            </div>
+            <div class="od-scroll" id="chat-scroll">
+              <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Сообщения чата"></div>
+            </div>
+            <div class="keys-wrap">
+              <div class="keys" id="keys" role="group" aria-label="Кнопки ответа"></div>
+              <div class="inputbar" aria-hidden="true">
+                <span class="inputbar-field">Сообщение</span>
+                <span class="inputbar-mic"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></span>
+              </div>
+              <div class="homebar" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="owner" id="owner" aria-label="Чат владельца сервиса" tabindex="-1">
+        <div class="owner-head">
+          <span class="owner-avatar" aria-hidden="true"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.6 17.4a1.9 1.9 0 0 0 2.7 2.7l5.7-5.7a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.3-.4-.4-2.3z"/></svg></span>
+          <span class="od-fill">
+            <span class="owner-title">Чат владельца</span>
+            <span class="owner-sub">Сюда бот присылает каждую запись</span>
+          </span>
+          <span class="owner-count" id="owner-count" aria-label="Новых заявок: 0">0</span>
+        </div>
+        <div class="od-scroll" id="owner-scroll">
+          <div class="owner-feed" id="owner-feed" role="log" aria-live="polite" aria-label="Заявки от бота">
+            <div class="owner-empty" id="owner-empty">
+              <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h4l1.5 3h5L16 13h4"/><path d="M5.5 5h13L21 13v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5z"/></svg>
+              <p>Пока заявок нет. Запишитесь в телефоне, и карточка появится здесь.</p>
+            </div>
+          </div>
+        </div>
+        <div class="owner-foot">Так это выглядит в Telegram у администратора.</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- BAND -->
+  <section class="band" aria-label="Зачем это сервису">
+    <img class="band-img" src="https://images.unsplash.com/photo-1767681092416-bccf9410bda4?w=1600&q=75&auto=format" alt="" loading="lazy" decoding="async">
+    <div class="wrap">
+      <p class="band-text" data-scrub>Пока мастер на подъёмнике, телефон звонит в пустоту. Бот отвечает сразу и записывает клиента на <span class="hl">свободное время</span>.</p>
+    </div>
+  </section>
+
+  <!-- CAN -->
+  <section class="section" id="can" aria-labelledby="can-title">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 id="can-title">Что бот делает, пока вы работаете</h2>
+        <p>Четыре вещи, на которые у администратора обычно не хватает рук. Нажмите на круглую стрелку, чтобы показать ещё раз.</p>
+      </div>
+
+      <div class="vgrid">
+        <!-- V1 night -->
+        <article class="vcard span7" data-vig="night" data-reveal>
+          <div class="vstage">
+            <div class="night">
+              <svg class="od-icon night-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+              <p class="night-date" data-tonight>Вторник</p>
+              <p class="night-clock" aria-label="Время 23:14">23:14</p>
+              <div class="notif fx" data-step="1">
+                <span class="avatar" aria-hidden="true">М</span>
+                <span class="od-fill">
+                  <span class="notif-t">СТО «Мотор» · сейчас</span>
+                  <span class="notif-b">Новая запись: шиномонтаж, Honda Fit 2008, завтра 10:00</span>
+                </span>
+              </div>
+              <div class="notif fx" data-step="2">
+                <span class="avatar" aria-hidden="true">М</span>
+                <span class="od-fill">
+                  <span class="notif-t">СТО «Мотор» · сейчас</span>
+                  <span class="notif-b">Клиент уже получил подтверждение и адрес</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="vfoot">
+            <div>
+              <h3>Принимает записи ночью</h3>
+              <p>Клиент пишет в 23:14, когда сервис закрыт. Бот записывает его, а утром заявка уже ждёт администратора.</p>
+            </div>
+            <button class="replay" type="button" aria-label="Показать ещё раз: записи ночью"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+          </div>
+        </article>
+
+        <!-- V2 reminder -->
+        <article class="vcard span5" data-vig="remind" data-reveal>
+          <div class="vstage">
+            <div class="mini" data-remind-chat aria-live="polite">
+              <span class="msg-day">Накануне, 18:00</span>
+              <div class="typing fx" data-step="1" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="msg bot fx" data-step="2">Напоминаем: завтра в 10:00 вас ждут в СТО «Мотор» на Жибек Жолу. Если планы поменялись, нажмите «Перенести».</div>
+              <div class="mini-keys fx" data-step="3">
+                <button class="key" type="button" data-answer="yes">Приеду</button>
+                <button class="key" type="button" data-answer="move">Перенести</button>
+              </div>
+            </div>
+          </div>
+          <div class="vfoot">
+            <div>
+              <h3>Напоминает за день</h3>
+              <p>Клиент не забудет про запись, а если не может приехать, предупредит заранее. Попробуйте ответить.</p>
+            </div>
+            <button class="replay" type="button" aria-label="Показать ещё раз: напоминание"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+          </div>
+        </article>
+
+        <!-- V3 price -->
+        <article class="vcard span5 has-bg" data-vig="price" data-reveal>
+          <img class="vcard-bg" src="https://images.unsplash.com/photo-1645445522156-9ac06bc7a767?w=1600&q=75&auto=format" alt="" loading="lazy" decoding="async">
+          <div class="vstage">
+            <div class="mini">
+              <div class="price-keys" role="group" aria-label="Услуги прайс-листа">
+                <button class="key" type="button" aria-pressed="false" data-price="0">Замена масла</button>
+                <button class="key" type="button" aria-pressed="false" data-price="1">Шиномонтаж</button>
+                <button class="key" type="button" aria-pressed="false" data-price="2">Диагностика</button>
+                <button class="key" type="button" aria-pressed="false" data-price="3">Ходовая</button>
+              </div>
+              <div class="price-out" aria-live="polite">
+                <span class="k" data-price-k>Выберите услугу</span>
+                <span class="v" data-price-v>&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="vfoot">
+            <div>
+              <h3>Цены прямо в кнопках</h3>
+              <p>Клиенту не нужно звонить и спрашивать «сколько стоит». Нажмите любую услугу.</p>
+            </div>
+            <button class="replay" type="button" aria-label="Показать ещё раз: цены"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+          </div>
+        </article>
+
+        <!-- V4 six months -->
+        <article class="vcard span7 has-bg" data-vig="months" data-reveal>
+          <img class="vcard-bg" src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=75&auto=format" alt="" loading="lazy" decoding="async">
+          <div class="vstage">
+            <div class="months" data-months>
+              <div class="months-tags"><span>Замена масла</span><span>Через 6 месяцев</span></div>
+              <div class="track" aria-hidden="true">
+                <span class="track-fill"></span>
+                <span class="runner"></span>
+              </div>
+              <div class="mlabels" data-mlabels aria-hidden="true"></div>
+              <div class="mini" aria-live="polite">
+                <div class="msg bot fx" data-step="1">Салам! Прошло полгода с замены масла в СТО «Мотор». Записать вас снова на удобный день?</div>
+                <div class="mini-keys fx" data-step="2">
+                  <button class="key primary" type="button" data-back>Записаться</button>
+                  <button class="key" type="button" data-later>Позже</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="vfoot">
+            <div>
+              <h3>Зовёт обратно через полгода</h3>
+              <p>Бот сам напомнит клиенту о следующей замене масла. Клиент возвращается к вам, а не в сервис через дорогу.</p>
+            </div>
+            <button class="replay" type="button" aria-label="Показать ещё раз: напоминание через полгода"><svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEED -->
+  <section class="section" id="need" aria-labelledby="need-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <h2 id="need-title">Что нужно от вас</h2>
+        <p>Никаких программ на компьютер и обучения сотрудников. Бот работает в Telegram, который уже есть у ваших клиентов.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="steps-photo" data-reveal>
+          <img src="https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=1600&q=75&auto=format" alt="Механик работает с двигателем автомобиля" loading="lazy" decoding="async">
+        </div>
+        <div class="order" data-reveal>
+          <div class="order-head"><span>Заказ-наряд на бота</span><span>3 пункта</span></div>
+          <div class="step">
+            <span class="step-n" aria-hidden="true">1</span>
+            <div>
+              <h3>Список услуг и цены</h3>
+              <p>Пришлите то, что уже висит у вас на стене или лежит в заметках. Я перенесу это в кнопки.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n" aria-hidden="true">2</span>
+            <div>
+              <h3>Номер администратора</h3>
+              <p>Человек, которому бот будет присылать заявки. Он подтверждает или отменяет запись одной кнопкой.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n" aria-hidden="true">3</span>
+            <div>
+              <h3>3 дня на запуск</h3>
+              <p>Настраиваю бота под ваш сервис, вместе проверяем запись, и бот начинает принимать клиентов.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close" aria-labelledby="close-title">
+    <img class="close-img" src="https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=1600&q=75&auto=format" alt="" loading="lazy" decoding="async">
+    <div class="wrap">
+      <h2 id="close-title" data-reveal>Запись ведёт бот. Вы <span>чините машины.</span></h2>
+      <p data-reveal>Такой бот можно сделать для вашего СТО: с вашими услугами, ценами и адресом.</p>
+      <div class="close-actions" data-reveal>
+        <a class="btn btn-primary" href="#" data-contact>Хочу такого бота</a>
+        <button class="btn btn-ghost" type="button" id="restart-2">Пройти демо ещё раз</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>СТО «Мотор» вымышленный, это демонстрация бота.</span>
+    <span>Фото: Unsplash</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-const msgs=document.getElementById('msgs'),kb=document.getElementById('kb'),orders=document.getElementById('orders');
-let st={};
-function say(t,who='bot'){const d=document.createElement('div');d.className='m '+who;d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
-function keys(list,fn){kb.innerHTML='';list.forEach(k=>{const b=document.createElement('button');b.textContent=k;if(list.length%2&&k===list[list.length-1])b.className='wide';b.onclick=()=>{say(k,'me');kb.innerHTML='';setTimeout(()=>fn(k),450)};kb.appendChild(b)})}
-function start(){
-  st={};msgs.innerHTML='';
-  say('Салам! Я бот СТО «Мотор» на Жибек Жолу.\nЗапишу вас на ремонт за минуту.');
-  setTimeout(()=>{say('Что нужно сделать?');keys(['Замена масла','Шиномонтаж','Диагностика','Ходовая','Прайс-лист'],svc)},500);
-}
-function svc(k){
-  if(k==='Прайс-лист'){say('Замена масла: от 800 с\nШиномонтаж R13–R16: 1 200 с за 4 колеса\nКомпьютерная диагностика: 1 000 с\nХодовая: осмотр бесплатно');setTimeout(()=>keys(['Замена масла','Шиномонтаж','Диагностика','Ходовая'],svc),400);return}
-  st.svc=k;say('Какая машина? Марка и год.');
-  keys(['Toyota Camry 2012','Honda Fit 2008','Lexus RX 2015','Другая'],car);
-}
-function car(k){st.car=k;say('Когда удобно приехать?');keys(['Сегодня 17:00','Завтра 10:00','Завтра 15:00','Сб 11:00'],time)}
-function time(k){st.time=k;say('Отправьте номер, по нему мастер подтвердит запись.');keys(['📱 Отправить номер'],phone)}
-function phone(){
-  st.phone='+996 700 12 34 56';say(st.phone,'me');
-  setTimeout(()=>{
-    say('Готово! Вы записаны:\n'+st.svc+', '+st.car+'\n'+st.time+'\n\nНапомню за день. Адрес: Жибек Жолу, 120, 2GIS по кнопке ниже.');
-    if(orders.querySelector('.empty'))orders.innerHTML='';
-    const o=document.createElement('div');o.className='order';
-    o.textContent='Новая запись\n'+st.svc+' · '+st.car+'\n'+st.time+'\nКлиент: '+st.phone;
-    orders.prepend(o);
-    keys(['Записаться ещё раз'],start);
-  },500);
-}
-start();
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var NB = " ";
+
+  /* ---------- icons ---------- */
+  var ICONS = {
+    check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    x:'<path d="M6 6l12 12M18 6L6 18"/>',
+    phone:'<path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16 16 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/>',
+    bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+    eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    redo:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>'
+  };
+  function icon(name){
+    return '<svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+  }
+
+  /* ---------- time helpers ---------- */
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  function hm(d){ return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+  function tickClock(){ $$("[data-clock]").forEach(function(el){ el.textContent = hm(new Date()); }); }
+  tickClock(); setInterval(tickClock, 15000);
+
+  function makeSlots(){
+    var now = new Date(), out = [];
+    var OPEN = 9, CLOSE = 19; // last slot starts at 19:00
+    var t = new Date(now.getTime() + 60 * 60000);
+    t.setSeconds(0, 0);
+    var m = t.getMinutes();
+    if (m === 0 || m === 30) {} else if (m < 30) t.setMinutes(30); else { t.setHours(t.getHours() + 1); t.setMinutes(0); }
+    while (out.length < 2 && t.getDate() === now.getDate() && t.getHours() <= CLOSE) {
+      if (t.getHours() >= OPEN && !(t.getHours() === CLOSE && t.getMinutes() > 0)) out.push({ day:"Сегодня", time:hm(t) });
+      t = new Date(t.getTime() + 90 * 60000);
+    }
+    var tomorrow = ["09:30","11:00","14:00","16:30"];
+    var i = 0;
+    while (out.length < 4) { out.push({ day:"Завтра", time:tomorrow[i++] }); }
+    return out.map(function(s){ s.label = s.day + ", " + s.time; return s; });
+  }
+
+  /* ---------- data ---------- */
+  var SERVICES = ["Замена масла", "Шиномонтаж", "Диагностика", "Ходовая"];
+  var PRICES = [
+    ["Замена масла", "от 800" + NB + "с"],
+    ["Шиномонтаж R13-R16", "1" + NB + "200" + NB + "с за 4 колеса"],
+    ["Компьютерная диагностика", "1" + NB + "000" + NB + "с"],
+    ["Осмотр ходовой", "бесплатно"]
+  ];
+  var CARS = ["Toyota Camry 2012", "Honda Fit 2008", "Lexus RX 2015", "Другая"];
+  var CLIENT = { name:"Азамат", phone:"+996 555 123 456" };
+
+  /* ---------- chat engine ---------- */
+  var msgs = $("#messages"), scroller = $("#chat-scroll"), keys = $("#keys"), statusEl = $("#chat-status");
+  var token = 0, chain = Promise.resolve();
+  var S = {};
+  function Cancel(){}
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? Math.min(ms, 120) : ms); }); }
+
+  function scrollDown(){
+    scroller.scrollTo({ top: scroller.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+  }
+  function popIn(el, me){
+    if (reduce || !el.animate) return;
+    el.animate([
+      { opacity:0, transform:"translateY(12px) scale(.9)" },
+      { opacity:1, transform:"translateY(0) scale(1)" }
+    ], { duration: me ? 260 : 420, easing:"cubic-bezier(.34,1.56,.64,1)" });
+  }
+  function bubble(kind, build){
+    var el = document.createElement("div");
+    el.className = "msg " + kind;
+    if (typeof build === "string") { var p = document.createElement("span"); p.textContent = build; el.appendChild(p); }
+    else build(el);
+    var t = document.createElement("span"); t.className = "msg-time"; t.textContent = hm(new Date());
+    el.appendChild(t);
+    msgs.appendChild(el); popIn(el, kind === "me"); scrollDown();
+    return el;
+  }
+  function say(content, opts){
+    var my = token; opts = opts || {};
+    var p = chain.then(function(){
+      if (my !== token) throw new Cancel();
+      var len = typeof content === "string" ? content.length : 80;
+      var typing = document.createElement("div");
+      typing.className = "typing"; typing.setAttribute("aria-hidden","true");
+      typing.innerHTML = "<i></i><i></i><i></i>";
+      msgs.appendChild(typing); popIn(typing); scrollDown();
+      statusEl.textContent = "печатает…"; statusEl.classList.add("is-typing");
+      return wait(Math.min(1500, 520 + len * 9)).then(function(){
+        typing.remove();
+        statusEl.textContent = "бот"; statusEl.classList.remove("is-typing");
+        if (my !== token) throw new Cancel();
+        var el = bubble("bot", content);
+        if (opts.after) opts.after(el);
+        return wait(220);
+      });
+    });
+    chain = p.catch(function(){});
+    return p;
+  }
+  function me(content){ bubble("me", content); }
+  var kbFocus = false;
+  function setKeys(list){
+    var hadFocus = kbFocus || keys.contains(document.activeElement);
+    kbFocus = false;
+    keys.innerHTML = "";
+    list.forEach(function(k){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "key" + (k.wide ? " wide" : "") + (k.primary ? " primary" : "");
+      b.innerHTML = (k.icon ? icon(k.icon) : "") + "<span></span>";
+      b.lastChild.textContent = k.label;
+      b.addEventListener("click", function(){ if (b.disabled) return; lockKeys(); k.on(); });
+      keys.appendChild(b);
+      if (!reduce && b.animate) b.animate([{ opacity:0, transform:"translateY(8px)" },{ opacity:1, transform:"none" }], { duration:220, delay: keys.children.length * 35, easing:"cubic-bezier(.22,1,.36,1)", fill:"backwards" });
+    });
+    if (hadFocus && keys.firstChild) keys.firstChild.focus({ preventScroll:true });
+  }
+  function lockKeys(){
+    // remember keyboard focus so the next set of buttons receives it
+    kbFocus = keys.contains(document.activeElement);
+    keys.innerHTML = "";
+    if (kbFocus) { msgs.setAttribute("tabindex","-1"); msgs.focus({ preventScroll:true }); }
+  }
+  function run(fn){ return function(){ fn().catch(function(e){ if (!(e instanceof Cancel)) console.error(e); }); }; }
+
+  /* flow */
+  var start = run(function(){
+    token++; chain = Promise.resolve();
+    S = { service:null, car:null, slot:null, phoneSent:false, token:token };
+    msgs.innerHTML = ""; keys.innerHTML = "";
+    var day = document.createElement("span"); day.className = "msg-day"; day.textContent = "Сегодня";
+    msgs.appendChild(day);
+    return say("Салам! Я бот СТО «Мотор». Запишу вас на ремонт за минуту.").then(askService);
+  });
+
+  function serviceKeys(withPrice){
+    var list = SERVICES.map(function(s){ return { label:s, on:run(function(){ return pickService(s); }) }; });
+    if (withPrice) list.push({ label:"Прайс-лист", wide:true, on:run(showPrice) });
+    return list;
+  }
+  function askService(){
+    return say("Что нужно сделать с машиной?").then(function(){ setKeys(serviceKeys(true)); });
+  }
+  function showPrice(){
+    me("Прайс-лист");
+    return say(function(el){
+      var h = document.createElement("span"); h.textContent = "Наши цены:"; el.appendChild(h);
+      var list = document.createElement("div"); list.className = "msg-list";
+      PRICES.forEach(function(p){
+        var row = document.createElement("div");
+        var k = document.createElement("span"); k.className = "k"; k.textContent = p[0];
+        var v = document.createElement("span"); v.className = "v"; v.textContent = p[1];
+        row.appendChild(k); row.appendChild(v); list.appendChild(row);
+      });
+      el.appendChild(list);
+    }).then(function(){ return say("Выберите услугу, и я подберу время."); })
+      .then(function(){ setKeys(serviceKeys(false)); });
+  }
+  function pickService(s){
+    me(s); S.service = s;
+    return say("Какая у вас машина?").then(function(){
+      setKeys(CARS.map(function(c){ return { label:c, wide:c === "Другая", on:run(function(){ return pickCar(c); }) }; }));
+    });
+  }
+  function pickCar(c){
+    me(c);
+    S.car = c === "Другая" ? "Другая марка, уточнить" : c;
+    var p = c === "Другая" ? say("Хорошо, мастер уточнит марку, когда будет подтверждать запись.") : Promise.resolve();
+    return p.then(askTime);
+  }
+  function askTime(){
+    var slots = makeSlots();
+    return say("Когда удобно приехать? Вот ближайшее свободное время:").then(function(){
+      setKeys(slots.map(function(s){ return { label:s.label, on:run(function(){ return pickSlot(s); }) }; }));
+    });
+  }
+  function pickSlot(s){
+    me(s.label); S.slot = s;
+    if (S.phoneSent) return confirm();
+    return say("Последний шаг: отправьте номер, чтобы администратор мог подтвердить запись.").then(function(){
+      setKeys([{ label:"Отправить номер", icon:"phone", wide:true, primary:true, on:run(sendPhone) }]);
+    });
+  }
+  function sendPhone(){
+    S.phoneSent = true;
+    me(function(el){
+      el.innerHTML = '<span class="msg-contact"><span class="ico">' + icon("phone") + '</span><span><span class="n"></span><span class="p"></span></span></span>';
+      $(".n", el).textContent = CLIENT.name;
+      $(".p", el).textContent = CLIENT.phone;
+    });
+    return confirm();
+  }
+  function confirm(){
+    var snap = { service:S.service, car:S.car, slot:S.slot, token:token };
+    return say(function(el){
+      var h = document.createElement("span"); h.textContent = "Готово, вы записаны!"; el.appendChild(h);
+      var sum = document.createElement("div"); sum.className = "msg-sum";
+      [["Услуга", snap.service], ["Машина", snap.car], ["Время", snap.slot.label], ["Адрес", "СТО «Мотор», Жибек Жолу"]].forEach(function(r){
+        var k = document.createElement("span"); k.className = "k"; k.textContent = r[0];
+        var v = document.createElement("span"); v.className = "v"; v.textContent = r[1];
+        sum.appendChild(k); sum.appendChild(v);
+      });
+      el.appendChild(sum);
+      var f = document.createElement("span"); f.textContent = "Администратор подтвердит запись, я сразу сообщу."; el.appendChild(f);
+    }, { after:function(){ ownerReceive(snap); } }).then(function(){ setKeys(finalKeys()); });
+  }
+  function finalKeys(){
+    return [
+      { label:"Заявка у владельца", icon:"eye", wide:true, on:function(){ kbFocus = false; setKeys(finalKeys()); goOwner(); } },
+      { label:"Записаться ещё раз", icon:"redo", wide:true, on:start }
+    ];
+  }
+  function goOwner(){
+    var o = $("#owner");
+    o.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block:"center" });
+    o.focus({ preventScroll:true });
+  }
+
+  /* ---------- owner chat ---------- */
+  var feed = $("#owner-feed"), countEl = $("#owner-count"), ownerScroll = $("#owner-scroll");
+  var pending = 0, bookingSeq = 0;
+  function setCount(){
+    countEl.textContent = String(pending);
+    countEl.setAttribute("aria-label", "Новых заявок: " + pending);
+    countEl.classList.toggle("has-new", pending > 0);
+  }
+  function ownerReceive(b){
+    var empty = $("#owner-empty"); if (empty) empty.remove();
+    var id = ++bookingSeq;
+    var card = document.createElement("article");
+    card.className = "booking is-fresh";
+    card.setAttribute("aria-label", "Заявка номер " + id);
+    card.innerHTML =
+      '<div class="booking-top"><span class="booking-tag">' + icon("bell") + '<span></span></span><span class="booking-at"></span></div>' +
+      '<div class="booking-rows"></div>' +
+      '<div class="booking-actions"><button type="button" class="btn btn-ok" data-act="ok">' + icon("check") + 'Подтвердить</button><button type="button" class="btn btn-cancel" data-act="cancel">' + icon("x") + 'Отменить</button></div>';
+    $(".booking-tag span", card).textContent = "Новая запись №" + id;
+    $(".booking-at", card).textContent = hm(new Date());
+    var rows = $(".booking-rows", card);
+    [["Клиент", CLIENT.name, false], ["Телефон", CLIENT.phone, true], ["Услуга", b.service, false], ["Машина", b.car, false], ["Время", b.slot.label, true]].forEach(function(r){
+      var row = document.createElement("div"); row.className = "booking-row";
+      var k = document.createElement("span"); k.className = "k"; k.textContent = r[0];
+      var v = document.createElement("span"); v.className = "v" + (r[2] ? " mono" : ""); v.textContent = r[1];
+      row.appendChild(k); row.appendChild(v); rows.appendChild(row);
+    });
+    card._b = b;
+    feed.appendChild(card);
+    pending++; setCount();
+    if (!reduce && card.animate) {
+      card.animate([
+        { opacity:0, transform:"translateY(28px) scale(.94)" },
+        { opacity:1, transform:"translateY(-4px) scale(1.01)", offset:.65 },
+        { opacity:1, transform:"translateY(0) scale(1)" }
+      ], { duration:620, easing:"cubic-bezier(.22,1,.36,1)" });
+      countEl.animate([{ transform:"scale(1)" },{ transform:"scale(1.25)" },{ transform:"scale(1)" }], { duration:360, easing:"cubic-bezier(.34,1.56,.64,1)" });
+    }
+    ownerScroll.scrollTo({ top: ownerScroll.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+  }
+  feed.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-act]"); if (!btn) return;
+    var card = btn.closest(".booking"); var act = btn.getAttribute("data-act");
+    if (act === "cancel") { askCancel(card); return; }
+    if (act === "back") { restoreActions(card); return; }
+    if (act === "ok") { resolveBooking(card, true); return; }
+    if (act === "cancel-yes") { resolveBooking(card, false); }
+  });
+  function askCancel(card){
+    var a = $(".booking-actions", card);
+    var ask = document.createElement("div");
+    ask.className = "booking-ask";
+    ask.innerHTML = '<p>Отменить запись клиента? Бот предложит ему другое время.</p><div class="booking-actions" style="margin-top:0"><button type="button" class="btn btn-cancel" data-act="cancel-yes">Да, отменить</button><button type="button" class="btn btn-ghost" data-act="back">Назад</button></div>';
+    a.replaceWith(ask);
+    $("[data-act=back]", ask).focus();
+  }
+  function restoreActions(card){
+    var ask = $(".booking-ask", card);
+    var a = document.createElement("div"); a.className = "booking-actions";
+    a.innerHTML = '<button type="button" class="btn btn-ok" data-act="ok">' + icon("check") + 'Подтвердить</button><button type="button" class="btn btn-cancel" data-act="cancel">' + icon("x") + 'Отменить</button>';
+    ask.replaceWith(a);
+    $("[data-act=cancel]", a).focus();
+  }
+  function resolveBooking(card, ok){
+    var area = $(".booking-actions", card) || $(".booking-ask", card);
+    var st = document.createElement("div");
+    st.className = "booking-status " + (ok ? "ok" : "bad");
+    st.setAttribute("tabindex","-1");
+    st.innerHTML = icon(ok ? "check" : "x") + "<span></span>";
+    st.lastChild.textContent = (ok ? "Подтверждено в " : "Отменено в ") + hm(new Date());
+    area.replaceWith(st);
+    card.classList.remove("is-fresh");
+    if (!reduce && st.animate) st.animate([{ opacity:0, transform:"scale(.96)" },{ opacity:1, transform:"none" }], { duration:240, easing:"cubic-bezier(.22,1,.36,1)" });
+    st.focus({ preventScroll:true });
+    pending = Math.max(0, pending - 1); setCount();
+    var b = card._b;
+    if (b.token !== token) return; // that chat was restarted
+    if (ok) {
+      run(function(){
+        return say("Администратор подтвердил запись. Ждём вас: " + b.slot.label + ", Жибек Жолу.");
+      })();
+    } else {
+      run(function(){
+        keys.innerHTML = "";
+        return say("К сожалению, администратор не сможет принять вас в это время. Выберите другое, и я перезапишу вас.").then(askTimeAgain);
+      })();
+    }
+  }
+  function askTimeAgain(){
+    var slots = makeSlots().slice(1);
+    setKeys(slots.map(function(s){ return { label:s.label, on:run(function(){ return pickSlot(s); }) }; }));
+  }
+
+  $("#restart").addEventListener("click", function(){ start(); });
+  $("#restart-2").addEventListener("click", function(){
+    $("#demo").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block:"center" });
+    start();
+  });
+
+  /* ---------- vignettes ---------- */
+  var V = {};
+  function steps(root){ return $$("[data-step]", root).sort(function(a,b){ return a.dataset.step - b.dataset.step; }); }
+  function resetFx(root){ $$(".fx", root).forEach(function(el){ el.classList.remove("is-in"); }); }
+  function showAll(root){ $$(".fx", root).forEach(function(el){ el.classList.add("is-in"); }); }
+
+  // V1 night
+  (function(){
+    var root = $('[data-vig="night"]');
+    var days = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+    var months = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+    var d = new Date();
+    $("[data-tonight]", root).textContent = days[d.getDay()] + ", " + d.getDate() + " " + months[d.getMonth()];
+    var timers = [];
+    V.night = function(){
+      timers.forEach(clearTimeout); timers = [];
+      resetFx(root);
+      if (reduce) { showAll(root); return; }
+      var st = steps(root);
+      timers.push(setTimeout(function(){ st[0].classList.add("is-in"); }, 500));
+      timers.push(setTimeout(function(){ st[1].classList.add("is-in"); }, 1500));
+    };
+  })();
+
+  // V2 reminder
+  (function(){
+    var root = $('[data-vig="remind"]'), chat = $("[data-remind-chat]", root), timers = [];
+    function clearExtra(){ $$(".extra", chat).forEach(function(el){ el.remove(); }); }
+    V.remind = function(){
+      timers.forEach(clearTimeout); timers = [];
+      clearExtra(); resetFx(root);
+      var st = steps(root);
+      $$(".key", root).forEach(function(b){ b.disabled = false; });
+      if (reduce) { st[1].classList.add("is-in"); st[2].classList.add("is-in"); return; }
+      timers.push(setTimeout(function(){ st[0].classList.add("is-in"); }, 300));
+      timers.push(setTimeout(function(){ st[0].classList.remove("is-in"); st[1].classList.add("is-in"); }, 1300));
+      timers.push(setTimeout(function(){ st[2].classList.add("is-in"); }, 1650));
+    };
+    $$("[data-answer]", root).forEach(function(b){
+      b.addEventListener("click", function(){
+        if ($(".extra", chat)) return;
+        var yes = b.getAttribute("data-answer") === "yes";
+        var u = document.createElement("div"); u.className = "msg me extra"; u.textContent = yes ? "Приеду" : "Перенести";
+        chat.appendChild(u); popIn(u, true);
+        var r = document.createElement("div"); r.className = "msg bot extra";
+        r.textContent = yes ? "Отлично, ждём вас завтра в 10:00." : "Хорошо, администратор перезвонит и предложит другое время.";
+        timers.push(setTimeout(function(){ chat.appendChild(r); popIn(r); }, reduce ? 0 : 600));
+        $$(".key", root).forEach(function(k){ k.disabled = true; });
+      });
+    });
+  })();
+
+  // V3 price
+  (function(){
+    var root = $('[data-vig="price"]'), btns = $$("[data-price]", root);
+    var k = $("[data-price-k]", root), v = $("[data-price-v]", root);
+    function pick(i){
+      btns.forEach(function(b, j){ b.setAttribute("aria-pressed", String(i === j)); });
+      if (i < 0) { k.textContent = "Выберите услугу"; v.textContent = NB; return; }
+      k.textContent = PRICES[i][0]; v.textContent = PRICES[i][1];
+      if (!reduce && v.animate) v.animate([{ opacity:0, transform:"translateY(6px)" },{ opacity:1, transform:"none" }], { duration:240, easing:"cubic-bezier(.22,1,.36,1)" });
+    }
+    btns.forEach(function(b, i){ b.addEventListener("click", function(){ auto.forEach(clearTimeout); pick(i); }); });
+    var auto = [];
+    V.price = function(){
+      auto.forEach(clearTimeout); auto = [];
+      pick(-1);
+      if (reduce) { pick(0); return; }
+      [0,1,2].forEach(function(i, n){ auto.push(setTimeout(function(){ pick(i); }, 500 + n * 1100)); });
+    };
+  })();
+
+  // V4 months
+  (function(){
+    var root = $('[data-vig="months"]'), box = $("[data-months]", root), labels = $("[data-mlabels]", root);
+    var short = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+    var m = new Date().getMonth();
+    for (var i = 0; i <= 6; i++) { var s = document.createElement("span"); s.textContent = short[(m + i) % 12]; labels.appendChild(s); }
+    var timers = [];
+    var later = $("[data-later]", root), back = $("[data-back]", root);
+    function reply(text){
+      if ($(".extra", root)) return;
+      var r = document.createElement("div"); r.className = "msg bot extra"; r.textContent = text;
+      $(".mini", root).appendChild(r); popIn(r);
+      later.disabled = back.disabled = true;
+    }
+    back.addEventListener("click", function(){ reply("Отлично! Выберите время, и я запишу вас на замену масла."); });
+    later.addEventListener("click", function(){ reply("Хорошо, напомню через неделю."); });
+    V.months = function(){
+      timers.forEach(clearTimeout); timers = [];
+      $$(".extra", root).forEach(function(el){ el.remove(); });
+      later.disabled = back.disabled = false;
+      resetFx(root); box.classList.remove("run");
+      var st = steps(root);
+      if (reduce) { box.classList.add("run"); showAll(root); return; }
+      void box.offsetWidth;
+      timers.push(setTimeout(function(){ box.classList.add("run"); }, 300));
+      timers.push(setTimeout(function(){ st[0].classList.add("is-in"); }, 2000));
+      timers.push(setTimeout(function(){ st[1].classList.add("is-in"); }, 2350));
+    };
+  })();
+
+  $$("[data-vig]").forEach(function(card){
+    var name = card.getAttribute("data-vig");
+    $(".replay", card).addEventListener("click", function(){ V[name](); });
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { V[en.target.getAttribute("data-vig")](); io.unobserve(en.target); }
+      });
+    }, { threshold:.45 });
+    $$("[data-vig]").forEach(function(c){ io.observe(c); });
+  } else {
+    Object.keys(V).forEach(function(k){ V[k](); });
+  }
+
+  // placeholder contact link: keep page in place until the developer's link is set
+  $$("[data-contact]").forEach(function(a){
+    a.addEventListener("click", function(e){ if (a.getAttribute("href") === "#") e.preventDefault(); });
+  });
+
+  /* ---------- GSAP scroll craft ---------- */
+  function words(el){
+    var walk = function(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function(part){
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var s = document.createElement("span"); s.className = "w"; s.textContent = part; frag.appendChild(s);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) walk(n);
+      });
+    };
+    walk(el);
+    return $$(".w", el);
+  }
+  if (window.gsap && window.ScrollTrigger && !reduce) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from(".hero-text > *", { y:24, opacity:0, duration:.7, ease:"power3.out", stagger:.07 });
+    gsap.from(".phone", { y:48, opacity:0, duration:.9, ease:"power3.out", delay:.15 });
+    gsap.from(".owner", { y:48, opacity:0, duration:.9, ease:"power3.out", delay:.3 });
+
+    var bandImg = $(".band-img");
+    gsap.fromTo(bandImg, { scale:1.18 }, { scale:1, ease:"none", scrollTrigger:{ trigger:".band", start:"top bottom", end:"bottom top", scrub:true } });
+    var ws = words($("[data-scrub]"));
+    gsap.fromTo(ws, { opacity:.14 }, { opacity:1, ease:"none", stagger:.1, scrollTrigger:{ trigger:".band", start:"top 75%", end:"bottom 55%", scrub:true } });
+
+    gsap.fromTo(".close-img", { scale:1.15 }, { scale:1, ease:"none", scrollTrigger:{ trigger:".close", start:"top bottom", end:"bottom bottom", scrub:true } });
+    gsap.fromTo(".steps-photo img", { scale:.86, opacity:.5 }, { scale:1, opacity:1, ease:"none", scrollTrigger:{ trigger:".steps-photo", start:"top 90%", end:"top 35%", scrub:true } });
+
+    $$("[data-reveal]").forEach(function(el){
+      gsap.from(el, { y:32, opacity:0, duration:.7, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 86%", once:true } });
+    });
+  }
+
+  start();
+})();
 </script>
 </body>
 </html>

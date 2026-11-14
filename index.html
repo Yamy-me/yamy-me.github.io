@@ -3,100 +3,568 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Сайты и боты для бизнеса в Бишкеке</title>
-<meta name="description" content="Сайты с онлайн-записью и Telegram-боты для салонов, клиник, СТО и учебных центров Бишкека. От 3 дней.">
+<title>Сайты с онлайн-записью и Telegram-боты для бизнеса Бишкека</title>
+<meta name="description" content="Сайт с онлайн-записью или Telegram-бот для салона, клиники, СТО за 3–5 дней. Заявки приходят в WhatsApp. Бишкек.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic" rel="stylesheet">
 <style>
-:root{--ink:#14213d;--blue:#2453c9;--sun:#ffc94a;--paper:#f7f8fb;--white:#fff;--mute:#5b6478;--line:#dfe3ec}
-*{box-sizing:border-box;margin:0}
-body{font-family:Commissioner,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;font-size:17px}
+:root{
+  --paper:#efe7d2; --paper-warm:#ece4cf; --paper-dark:#ddd2b6; --bone:#f7f1de;
+  --ink:#15140f; --ink-soft:#2a2620; --ink-mute:#5a5448; --ink-faint:#8b8676;
+  --coral:#ed6f5c; --coral-soft:#f08e7c; --olive:#6e7448;
+  --bg:var(--paper); --surface:var(--bone); --fg:var(--ink); --muted:var(--ink-mute);
+  --border:oklch(from var(--ink) l c h / .16); --accent:var(--coral);
+  --f-display:"Inter Tight","Arial Narrow",system-ui,sans-serif;
+  --f-serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --f-body:Inter,"Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+  --pad:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font:400 17px/1.55 var(--f-body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:radial-gradient(60% 50% at 12% 8%,rgba(106,92,56,.06),transparent 70%),radial-gradient(50% 40% at 90% 70%,rgba(106,92,56,.06),transparent 70%)}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
-header{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:16px}
-.me{font-weight:800;font-size:18px}
-.me span{display:block;font-weight:400;font-size:14px;color:var(--mute)}
-.btn{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;border-radius:12px;padding:13px 18px;font-weight:700;font-size:15px;white-space:nowrap}
-.btn.sun{background:var(--sun);color:var(--ink)}
-h1{font-size:clamp(34px,5.6vw,68px);line-height:1.02;letter-spacing:-.04em;font-weight:800;max-width:900px;margin:30px 0 18px}
-.lead{font-size:19px;color:var(--mute);max-width:620px;margin-bottom:40px}
+img{display:block;max-width:100%}
+.wrap{max-width:1360px;margin:0 auto;padding:0 var(--pad)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+.dot{color:var(--coral)}
+em,.it{font-family:var(--f-serif);font-style:italic;font-weight:500;letter-spacing:-.01em}
 
-.demos{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:90px}
-@media(max-width:900px){.demos{grid-template-columns:1fr}}
-.demo{text-decoration:none;display:block}
-.frame{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#fff;aspect-ratio:4/5;position:relative}
-.frame iframe{position:absolute;top:0;left:0;width:250%;height:250%;transform:scale(.4);transform-origin:0 0;border:0;pointer-events:none}
-.demo b{display:block;margin-top:14px;font-size:18px}
-.demo span{color:var(--mute);font-size:15px}
-.demo:hover b{text-decoration:underline}
+/* progress */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--ink);transform-origin:0 50%;transform:scaleX(0);z-index:60}
 
-h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.03em;font-weight:800;margin-bottom:26px}
-.prices{background:var(--white);border-radius:24px;padding:10px 28px;margin-bottom:20px}
-.p{display:grid;grid-template-columns:1fr auto;gap:8px 24px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.p:last-child{border-bottom:0}
-.p b{font-size:19px}
-.p .c{font-weight:800;font-size:22px;text-align:right;white-space:nowrap}
-.p .c s{color:var(--mute);font-weight:400;font-size:16px;margin-right:6px}
-.p p{color:var(--mute);font-size:15px;grid-column:1/-1;max-width:640px}
-.offer{background:var(--sun);border-radius:16px;padding:16px 20px;font-weight:500;margin-bottom:90px}
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:oklch(from var(--paper) l c h / .88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s,transform .3s var(--ease)}
+.nav.scrolled{border-color:var(--border)}
+.nav.hide{transform:translateY(-100%)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;font:700 15px/1 var(--f-display);letter-spacing:.01em}
+.brand .mark{font:500 22px/1 var(--f-serif);font-style:italic}
+.brand small{font:400 11px/1 var(--f-mono);color:var(--ink-faint);letter-spacing:.04em}
+.nav ul{display:flex;gap:28px;list-style:none}
+.nav ul a{font:600 14px/1 var(--f-display);letter-spacing:.02em;text-decoration:none;padding:12px 0;background:linear-gradient(var(--ink),var(--ink)) 0 calc(100% - 6px)/0 1px no-repeat;transition:background-size .2s var(--ease)}
+.nav ul a:hover{background-size:100% 1px}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border:1px solid var(--ink);border-radius:999px;font:600 14px/1 var(--f-display);letter-spacing:.02em;text-decoration:none;color:var(--ink);transition:background .15s,color .15s}
+.btn-ghost:hover{background:var(--ink);color:var(--bone)}
 
-.how{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:90px}
-@media(max-width:900px){.how{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.how{grid-template-columns:1fr}}
-.how div b{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.how div b i{font-style:normal;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:15px;flex:none}
-.how p{color:var(--mute);font-size:15px}
+/* primary button */
+.btn{display:inline-flex;align-items:center;gap:14px;min-height:60px;padding:0 30px 0 26px;border-radius:999px;background:var(--coral);color:var(--ink);font:700 18px/1 var(--f-display);letter-spacing:.01em;text-decoration:none;transition:background .15s var(--ease),transform .15s var(--ease),box-shadow .2s}
+.btn svg{width:22px;height:22px;flex:none}
+.btn:hover{background:oklch(from var(--coral) calc(l + .07) c h);box-shadow:0 10px 30px -12px oklch(from var(--coral) l c h / .7)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn .arr{transition:transform .2s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
 
-.end{background:var(--ink);color:#fff;border-radius:28px;padding:44px 32px;margin-bottom:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
-.end h2{margin:0;color:#fff;max-width:560px}
-footer{color:var(--mute);font-size:14px;padding:0 0 40px}
+/* section scaffolding */
+section{padding:130px 0}
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:56px;font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute)}
+.sec-head .num{font:500 18px/1 var(--f-serif);font-style:italic;text-transform:none;letter-spacing:0;color:var(--ink)}
+.sec-head .rule{flex:1;height:0;border-top:1px dotted oklch(from var(--ink) l c h / .45)}
+h2.display{font:800 clamp(38px,5.6vw,78px)/1.02 var(--f-display);letter-spacing:-.035em;max-width:16ch}
+h2.display em{letter-spacing:-.02em}
+.lede{font-size:19px;line-height:1.55;color:var(--ink-soft);max-width:52ch}
+
+/* hero */
+.hero{padding:72px 0 110px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 28px;font:400 11px/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);padding-bottom:22px;border-bottom:1px solid var(--border);margin-bottom:44px}
+.hero h1{font:800 clamp(40px,7.4vw,112px)/.98 var(--f-display);letter-spacing:-.04em;max-width:20ch}
+.hero h1 em{white-space:nowrap}
+.hero h1 em{letter-spacing:-.02em}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.hero h1 .ln>span{display:inline-block}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:end;margin-top:56px}
+.hero-lead{font-size:clamp(19px,1.7vw,23px);line-height:1.45;color:var(--ink-soft);max-width:30ch;margin-bottom:34px}
+.hero-lead strong{font-weight:500;color:var(--ink)}
+.hero-note{margin-top:18px;font:400 13px/1.5 var(--f-body);color:var(--ink-mute)}
+
+/* notification mock */
+.notif-stage{position:relative;justify-self:end;width:min(100%,420px)}
+.notif-cap{font:400 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;display:flex;justify-content:space-between}
+.notif{background:var(--bone);border:1px solid var(--border);border-radius:18px;padding:18px 20px;box-shadow:0 24px 50px -30px rgba(21,20,15,.45)}
+.notif+.notif{margin-top:10px}
+.notif-top{display:flex;align-items:center;gap:10px;font:600 13px/1 var(--f-display);letter-spacing:.02em}
+.notif-top .ic{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--bone);display:grid;place-items:center}
+.notif-top .ic svg{width:16px;height:16px}
+.notif-top time{margin-left:auto;font:400 12px/1 var(--f-mono);color:var(--ink-faint)}
+.notif p{margin-top:10px;font-size:15px;line-height:1.5;color:var(--ink-soft)}
+.notif p b{font-weight:500;color:var(--ink)}
+.notif.ghost{opacity:.55;transform:scale(.96);transform-origin:50% 0}
+
+/* work */
+.work{border-top:1px solid var(--border)}
+.work-intro{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;margin-bottom:72px}
+.cases{display:grid;grid-template-columns:repeat(12,1fr);gap:28px}
+.case{grid-column:span 6;text-decoration:none;display:block}
+.case:first-child{grid-column:span 12}
+.case-frame{position:relative;background:var(--ink);border-radius:16px;padding:10px;transition:transform .45s var(--ease),box-shadow .45s var(--ease);box-shadow:0 30px 60px -40px rgba(21,20,15,.6)}
+.case:hover .case-frame{transform:translateY(-6px);box-shadow:0 46px 80px -40px rgba(21,20,15,.7)}
+.bar{display:flex;align-items:center;gap:6px;padding:4px 6px 12px}
+.bar i{width:9px;height:9px;border-radius:50%;background:oklch(from var(--bone) l c h / .28)}
+.bar span{margin-left:12px;font:400 11px/1 var(--f-mono);color:oklch(from var(--bone) l c h / .62);letter-spacing:.03em}
+.screen{position:relative;overflow:hidden;border-radius:8px;background:var(--bone);aspect-ratio:16/9}
+.case:first-child .screen{aspect-ratio:21/9}
+.screen .mock{position:absolute;inset:0;transition:transform .9s var(--ease)}
+.case:hover .screen .mock{transform:translateY(-4%)}
+.screen iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;pointer-events:none;background:#fff}
+.case-cap{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:baseline;padding:20px 4px 0}
+.case-cap .n{font:500 16px/1 var(--f-serif);font-style:italic;color:var(--ink-mute)}
+.case-cap h3{font:700 clamp(19px,1.7vw,24px)/1.25 var(--f-display);letter-spacing:-.015em}
+.case-cap .go{font:600 14px/1 var(--f-display);letter-spacing:.02em;white-space:nowrap;display:inline-flex;gap:8px;align-items:center}
+.case-cap .go svg{width:16px;height:16px;transition:transform .25s var(--ease)}
+.case:hover .go svg{transform:translate(3px,-3px)}
+.case:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+
+/* mock internals */
+.m{position:absolute;inset:0;padding:5% 6%;font-family:var(--f-body);color:var(--ink)}
+.m-head{display:flex;justify-content:space-between;align-items:center;font:700 clamp(10px,1.1vw,15px)/1 var(--f-display);padding-bottom:4%;border-bottom:1px solid var(--border)}
+.m-head .pill{font:600 clamp(8px,.8vw,12px)/1 var(--f-display);background:var(--ink);color:var(--bone);padding:.7em 1.2em;border-radius:99px}
+.m-title{font:800 clamp(16px,2.6vw,40px)/1.02 var(--f-display);letter-spacing:-.03em;margin:5% 0 3%}
+.m-title em{font-weight:500}
+.m-label{font:400 clamp(7px,.75vw,11px)/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:2%}
+.chips{display:flex;flex-wrap:wrap;gap:1.2%;margin-bottom:3.5%}
+.chips span{font:500 clamp(8px,.85vw,13px)/1 var(--f-body);border:1px solid oklch(from var(--ink) l c h / .3);padding:.7em 1.1em;border-radius:99px}
+.chips span.on{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.m-salon{display:grid;grid-template-columns:1.1fr 1fr;gap:6%}
+.m-salon .photo{border-radius:10px;background:
+  radial-gradient(70% 60% at 30% 30%,oklch(from var(--coral-soft) l c h / .55),transparent 70%),
+  radial-gradient(60% 70% at 80% 80%,oklch(from var(--olive) l c h / .35),transparent 70%),var(--paper-dark);
+  display:flex;align-items:flex-end;padding:5%;font:500 clamp(8px,.9vw,13px)/1.3 var(--f-serif);font-style:italic;color:var(--ink-soft)}
+.m-dent{display:grid;grid-template-columns:1.3fr 1fr;gap:6%;margin-top:4%}
+.row{display:flex;align-items:center;gap:4%;padding:3.2% 0;border-bottom:1px dotted oklch(from var(--ink) l c h / .35);font:500 clamp(8px,.95vw,14px)/1 var(--f-body)}
+.row .box{width:1.2em;height:1.2em;border:1.5px solid var(--ink);border-radius:4px;flex:none}
+.row .box.on{background:var(--ink);box-shadow:inset 0 0 0 2px var(--bone)}
+.row .sk{margin-left:auto;height:.7em;width:18%;border-radius:3px;background:oklch(from var(--ink) l c h / .14)}
+.total{background:var(--ink);color:var(--bone);border-radius:10px;padding:8% 9%;display:flex;flex-direction:column;justify-content:space-between}
+.total .m-label{color:oklch(from var(--bone) l c h / .7)}
+.total .sk{height:clamp(14px,2vw,30px);width:80%;border-radius:4px;background:oklch(from var(--bone) l c h / .22);margin:6% 0}
+.total .cta{font:600 clamp(8px,.85vw,12px)/1 var(--f-display);border:1px solid oklch(from var(--bone) l c h / .5);border-radius:99px;padding:.8em;text-align:center}
+.m-bot{background:var(--paper-dark);padding:4% 6%;display:flex;flex-direction:column;gap:3.4%}
+.bub{max-width:72%;font:400 clamp(8px,.95vw,14px)/1.35 var(--f-body);padding:.8em 1em;border-radius:12px;background:var(--bone)}
+.bub.me{align-self:flex-end;background:var(--ink);color:var(--bone)}
+.kb{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:72%}
+.kb span{font:500 clamp(7px,.85vw,13px)/1 var(--f-body);text-align:center;padding:.8em;border-radius:8px;background:oklch(from var(--bone) l c h / .7);border:1px solid var(--border)}
+.bot-head{display:flex;align-items:center;gap:3%;font:700 clamp(9px,1vw,15px)/1 var(--f-display);padding-bottom:2%}
+.bot-head .av{width:2.2em;height:2.2em;border-radius:50%;background:var(--ink);color:var(--bone);display:grid;place-items:center;font-size:.8em}
+.bot-head small{display:block;font:400 .72em/1.4 var(--f-mono);color:var(--ink-mute)}
+
+/* prices */
+.prices{background:var(--paper-warm);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.price-top{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;margin-bottom:64px}
+.offer-note{font-size:16px;color:var(--ink-soft);max-width:44ch;border-top:1px solid var(--ink);padding-top:16px}
+.offer-note b{font-weight:500;color:var(--ink)}
+.plist{list-style:none;border-top:2px solid var(--ink)}
+.pitem{display:grid;grid-template-columns:72px 1fr auto;gap:24px;padding:34px 0;border-bottom:1px solid var(--border);align-items:baseline}
+.pitem .n{font:500 18px/1 var(--f-serif);font-style:italic;color:var(--ink-mute)}
+.pname{display:flex;align-items:baseline;gap:14px}
+.pname h3{font:700 clamp(22px,2.4vw,34px)/1.15 var(--f-display);letter-spacing:-.02em}
+.pname .lead{flex:1;min-width:24px;border-bottom:2px dotted oklch(from var(--ink) l c h / .35);transform:translateY(-6px)}
+.pdesc{grid-column:2/4;font-size:16px;color:var(--ink-mute);max-width:62ch;margin-top:-10px}
+.pprice{text-align:right;white-space:nowrap}
+.pprice .now{font:800 clamp(28px,3.2vw,46px)/1 var(--f-display);letter-spacing:-.03em}
+.pprice .now small{font:600 .42em/1 var(--f-display);letter-spacing:.02em;margin-left:6px}
+.pprice .was{display:block;margin-top:8px;font:400 13px/1 var(--f-mono);color:var(--ink-mute)}
+.pprice .was s{text-decoration-thickness:1px}
+.pitem.hl{background:linear-gradient(90deg,oklch(from var(--bone) l c h / .9),oklch(from var(--bone) l c h / 0));margin:0 calc(-1*24px);padding-left:24px;padding-right:24px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tags span{font:500 14px/1 var(--f-body);padding:9px 14px;border:1px solid var(--border);border-radius:99px;background:var(--bone);color:var(--ink-soft)}
+
+/* process */
+.steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:72px}
+.steps-line{position:absolute;top:27px;left:0;right:0;height:1px;background:var(--border)}
+.steps-line i{position:absolute;inset:0;background:var(--ink);transform-origin:0 50%;transform:scaleX(var(--p,0))}
+.step{position:relative}
+.step .k{width:56px;height:56px;border-radius:50%;background:var(--paper);border:1px solid var(--ink);display:grid;place-items:center;font:500 22px/1 var(--f-serif);font-style:italic;margin-bottom:28px;transition:background .3s,color .3s}
+.step.on .k{background:var(--ink);color:var(--bone)}
+.step h3{font:700 24px/1.2 var(--f-display);letter-spacing:-.015em;margin-bottom:12px}
+.step p{font-size:16px;color:var(--ink-mute);max-width:28ch}
+.pay{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center;margin-top:96px;padding:48px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.pay .big{font:800 clamp(64px,10vw,150px)/.9 var(--f-display);letter-spacing:-.05em;white-space:nowrap}
+.pay .big em{font-weight:500;letter-spacing:-.02em;color:var(--ink-mute);margin:0 .08em}
+.pay h3{font:700 clamp(22px,2.2vw,30px)/1.2 var(--f-display);letter-spacing:-.015em;margin-bottom:10px}
+.pay p{color:var(--ink-soft);max-width:48ch}
+
+/* faq */
+.faq{border-top:1px solid var(--border)}
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px}
+details{border-bottom:1px solid var(--border)}
+details:first-child{border-top:2px solid var(--ink)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:28px 0;font:700 clamp(20px,2vw,27px)/1.25 var(--f-display);letter-spacing:-.015em;border-radius:4px}
+summary::-webkit-details-marker{display:none}
+summary .pm{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;transition:transform .25s var(--ease),background .15s,color .15s}
+summary:hover .pm{background:var(--ink);color:var(--bone)}
+details[open] summary .pm{transform:rotate(45deg)}
+summary .pm svg{width:16px;height:16px}
+.ans{padding:0 64px 32px 0;font-size:17px;color:var(--ink-soft);max-width:62ch}
+.ans p+p{margin-top:12px}
+
+/* close */
+.close{background:var(--ink);color:var(--bone);padding:150px 0 0;overflow:hidden}
+.close .sec-head{color:oklch(from var(--bone) l c h / .6)}
+.close .sec-head .num{color:var(--bone)}
+.close .sec-head .rule{border-color:oklch(from var(--bone) l c h / .3)}
+.close h2{font:800 clamp(44px,8.4vw,132px)/.98 var(--f-display);letter-spacing:-.045em;max-width:13ch}
+.close h2 em{letter-spacing:-.02em}
+.close-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px;margin-top:64px}
+.close-row p{font-size:19px;color:oklch(from var(--bone) l c h / .78);max-width:40ch}
+.close .btn:focus-visible{outline-color:var(--bone)}
+.foot{margin-top:140px;border-top:1px solid oklch(from var(--bone) l c h / .18);padding:28px 0 36px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font:400 12px/1.5 var(--f-mono);letter-spacing:.04em;color:oklch(from var(--bone) l c h / .62)}
+.foot a{color:oklch(from var(--bone) l c h / .85);text-decoration:none}
+.foot a:hover{color:var(--bone);text-decoration:underline}
+.mega{font:500 clamp(80px,19vw,300px)/.8 var(--f-serif);font-style:italic;letter-spacing:-.04em;color:oklch(from var(--bone) l c h / .07);white-space:nowrap;margin-top:40px;transform:translateX(var(--mx,0));user-select:none}
+
+/* reveal + hero entrance */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+[data-reveal].in{opacity:1;transform:none}
+.js .hero h1 .ln>span{transform:translateY(105%)}
+.js .hero [data-h]{opacity:0;transform:translateY(16px)}
+.loaded .hero h1 .ln>span{transform:none;transition:transform .9s var(--ease)}
+.loaded .hero h1 .ln:nth-child(2)>span{transition-delay:.08s}
+.loaded .hero h1 .ln:nth-child(3)>span{transition-delay:.16s}
+.loaded .hero [data-h]{opacity:1;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(.35s + var(--d,0) * .1s)}
+.loaded .notif.n1{animation:pop .5s var(--ease) 1.05s both}
+@keyframes pop{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  [data-reveal],.js .hero h1 .ln>span,.js .hero [data-h]{opacity:1!important;transform:none!important}
+  .mega{transform:none!important}
+  .case:hover .case-frame,.case:hover .screen .mock{transform:none}
+}
+
+/* responsive */
+@media (max-width:1080px){:root{--pad:32px} .hero-grid,.work-intro,.price-top,.faq-grid{grid-template-columns:1fr;gap:40px} .notif-stage{justify-self:start} .steps{grid-template-columns:1fr 1fr;row-gap:56px} .steps-line{display:none}}
+@media (max-width:880px){:root{--pad:24px} section{padding:96px 0} .nav ul{display:none} .case,.case:first-child{grid-column:span 12} .case:first-child .screen{aspect-ratio:16/10} .pay{grid-template-columns:1fr;gap:24px}}
+@media (max-width:560px){
+  section{padding:80px 0} body{font-size:16px}
+  .hero{padding:40px 0 80px} .hero-meta{margin-bottom:32px} .hero-grid{margin-top:36px}
+  .brand small{display:none} .btn-ghost{padding:0 14px}
+  .btn{width:100%;justify-content:center;min-height:58px;font-size:17px}
+  .sec-head{margin-bottom:36px}
+  .steps{grid-template-columns:1fr;row-gap:40px}
+  .screen,.case:first-child .screen{aspect-ratio:4/3.4}
+  .m-salon .photo{display:none} .m-salon{grid-template-columns:1fr}
+  .m-dent{grid-template-columns:1fr} .total{display:none}
+  .case-cap{grid-template-columns:auto 1fr} .case-cap .go{grid-column:2}
+  .pitem{grid-template-columns:1fr;gap:10px;padding:28px 0} .pitem .n{display:none}
+  .pname .lead{display:none} .pdesc{grid-column:auto;margin-top:0} .pprice{text-align:left}
+  .pprice .was{display:inline;margin-left:12px}
+  .pitem.hl{margin:0 -16px;padding-left:16px;padding-right:16px}
+  .ans{padding-right:0} summary{padding:22px 0}
+  .close{padding-top:100px} .foot{margin-top:96px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="me" id="name">Имя Фамилия<span>Разработчик, Бишкек</span></div>
-    <a class="btn wa" href="#">Написать в WhatsApp</a>
-  </header>
+<div class="progress" aria-hidden="true"></div>
 
-  <h1>Сайт с онлайн-записью или Telegram-бот для вашего бизнеса за 3–5 дней</h1>
-  <p class="lead">Для салонов, клиник, СТО и учебных центров, у которых пока есть только Instagram и 2GIS. Клиенты записываются сами, заявки приходят вам в WhatsApp или Telegram.</p>
-
-  <div class="demos">
-    <a class="demo" href="salon/"><div class="frame"><iframe src="salon/" title="Демо сайта салона" loading="lazy" tabindex="-1"></iframe></div><b>Сайт салона с записью</b><span>Клиент выбирает услугу, мастера и время</span></a>
-    <a class="demo" href="dent/"><div class="frame"><iframe src="dent/" title="Демо сайта стоматологии" loading="lazy" tabindex="-1"></iframe></div><b>Стоматология с калькулятором</b><span>Пациент видит цену лечения до визита</span></a>
-    <a class="demo" href="bot/"><div class="frame"><iframe src="bot/" title="Демо Telegram-бота" loading="lazy" tabindex="-1"></iframe></div><b>Telegram-бот записи для СТО</b><span>Нажмите кнопки и запишитесь сами</span></a>
+<header class="nav" data-od-id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" data-od-id="brand"><span class="mark">с.</span><span class="js-name">Имя Фамилия</span><small>Бишкек</small></a>
+    <nav aria-label="Разделы"><ul>
+      <li><a href="#work">Работы</a></li>
+      <li><a href="#prices">Цены</a></li>
+      <li><a href="#process">Как работаем</a></li>
+      <li><a href="#faq">Вопросы</a></li>
+    </ul></nav>
+    <a class="btn-ghost js-wa" href="https://wa.me/996XXXXXXXXX" target="_blank" rel="noopener" data-od-id="nav-whatsapp">WhatsApp</a>
   </div>
+</header>
 
-  <h2>Цены</h2>
-  <div class="prices">
-    <div class="p"><b>Сайт-лендинг</b><div class="c"><s>12 000</s>7 000 сом</div><p>Одна страница: услуги, цены, мастера, отзывы, карта, кнопки WhatsApp и Instagram. Онлайн-запись или калькулятор цены. Готов за 3 дня.</p></div>
-    <div class="p"><b>Telegram-бот записи или заказов</b><div class="c"><s>18 000</s>10 000 сом</div><p>Запись, прайс, каталог, уведомления владельцу, напоминания клиентам. Готов за 3–5 дней. Сервер для бота около 400 сом в месяц, оплачиваете напрямую.</p></div>
-    <div class="p"><b>Сайт и бот вместе</b><div class="c"><s>28 000</s>15 000 сом</div><p>Заявки с сайта и из бота приходят в один чат.</p></div>
-    <div class="p"><b>Мелкие задачи</b><div class="c">от 1 000 сом</div><p>Правки на сайте, карточка в 2GIS и Google Картах, страница-визитка для ссылки в Instagram, настройка WhatsApp Business.</p></div>
+<main id="top">
+<section class="hero" data-od-id="hero">
+  <div class="wrap">
+    <div class="hero-meta" data-h style="--d:0">
+      <span>Веб-студия из одного человека</span><span>Бишкек</span><span>Салоны · клиники · СТО · барбершопы · фитнес · курсы</span>
+    </div>
+    <h1 data-od-id="hero-title">
+      <span class="ln"><span>Сайты с <em>онлайн-записью</em></span></span>
+      <span class="ln"><span>и Telegram-боты</span></span>
+      <span class="ln"><span>для бизнеса Бишкека<span class="dot">.</span></span></span>
+    </h1>
+    <div class="hero-grid">
+      <div>
+        <p class="hero-lead" data-h style="--d:1">Готово за&nbsp;3–5 дней. <strong>Клиенты записываются сами, заявки приходят вам в&nbsp;WhatsApp.</strong></p>
+        <div data-h style="--d:2">
+          <a class="btn js-wa" href="https://wa.me/996XXXXXXXXX" target="_blank" rel="noopener" data-od-id="hero-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.3z"/><path d="M9 9.2c.3 1.9 2.2 4 4.6 4.8l1.2-1.1 2 .9c-.2 1.1-1.1 1.9-2.3 1.8-3.5-.4-6.4-3.3-6.7-6.8-.1-1.1.7-2 1.8-2.2l.9 2z"/></svg>
+            Написать в WhatsApp <span class="arr" aria-hidden="true">→</span>
+          </a>
+          <p class="hero-note">Отвечаю сам, без менеджеров. Сначала короткий разговор, без обязательств.</p>
+        </div>
+      </div>
+      <div class="notif-stage" aria-label="Пример того, как выглядит заявка с сайта" data-od-id="hero-notification">
+        <div class="notif-cap" data-h style="--d:2"><span>Пример заявки</span><span>WhatsApp</span></div>
+        <div class="notif n1">
+          <div class="notif-top"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Новая запись с сайта<time>14:32</time></div>
+          <p><b>Маникюр с покрытием</b>, мастер Айгерим<br>Пятница, 15:00 · телефон клиента в заявке</p>
+        </div>
+        <div class="notif ghost" data-h style="--d:3">
+          <div class="notif-top"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 4L3 11l6 2 2 6 3-4 4 3z"/></svg></span>Telegram-бот<time>13:05</time></div>
+          <p><b>Диагностика ходовой</b>, завтра 10:00</p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="offer">Цены со скидкой действуют для первых трёх клиентов: собираю портфолио в Бишкеке. Оплата 50% до начала, 50% после того, как увидите готовую работу.</div>
+</section>
 
-  <h2>Как работаем</h2>
-  <div class="how">
-    <div><b><i>1</i>Созвон 15 минут</b><p>Обсуждаем, что нужно, и что уже есть: фото, цены, отзывы.</p></div>
-    <div><b><i>2</i>Макет за сутки</b><p>Показываю первый вариант с вашими фото и ценами.</p></div>
-    <div><b><i>3</i>Правки</b><p>Две бесплатные правки, пока не будет нравиться.</p></div>
-    <div><b><i>4</i>Запуск</b><p>Сайт в интернете, ссылка в Instagram и 2GIS, бот принимает заявки.</p></div>
+<section class="work" id="work" data-od-id="work">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="num">I.</span>Живые примеры<span class="rule"></span>03 демо</div>
+    <div class="work-intro">
+      <h2 class="display" data-reveal>Нажмите и <em>попробуйте</em> сами<span class="dot">.</span></h2>
+      <p class="lede" data-reveal>Это рабочие демо, а не картинки. Запишитесь на свободное время, посчитайте цену лечения, поговорите с ботом. Ваш сайт будет таким же, только с вашими фото, услугами и ценами.</p>
+    </div>
+    <div class="cases">
+      <a class="case" href="./salon-od/" data-demo="../salon-od/" data-od-id="case-salon" data-reveal>
+        <div class="case-frame">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>salon-od / запись</span></div>
+          <div class="screen"><div class="mock" aria-hidden="true">
+            <div class="m">
+              <div class="m-head"><span>Салон красоты</span><span class="pill">Записаться</span></div>
+              <div class="m-salon">
+                <div>
+                  <div class="m-title">Запись к <em>мастеру</em> онлайн</div>
+                  <div class="m-label">Мастер</div>
+                  <div class="chips"><span class="on">Айгерим</span><span>Мадина</span><span>Любой</span></div>
+                  <div class="m-label">Пятница, свободное время</div>
+                  <div class="chips"><span>10:00</span><span>11:30</span><span>13:00</span><span class="on">15:00</span><span>16:30</span><span>18:00</span></div>
+                </div>
+                <div class="photo">ваши фото работ</div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="case-cap"><span class="n">01</span><h3>Салон красоты: запись к мастеру на свободное время</h3><span class="go">Открыть <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div>
+      </a>
+
+      <a class="case" href="./dent/" data-demo="../dent/" data-od-id="case-dent" data-reveal>
+        <div class="case-frame">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>dent / калькулятор</span></div>
+          <div class="screen"><div class="mock" aria-hidden="true">
+            <div class="m">
+              <div class="m-head"><span>Стоматология</span><span class="pill">Позвонить</span></div>
+              <div class="m-dent">
+                <div>
+                  <div class="m-label">Что нужно сделать</div>
+                  <div class="row"><span class="box on"></span>Профессиональная чистка<span class="sk"></span></div>
+                  <div class="row"><span class="box on"></span>Пломба, 2 зуба<span class="sk"></span></div>
+                  <div class="row"><span class="box"></span>Отбеливание<span class="sk"></span></div>
+                  <div class="row"><span class="box"></span>Консультация<span class="sk"></span></div>
+                </div>
+                <div class="total"><div><div class="m-label">Итого</div><div class="sk"></div></div><div class="cta">Записаться на приём</div></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="case-cap"><span class="n">02</span><h3>Стоматология: калькулятор цены лечения</h3><span class="go">Открыть <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div>
+      </a>
+
+      <a class="case" href="./bot/" data-demo="../bot/" data-od-id="case-bot" data-reveal>
+        <div class="case-frame">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>bot / Telegram</span></div>
+          <div class="screen"><div class="mock" aria-hidden="true">
+            <div class="m m-bot">
+              <div class="bot-head"><span class="av">СТО</span><div>Бот записи СТО<small>бот · онлайн</small></div></div>
+              <div class="bub">Здравствуйте! На какую услугу записать?</div>
+              <div class="kb"><span>Замена масла</span><span>Диагностика</span><span>Шиномонтаж</span><span>Другое</span></div>
+              <div class="bub me">Диагностика</div>
+              <div class="bub">Свободно завтра в 10:00 и 14:00. Какое время удобно?</div>
+            </div>
+          </div></div>
+        </div>
+        <div class="case-cap"><span class="n">03</span><h3>СТО: Telegram-бот записи</h3><span class="go">Открыть <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></div>
+      </a>
+    </div>
   </div>
+</section>
 
-  <div class="end"><h2>Покажу, как это будет выглядеть с вашими услугами</h2><a class="btn sun wa" href="#">Написать в WhatsApp</a></div>
-  <footer>Бишкек · сайты и Telegram-боты для малого бизнеса</footer>
-</div>
+<section class="prices" id="prices" data-od-id="prices">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="num">II.</span>Цены<span class="rule"></span>в сомах</div>
+    <div class="price-top">
+      <h2 class="display" data-reveal>Цена известна <em>заранее</em><span class="dot">.</span></h2>
+      <p class="offer-note" data-reveal><b>Цены для первых трёх клиентов.</b> Я только запускаю студию, и мне нужны первые работы с настоящим бизнесом. Зачёркнута обычная цена, по которой я буду работать дальше.</p>
+    </div>
+    <ul class="plist">
+      <li class="pitem" data-od-id="price-landing" data-reveal>
+        <span class="n">01</span>
+        <div class="pname"><h3>Сайт-лендинг</h3><span class="lead"></span></div>
+        <div class="pprice"><span class="now">7 000<small>сом</small></span><span class="was"><s>12 000 сом</s></span></div>
+        <p class="pdesc">Одна страница с услугами, ценами, фото и онлайн-записью. Заявки приходят в WhatsApp.</p>
+      </li>
+      <li class="pitem" data-od-id="price-bot" data-reveal>
+        <span class="n">02</span>
+        <div class="pname"><h3>Telegram-бот записи или заказов</h3><span class="lead"></span></div>
+        <div class="pprice"><span class="now">10 000<small>сом</small></span><span class="was"><s>18 000 сом</s></span></div>
+        <p class="pdesc">Бот принимает записи и заказы круглосуточно. Сервер для бота стоит около 400 сом в месяц, его оплачивает клиент.</p>
+      </li>
+      <li class="pitem hl" data-od-id="price-bundle" data-reveal>
+        <span class="n">03</span>
+        <div class="pname"><h3>Сайт и бот вместе</h3><span class="lead"></span></div>
+        <div class="pprice"><span class="now">15 000<small>сом</small></span><span class="was"><s>28 000 сом</s></span></div>
+        <p class="pdesc">Сайт для тех, кто пришёл из Instagram и 2GIS, бот для тех, кто привык писать в Telegram.</p>
+      </li>
+      <li class="pitem" data-od-id="price-small" data-reveal>
+        <span class="n">04</span>
+        <div class="pname"><h3>Мелкие задачи</h3><span class="lead"></span></div>
+        <div class="pprice"><span class="now"><span class="it" style="font-size:.5em;letter-spacing:0;margin-right:6px">от</span>1 000<small>сом</small></span></div>
+        <div class="pdesc tags"><span>Правки на сайте</span><span>Карточка в 2GIS и Google Картах</span><span>Страница для ссылки в Instagram</span><span>Настройка WhatsApp Business</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="process" data-od-id="process">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="num">III.</span>Как работаем<span class="rule"></span>3–5 дней</div>
+    <h2 class="display" data-reveal>Четыре шага, <em>без</em> долгих согласований<span class="dot">.</span></h2>
+    <div class="steps" data-od-id="steps">
+      <div class="steps-line" aria-hidden="true"><i></i></div>
+      <div class="step" data-od-id="step-call" data-reveal><div class="k">1</div><h3>Созвон 15 минут</h3><p>Расскажете, что у вас за бизнес и как сейчас идут записи. Я задам пару вопросов и назову срок.</p></div>
+      <div class="step" data-od-id="step-mockup" data-reveal><div class="k">2</div><h3>Макет за сутки</h3><p>С вашими фото и ценами, не с шаблонными картинками. Сразу видно, как будет выглядеть сайт.</p></div>
+      <div class="step" data-od-id="step-edits" data-reveal><div class="k">3</div><h3>Две бесплатные правки</h3><p>Поменять тексты, порядок услуг, фото. Говорите, что не так, я переделываю.</p></div>
+      <div class="step" data-od-id="step-launch" data-reveal><div class="k">4</div><h3>Запуск</h3><p>Сайт в интернете, ссылка стоит в Instagram и 2GIS, заявки приходят вам в WhatsApp.</p></div>
+    </div>
+    <div class="pay" data-od-id="payment" data-reveal>
+      <div class="big" aria-hidden="true">50<em>/</em>50</div>
+      <div><h3>Оплата в два этапа</h3><p>50% до начала работы, 50% после того, как увидите готовый сайт или бота и всё проверите.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq" data-od-id="faq">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="num">IV.</span>Вопросы<span class="rule"></span></div>
+    <div class="faq-grid">
+      <h2 class="display" data-reveal>То, что <em>обычно</em> спрашивают<span class="dot">.</span></h2>
+      <div data-reveal>
+        <details data-od-id="faq-instagram">
+          <summary>У нас всё через Instagram. Зачем сайт?<span class="pm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="ans"><p>Instagram остаётся, сайт его не заменяет. Ссылка на сайт стоит в профиле: человек видит услуги, цены и свободное время и записывается сам, без переписки в директе.</p><p>Вам не нужно отвечать «сколько стоит» и «есть ли время в пятницу». Готовая заявка приходит в WhatsApp.</p></div>
+        </details>
+        <details data-od-id="faq-broken">
+          <summary>А если что-то сломается?<span class="pm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="ans"><p>Пишете мне в WhatsApp, я разбираюсь. Если ошибка в моей работе, исправляю бесплатно.</p><p>Новые задачи после запуска, например добавить услугу или страницу, считаются как мелкие задачи, от 1 000 сом.</p></div>
+        </details>
+        <details data-od-id="faq-prices">
+          <summary>Можно ли менять цены самим?<span class="pm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+          <div class="ans"><p>Да. При запуске покажу, где меняются цены и услуги. Если не хочется разбираться, пришлите новый прайс в WhatsApp, и я обновлю.</p></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="contact" data-od-id="close">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="num">V.</span>Связаться<span class="rule"></span>WhatsApp</div>
+    <h2 data-reveal data-od-id="close-title">Напишите, и я <em>покажу</em>, как это будет у вас<span class="dot">.</span></h2>
+    <div class="close-row" data-reveal>
+      <p>Пришлите ссылку на ваш Instagram или 2GIS. Отвечу, что можно сделать и сколько это займёт.</p>
+      <a class="btn js-wa" href="https://wa.me/996XXXXXXXXX" target="_blank" rel="noopener" data-od-id="close-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.3z"/><path d="M9 9.2c.3 1.9 2.2 4 4.6 4.8l1.2-1.1 2 .9c-.2 1.1-1.1 1.9-2.3 1.8-3.5-.4-6.4-3.3-6.7-6.8-.1-1.1.7-2 1.8-2.2l.9 2z"/></svg>
+        Написать в WhatsApp <span class="arr" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+  <div class="mega" aria-hidden="true">Бишкек · сайты · боты</div>
+  <div class="wrap">
+    <footer class="foot" data-od-id="footer">
+      <span>© <span class="js-year">2026</span> <span class="js-name">Имя Фамилия</span> · Бишкек, Кыргызстан</span>
+      <span><a class="js-wa" href="https://wa.me/996XXXXXXXXX" target="_blank" rel="noopener">WhatsApp: <span class="js-phone">+996 XXX XXX XXX</span></a></span>
+    </footer>
+  </div>
+</section>
+</main>
+
 <script>
-/* Поменяй две строки ниже на свои данные */
-const MY_NAME = 'Имя Фамилия';
-const MY_WHATSAPP = '996XXXXXXXXX';
+/* Настройки: впишите своё имя и номер WhatsApp (только цифры, с 996) */
+const MY_NAME = 'Атай';
+const MY_WHATSAPP = '996555150381';
 
-document.getElementById('name').firstChild.textContent = MY_NAME;
-document.querySelectorAll('.wa').forEach(a => a.href = 'https://wa.me/' + MY_WHATSAPP + '?text=' + encodeURIComponent('Здравствуйте! Увидел ваши примеры сайтов, хочу узнать подробнее.'));
+(function(){
+  var MSG = 'Здравствуйте! Увидел ваши примеры сайтов, хочу узнать подробнее.';
+  var waUrl = 'https://wa.me/' + MY_WHATSAPP + '?text=' + encodeURIComponent(MSG);
+  document.querySelectorAll('.js-wa').forEach(function(a){ a.href = waUrl; });
+  document.querySelectorAll('.js-name').forEach(function(n){ n.textContent = MY_NAME; });
+  var ph = MY_WHATSAPP.replace(/^(996)(\d{3})(\d{3})(\d{3})$/, '+$1 $2 $3 $4');
+  document.querySelectorAll('.js-phone').forEach(function(n){ n.textContent = /\d{12}/.test(MY_WHATSAPP) ? ph : '+' + MY_WHATSAPP; });
+  document.querySelectorAll('.js-year').forEach(function(n){ n.textContent = new Date().getFullYear(); });
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+  root.classList.add('js');
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ root.classList.add('loaded'); }); });
+
+  /* reveal */
+  var els = document.querySelectorAll('[data-reveal]');
+  if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); }
+  else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        var sibs = Array.prototype.filter.call(en.target.parentElement.children, function(c){ return c.hasAttribute('data-reveal'); });
+        var i = Math.max(0, sibs.indexOf(en.target));
+        en.target.style.transitionDelay = Math.min(i, 4) * 70 + 'ms';
+        en.target.classList.add('in'); io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .12 });
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  /* scroll-linked: progress, headroom nav, steps line, mega word */
+  var bar = document.querySelector('.progress'), nav = document.querySelector('.nav');
+  var steps = document.querySelector('.steps'), line = document.querySelector('.steps-line');
+  var stepEls = document.querySelectorAll('.step'), mega = document.querySelector('.mega');
+  var lastY = 0, ticking = false;
+  function onScroll(){
+    var y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? y / h : 0) + ')';
+    nav.classList.toggle('scrolled', y > 8);
+    nav.classList.toggle('hide', y > 400 && y > lastY + 4);
+    if (y < lastY - 4 || y < 400) nav.classList.remove('hide');
+    lastY = y;
+    if (!reduce) {
+      var r = steps.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (innerHeight * .8 - r.top) / (r.height + innerHeight * .3)));
+      line.style.setProperty('--p', p.toFixed(3));
+      stepEls.forEach(function(s, i){ s.classList.toggle('on', p >= i / 3 - .02 && p > 0); });
+      var mr = mega.getBoundingClientRect();
+      var mp = (innerHeight - mr.top) / (innerHeight + mr.height);
+      mega.style.setProperty('--mx', ((0.5 - Math.min(1, Math.max(0, mp))) * 12).toFixed(2) + '%');
+    } else { stepEls.forEach(function(s){ s.classList.add('on'); }); }
+    ticking = false;
+  }
+  addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+
+  /* live previews: if the demo is reachable, swap the mock for a scaled live iframe */
+  document.querySelectorAll('[data-demo]').forEach(function(card){
+    var url = card.getAttribute('data-demo'), screen = card.querySelector('.screen');
+    if (!window.fetch || location.protocol === 'file:') return;
+    fetch(url, { method: 'GET', credentials: 'same-origin' }).then(function(res){
+      var ct = res.headers.get('content-type') || '';
+      if (!res.ok || ct.indexOf('text/html') < 0) return null;
+      return res.text();
+    }).then(function(html){
+      if (!html || html.length < 400 || /Open Design/i.test(html.slice(0, 2000))) return;
+      var f = document.createElement('iframe');
+      f.src = url; f.loading = 'lazy'; f.tabIndex = -1; f.title = ''; f.setAttribute('aria-hidden', 'true');
+      var W = 1280;
+      function fit(){ var s = screen.clientWidth / W; f.style.width = W + 'px'; f.style.height = (screen.clientHeight / s) + 'px'; f.style.transform = 'scale(' + s + ')'; }
+      f.style.opacity = '0'; f.addEventListener('load', function(){ f.style.opacity = '1'; screen.querySelector('.mock').style.opacity = '0'; });
+      screen.appendChild(f); fit();
+      if ('ResizeObserver' in window) new ResizeObserver(fit).observe(screen); else addEventListener('resize', fit);
+    }).catch(function(){});
+  });
+})();
 </script>
 </body>
 </html>
