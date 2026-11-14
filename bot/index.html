@@ -45,7 +45,8 @@
   .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
 
   .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
-  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; scrollbar-width: none; -ms-overflow-style: none; }
+  .od-scroll::-webkit-scrollbar { display: none; }
 
   .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
              padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }

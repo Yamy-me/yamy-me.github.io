@@ -3,142 +3,1020 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ак Тиш, стоматология в Бишкеке</title>
-<meta name="description" content="Лечение, чистка, имплантация. Посчитайте стоимость лечения до визита.">
+<title>Ак Тиш · стоматология в Бишкеке (демо)</title>
+<meta name="description" content="Демо-сайт вымышленной стоматологии «Ак Тиш» в Бишкеке. Калькулятор стоимости лечения, бесплатный первый осмотр.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--deep:#0d4f4a;--teal:#14857b;--ice:#eef6f5;--paper:#ffffff;--ink:#12302e;--mute:#5d7472;--coral:#ff6a55;--line:#d5e6e3}
-*{box-sizing:border-box;margin:0}
-body{font-family:Onest,system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55;font-size:17px}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-.demo-bar{background:var(--deep);color:#d6efec;font-size:13px;text-align:center;padding:8px 16px}
-header{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
-.logo{font-weight:800;font-size:22px;letter-spacing:-.03em;text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo i{width:30px;height:30px;border-radius:10px 10px 14px 14px;background:var(--teal);display:inline-block}
-.tel{font-weight:700;text-decoration:none}
-.hero{padding:30px 0 70px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-@media(max-width:900px){.hero{grid-template-columns:1fr;gap:28px}}
-h1{font-size:clamp(36px,5.4vw,64px);line-height:1.02;letter-spacing:-.04em;font-weight:800}
-.lead{color:var(--mute);font-size:19px;margin:20px 0 26px;max-width:470px}
-.trust{display:grid;grid-template-columns:repeat(3,auto);gap:10px 28px;justify-content:start;font-size:15px;color:var(--mute)}
-.trust b{display:block;color:var(--ink);font-size:24px;letter-spacing:-.02em}
+/* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio, geometry.
+   Put this @layer first; product CSS outside the layer wins ordinary layout rules.
+   Native hidden and closed-dialog states take precedence over component display rules. */
+@layer od-layout {
+  [hidden]:not([hidden="until-found" i]) { display: none !important; }
+  dialog:not([open]) { display: none !important; }
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-fill    { flex: 1 1 0; min-width: 0; }
+  .od-fixed   { flex: none; }
+  .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+  .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+  .od-icon { display: inline-block; inline-size: var(--od-icon-size, 1em); block-size: var(--od-icon-size, 1em); flex: none; }
+  .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .od-clamp-2 { -webkit-line-clamp: 2; }
+  .od-clamp-3 { -webkit-line-clamp: 3; }
+  .od-lines-2 { min-height: calc(2 * 1.4em); }
+  .od-nowrap  { white-space: nowrap; }
+  .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
+  .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+  .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+             padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+  .od-rail::-webkit-scrollbar { display: none; }
+  :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+  :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+  .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+:root [hidden]:where(:not([hidden="until-found" i])) { display: none; }
+/* /OD-LAYOUT-PRIMITIVES v1 */
 
-.calc{background:var(--ice);border-radius:24px;padding:24px;border:1px solid var(--line)}
-.calc h2{font-size:21px;letter-spacing:-.02em;margin-bottom:4px}
-.calc .s{color:var(--mute);font-size:14px;margin-bottom:16px}
-.item{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.item:last-of-type{border-bottom:0}
-.item .n{font-weight:500}
-.item .n small{display:block;color:var(--mute);font-size:13px;font-weight:400}
-.item .p{font-size:14px;color:var(--mute);white-space:nowrap}
-.qty{display:flex;align-items:center;gap:6px}
-.qty button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;font:700 18px Onest;cursor:pointer;color:var(--deep)}
-.qty output{min-width:18px;text-align:center;font-weight:700}
-.total{margin-top:14px;background:var(--deep);color:#fff;border-radius:18px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.total .v{font-size:28px;font-weight:800;letter-spacing:-.03em}
-.total .l{font-size:13px;color:#b9dcd8}
-.cta{background:var(--coral);color:#fff;border:0;border-radius:14px;padding:14px 18px;font:700 15px Onest;cursor:pointer;text-decoration:none;display:inline-block}
-.note{font-size:13px;color:var(--mute);margin-top:10px}
+:root {
+  /* palette: porcelain, graphite, sea-glass teal, pine; one warm amber for focus and "today" */
+  --bg: #F3F6F4;
+  --surface: #FFFFFF;
+  --ink: #15201D;
+  --ink-2: #47554F;
+  --ink-3: #5F6D67;
+  --line: #D6E0DB;
+  --line-strong: #B9C8C1;
+  --accent: #1E6B5F;
+  --accent-hover: #17574D;
+  --mint: #E2EFEA;
+  --mint-2: #CFE6DD;
+  --pine: #0F2B26;
+  --pine-2: #163A33;
+  --on-pine: #EDF4F1;
+  --on-pine-2: #A9C4BB;
+  --warm: #A65A2E;
+  --focus: #C77A33;
 
-section{padding:72px 0}
-h3.t{font-size:clamp(28px,3.6vw,40px);letter-spacing:-.03em;margin-bottom:28px;font-weight:800}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;counter-reset:s}
-@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.steps{grid-template-columns:1fr}}
-.steps div{counter-increment:s}
-.steps div::before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ice);color:var(--teal);font-weight:800;margin-bottom:12px}
-.steps b{display:block;margin-bottom:4px}
-.steps p{color:var(--mute);font-size:15px}
-.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:800px){.docs{grid-template-columns:1fr}}
-.doc{display:flex;gap:16px;align-items:center}
-.doc .a{width:72px;height:72px;border-radius:50%;background:var(--ice);display:grid;place-items:center;font-weight:800;font-size:26px;color:var(--teal);flex:none}
-.doc span{display:block;color:var(--mute);font-size:14px}
-footer{background:var(--deep);color:#cfe7e4;padding:48px 0}
-.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
-footer b{color:#fff;display:block;margin-bottom:6px}
+  --f-display: "Cormorant Garamond", "Cormorant", Georgia, serif;
+  --f-body: "Onest", "Golos Text", system-ui, sans-serif;
+
+  --fs-xs: 0.875rem;
+  --fs-s: 1rem;
+  --fs-m: 1.125rem;
+  --fs-l: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
+  --fs-h2: clamp(2.5rem, 1.6rem + 3.4vw, 4.5rem);
+  --fs-h1: clamp(3rem, 1.8rem + 5vw, 6.25rem);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --s7: 48px; --s8: 64px; --s9: 96px; --s10: 128px;
+
+  --r-s: 6px; --r-m: 12px;
+  --wrap: 1320px;
+  --gutter: clamp(20px, 4vw, 48px);
+
+  --ease-out: cubic-bezier(.22, .8, .24, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+  --t-fast: 180ms;
+  --t-mid: 260ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 88px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: var(--fs-s); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+main { overflow-x: clip; width: 100%; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; font-weight: 500; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.serif { font-family: var(--f-display); }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 52px; padding: 0 var(--s5); border-radius: 999px; border: 1px solid transparent;
+  font-weight: 500; font-size: var(--fs-s); text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.btn-light { background: var(--mint-2); color: var(--pine); }
+.btn[disabled], .btn[aria-disabled="true"] { background: #DCE3E0; color: #56635D; border-color: transparent; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--accent-hover); color: #fff; }
+  .btn-ghost:hover { border-color: var(--ink); background: var(--surface); }
+  .btn-light:hover { background: #fff; color: var(--pine); }
+  .btn[disabled]:hover { background: #DCE3E0; color: #56635D; }
+}
+.btn .od-icon { --od-icon-size: 18px; transition: transform var(--t-fast) var(--ease-out); }
+@media (hover: hover) { .btn:hover .od-icon { transform: translateX(3px); } }
+
+/* demo strip */
+.strip { background: var(--pine); color: var(--on-pine); font-size: var(--fs-xs); text-align: center; padding: var(--s2) var(--gutter); }
+
+/* nav */
+.nav { position: sticky; top: 0; z-index: 40; background: rgba(243, 246, 244, .94); border-bottom: 1px solid transparent; transition: border-color var(--t-mid) var(--ease-out); }
+.nav.is-stuck { border-bottom-color: var(--line); }
+.nav-in { display: flex; align-items: center; justify-content: space-between; gap: var(--s5); min-height: 72px; }
+.mark { font-family: var(--f-display); font-style: italic; font-weight: 600; font-size: 1.875rem; line-height: 1; text-decoration: none; letter-spacing: -0.01em; display: inline-flex; align-items: center; min-height: 44px; }
+.nav-links { display: flex; gap: var(--s1); list-style: none; margin: 0; padding: 0; }
+.nav-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s3); text-decoration: none; color: var(--ink-2); border-radius: 999px; transition: color var(--t-fast) var(--ease-out), background-color var(--t-fast) var(--ease-out); }
+@media (hover: hover) { .nav-links a:hover { color: var(--ink); background: var(--mint); } }
+.nav .btn { min-height: 44px; padding: 0 var(--s4); font-size: 0.9375rem; }
+@media (max-width: 899px) { .nav-links { display: none; } }
+
+/* hero */
+.hero { padding: var(--s8) 0 var(--s9); }
+.hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s6); align-items: end; }
+.hero-copy { grid-column: 1 / span 7; padding-bottom: var(--s5); }
+.hero h1 { font-family: var(--f-display); font-size: var(--fs-h1); line-height: 0.98; letter-spacing: -0.02em; max-width: 12ch; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero-lede { margin-top: var(--s6); font-size: var(--fs-m); color: var(--ink-2); max-width: 46ch; line-height: 1.65; }
+.hero-actions { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s3); }
+.hero-media { grid-column: 8 / span 5; position: relative; }
+.hero-frame { overflow: hidden; border-radius: var(--r-m); aspect-ratio: 4 / 5; background: var(--mint); }
+.hero-frame img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) contrast(1.03); }
+.hero-note { margin-top: var(--s3); font-size: var(--fs-xs); color: var(--ink-3); display: flex; gap: var(--s2); align-items: center; }
+.hero-note .od-icon { --od-icon-size: 16px; color: var(--accent); }
+@media (max-width: 1023px) {
+  .hero-copy { grid-column: 1 / -1; padding-bottom: 0; }
+  .hero-media { grid-column: 1 / -1; }
+  .hero-frame { aspect-ratio: 16 / 10; }
+}
+@media (max-width: 599px) {
+  .hero { padding: var(--s7) 0 var(--s8); }
+  .hero-actions .btn { width: 100%; }
+  .hero-frame { aspect-ratio: 4 / 3; }
+}
+
+/* section shell */
+.section { padding: var(--s10) 0; }
+@media (max-width: 767px) { .section { padding: var(--s9) 0; } }
+.h2 { font-family: var(--f-display); font-size: var(--fs-h2); line-height: 1.02; letter-spacing: -0.015em; }
+.h2 em { font-style: italic; color: var(--accent); }
+.lede { margin-top: var(--s5); font-size: var(--fs-m); color: var(--ink-2); max-width: 56ch; }
+
+/* calculator */
+.calc { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.calc-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s6); margin-bottom: var(--s8); }
+.calc-head .h2 { grid-column: 1 / span 7; }
+.calc-head .lede { grid-column: 8 / span 5; align-self: end; margin-top: 0; }
+@media (max-width: 1023px) { .calc-head .h2, .calc-head .lede { grid-column: 1 / -1; } }
+.calc-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s7); align-items: start; }
+@media (max-width: 1023px) { .calc-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s6); } }
+
+.svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.svc {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "name price ctr";
+  align-items: center; gap: var(--s3) var(--s5); padding: var(--s5) 0; border-bottom: 1px solid var(--line);
+  transition: background-color var(--t-mid) var(--ease-out);
+}
+.svc.is-on { background: linear-gradient(90deg, var(--mint) 0, transparent 100%); }
+.svc-name { grid-area: name; padding-left: var(--s3); border-left: 2px solid transparent; transition: border-color var(--t-mid) var(--ease-out); }
+.svc.is-on .svc-name { border-left-color: var(--accent); }
+.svc-title { font-size: var(--fs-m); font-weight: 500; line-height: 1.35; }
+.svc-note { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; }
+.svc-price { grid-area: price; text-align: right; font-size: var(--fs-m); font-weight: 500; }
+.svc-price .free { display: block; font-size: var(--fs-xs); font-weight: 500; color: var(--warm); }
+.ctr { grid-area: ctr; display: inline-flex; align-items: center; gap: var(--s1); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; background: var(--surface); }
+.ctr button {
+  width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; color: var(--ink);
+  transition: background-color var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+}
+.ctr button .od-icon { --od-icon-size: 18px; }
+.ctr button:active:not([disabled]) { transform: scale(.9); }
+.ctr button[disabled] { color: #9AA8A2; cursor: not-allowed; }
+@media (hover: hover) { .ctr button:not([disabled]):hover { background: var(--mint); } }
+.ctr output { min-width: 2ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+@media (max-width: 599px) {
+  .svc { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name name" "price ctr"; }
+  .svc-price { text-align: left; padding-left: calc(var(--s3) + 2px); }
+}
+
+.panel {
+  position: sticky; top: 96px; background: var(--pine); color: var(--on-pine);
+  border-radius: var(--r-m); padding: var(--s6); overflow: hidden;
+}
+.panel::before {
+  content: ""; position: absolute; inset: -40% -30% auto auto; width: 70%; aspect-ratio: 1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(110, 180, 160, .22), transparent);
+}
+.panel > * { position: relative; }
+.panel-label { font-size: var(--fs-s); color: var(--on-pine-2); }
+.total { display: flex; align-items: baseline; gap: var(--s3); margin-top: var(--s2); }
+.roll { display: inline-flex; font-weight: 300; font-size: clamp(3rem, 2rem + 3.6vw, 4.75rem); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums lining-nums; }
+.roll .d { --h: 1.1em; display: inline-block; height: var(--h); overflow: hidden; }
+.roll .col { display: block; transform: translateY(calc(var(--v, 0) * var(--h) * -1)); transition: transform 640ms var(--ease-out); }
+.roll .col span { display: block; height: var(--h); line-height: var(--h); text-align: center; }
+.roll .sep { display: inline-block; width: 0.28em; }
+.total-cur { font-size: var(--fs-l); color: var(--on-pine-2); white-space: nowrap; }
+.breakdown { list-style: none; margin: var(--s6) 0 0; padding: var(--s5) 0 0; border-top: 1px solid rgba(237, 244, 241, .16); display: grid; gap: var(--s3); }
+.breakdown li { display: flex; justify-content: space-between; gap: var(--s4); font-size: var(--fs-s); }
+.breakdown .bd-name { color: var(--on-pine); min-width: 0; }
+.breakdown .bd-qty { display: block; font-size: var(--fs-xs); color: var(--on-pine-2); }
+.breakdown .bd-sum { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--on-pine); }
+.bd-empty { margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid rgba(237, 244, 241, .16); color: var(--on-pine-2); }
+.panel .btn { width: 100%; margin-top: var(--s6); }
+.panel .btn[disabled] { background: var(--pine-2); color: #A3BDB4; }
+.panel-fine { margin-top: var(--s4); font-size: var(--fs-xs); color: var(--on-pine-2); line-height: 1.55; }
+.reset { margin-top: var(--s2); background: none; border: 0; color: var(--on-pine-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 44px; padding: 0; font-size: var(--fs-xs); }
+@media (hover: hover) { .reset:hover { color: var(--on-pine); } }
+@media (max-width: 1023px) { .panel { position: relative; top: 0; } }
+
+.calc-mini {
+  display: none; position: sticky; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 5;
+  margin-top: var(--s5); background: var(--pine); color: var(--on-pine); border-radius: 999px;
+  padding: var(--s3) var(--s5); justify-content: space-between; align-items: center; gap: var(--s4);
+}
+.calc-mini a { color: var(--on-pine); font-size: var(--fs-xs); min-height: 44px; display: inline-flex; align-items: center; }
+.calc-mini strong { font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 1023px) { .calc-mini { display: flex; } }
+
+/* steps */
+.steps-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s8); align-items: start; }
+.steps-side { position: sticky; top: 120px; }
+.steps-wrap { position: relative; }
+.steps-list { list-style: none; margin: 0; padding: 0; position: relative; }
+.steps-track { position: absolute; left: 27px; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+.steps-fill { position: absolute; inset: 0; background: var(--accent); transform-origin: top; transform: scaleY(1); }
+.step { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--s5); padding-bottom: var(--s8); position: relative; }
+.step:last-child { padding-bottom: 0; }
+.step-n {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line-strong);
+  display: flex; align-items: center; justify-content: center; font-family: var(--f-display); font-size: 1.75rem; font-weight: 600; position: relative; z-index: 1;
+}
+.step h3 { font-family: var(--f-display); font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.375rem); line-height: 1.1; padding-top: 6px; }
+.step p { margin-top: var(--s3); color: var(--ink-2); max-width: 52ch; }
+.step-tag { display: inline-block; margin-top: var(--s4); font-size: var(--fs-xs); padding: var(--s1) var(--s3); border-radius: 999px; background: var(--mint); color: var(--accent-hover); font-weight: 500; }
+.steps-side .btn { margin-top: var(--s6); }
+@media (max-width: 1023px) {
+  .steps-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s7); }
+  .steps-side { position: static; }
+}
+
+/* gallery */
+.gallery { background: var(--surface); border-top: 1px solid var(--line); }
+.gal-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s6); margin-bottom: var(--s8); }
+.gal-head .h2 { grid-column: 1 / span 8; }
+.gal-head .lede { grid-column: 9 / span 4; align-self: end; margin-top: 0; }
+.gal { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--s6) var(--s5); }
+.fig { margin: 0; }
+.fig-frame { overflow: hidden; border-radius: var(--r-m); background: var(--mint); }
+.fig-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); filter: saturate(.82) contrast(1.04); }
+@media (hover: hover) { .fig:hover .fig-frame img { transform: scale(1.04); } }
+.fig figcaption { margin-top: var(--s3); font-size: var(--fs-s); color: var(--ink-2); max-width: 40ch; }
+.f1 { grid-column: 1 / span 7; } .f1 .fig-frame { aspect-ratio: 3 / 2; }
+.f2 { grid-column: 9 / span 4; margin-top: var(--s10); } .f2 .fig-frame { aspect-ratio: 4 / 5; }
+.f3 { grid-column: 2 / span 4; } .f3 .fig-frame { aspect-ratio: 4 / 5; }
+.f4 { grid-column: 7 / span 6; margin-top: calc(var(--s9) * -1); } .f4 .fig-frame { aspect-ratio: 3 / 2; }
+.f5 { grid-column: 1 / span 12; } .f5 .fig-frame { aspect-ratio: 21 / 9; }
+.gal-quote { grid-column: 7 / span 6; align-self: center; font-family: var(--f-display); font-style: italic; font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem); line-height: 1.2; color: var(--ink); }
+@media (max-width: 1023px) {
+  .gal-head .h2, .gal-head .lede { grid-column: 1 / -1; }
+  .f1, .f4, .f5 { grid-column: 1 / -1; margin-top: 0; }
+  .f2, .f3 { grid-column: span 6; margin-top: 0; }
+  .gal-quote { grid-column: 1 / -1; }
+}
+@media (max-width: 599px) {
+  .f2, .f3 { grid-column: 1 / -1; }
+  .f2 .fig-frame, .f3 .fig-frame { aspect-ratio: 4 / 3; }
+  .f5 .fig-frame { aspect-ratio: 3 / 2; }
+}
+
+/* contacts */
+.contact-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: var(--s8); align-items: start; }
+@media (max-width: 1023px) { .contact-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s7); } }
+.addr { margin-top: var(--s6); display: grid; gap: var(--s5); }
+.addr-row { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--s3); }
+.addr-row .od-icon { --od-icon-size: 22px; color: var(--accent); margin-top: 3px; }
+.addr-row strong { display: block; font-weight: 500; font-size: var(--fs-m); }
+.addr-row span { display: block; color: var(--ink-3); font-size: var(--fs-xs); }
+.addr-actions { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s3); }
+.hours { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-m); padding: var(--s6); }
+.status { display: flex; align-items: center; gap: var(--s3); font-weight: 500; font-size: var(--fs-m); }
+.status-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; background: var(--accent); box-shadow: 0 0 0 4px var(--mint); }
+.status.is-closed .status-dot { background: transparent; border: 2px solid var(--ink-3); box-shadow: none; }
+.status-sub { color: var(--ink-3); font-size: var(--fs-xs); margin-top: var(--s1); }
+.days { list-style: none; margin: var(--s5) 0 0; padding: 0; border-top: 1px solid var(--line); }
+.days li { display: flex; justify-content: space-between; align-items: center; gap: var(--s4); min-height: 52px; padding: 0 var(--s3); border-bottom: 1px solid var(--line); }
+.days .t { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-2); }
+.days .off .t { color: var(--ink-3); }
+.days li.is-today { background: var(--mint); border-radius: var(--r-s); border-bottom-color: transparent; }
+.days li.is-today .dn { font-weight: 600; }
+.days li.is-today .dn::after { content: "сегодня"; margin-left: var(--s3); font-size: var(--fs-xs); font-weight: 500; color: var(--warm); }
+.days li.is-today .t { color: var(--ink); font-weight: 500; }
+.tz-note { margin-top: var(--s4); font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* final cta + footer */
+.final { background: var(--pine); color: var(--on-pine); padding: var(--s10) 0 var(--s8); overflow: hidden; }
+.final .h2 { color: var(--on-pine); max-width: 16ch; }
+.final .h2 em { color: var(--mint-2); }
+.final .lede { color: var(--on-pine-2); }
+.final-actions { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s3); }
+.final .btn-ghost { color: var(--on-pine); border-color: rgba(237, 244, 241, .4); }
+@media (hover: hover) { .final .btn-ghost:hover { background: var(--pine-2); border-color: var(--on-pine); color: var(--on-pine); } }
+.foot { margin-top: var(--s10); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s6); padding-top: var(--s6); border-top: 1px solid rgba(237, 244, 241, .16); font-size: var(--fs-xs); color: var(--on-pine-2); }
+.foot h3 { font-family: var(--f-body); font-size: var(--fs-xs); font-weight: 500; color: var(--on-pine); margin-bottom: var(--s2); }
+.foot ul { list-style: none; margin: 0; padding: 0; }
+.foot a { color: var(--on-pine-2); text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
+@media (hover: hover) { .foot a:hover { color: var(--on-pine); text-decoration: underline; text-underline-offset: 3px; } }
+@media (max-width: 767px) { .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.wordmark { margin-top: var(--s7); font-family: var(--f-display); font-style: italic; font-weight: 500; font-size: clamp(5rem, 22vw, 21rem); line-height: .82; letter-spacing: -0.035em; color: var(--on-pine); white-space: nowrap; }
+.legal { margin-top: var(--s5); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s3); font-size: var(--fs-xs); color: var(--on-pine-2); }
+
+/* mobile sticky CTA */
+.m-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: none;
+  padding: var(--s3) var(--gutter) calc(var(--s3) + env(safe-area-inset-bottom));
+  background: rgba(243, 246, 244, .96); border-top: 1px solid var(--line);
+  transform: translateY(110%); transition: transform var(--t-mid) var(--ease-in);
+}
+.m-cta.is-on { transform: translateY(0); transition: transform var(--t-mid) var(--ease-out); }
+.m-cta .btn { width: 100%; }
+@media (max-width: 1023px) {
+  .m-cta { display: block; }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+
+/* dialog */
+.dlg { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); border: 0; border-radius: var(--r-m); padding: 0; background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px rgba(15, 43, 38, .28); }
+.dlg::backdrop { background: rgba(15, 43, 38, .55); }
+.dlg[open] { animation: dlg-in var(--t-mid) var(--ease-out); }
+@keyframes dlg-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+.dlg.is-closing { animation: dlg-out 170ms var(--ease-in) forwards; }
+@keyframes dlg-out { to { opacity: 0; transform: translateY(8px) scale(.98); } }
+.dlg-in { padding: var(--s6); overflow-y: auto; max-height: calc(100dvh - 32px); }
+.dlg-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); }
+.dlg h2 { font-family: var(--f-display); font-size: 2.25rem; line-height: 1.05; }
+.x { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.x .od-icon { --od-icon-size: 18px; }
+@media (hover: hover) { .x:hover { background: var(--mint); } }
+.dlg-sub { margin-top: var(--s3); color: var(--ink-2); }
+.calc-sum { margin-top: var(--s5); background: var(--mint); border-radius: var(--r-s); padding: var(--s4); font-size: var(--fs-xs); }
+.calc-sum ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s1); }
+.calc-sum li { display: flex; justify-content: space-between; gap: var(--s3); }
+.calc-sum li span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.calc-sum .sum-total { margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--mint-2); font-weight: 600; font-size: var(--fs-s); display: flex; justify-content: space-between; gap: var(--s3); }
+.calc-sum .sum-total span:last-child { white-space: nowrap; }
+.field { margin-top: var(--s5); }
+.field label { display: block; font-weight: 500; font-size: var(--fs-xs); margin-bottom: var(--s2); }
+.field label .req { color: var(--warm); }
+.field input {
+  width: 100%; min-height: 52px; padding: 0 var(--s4); border: 1px solid var(--line-strong); border-radius: var(--r-s);
+  font: inherit; font-size: var(--fs-s); color: var(--ink); background: var(--surface);
+  transition: border-color var(--t-fast) var(--ease-out);
+}
+.field input:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--ink); }
+.field input[aria-invalid="true"] { border-color: #B23A2E; }
+.err { margin-top: var(--s2); font-size: var(--fs-xs); color: #A2322A; display: flex; gap: var(--s2); }
+.err .od-icon { --od-icon-size: 16px; margin-top: 3px; }
+.dlg .btn-primary { width: 100%; margin-top: var(--s6); }
+.dlg .btn.is-loading { cursor: progress; }
+.spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.dlg-fine { margin-top: var(--s3); font-size: var(--fs-xs); color: var(--ink-3); }
+.ok-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--mint); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: var(--s4); }
+.ok-icon .od-icon { --od-icon-size: 26px; }
+.wa { margin-top: var(--s5); background: #EEF4F1; border: 1px solid var(--line); border-radius: var(--r-s) var(--r-s) var(--r-s) 2px; padding: var(--s4); font-size: var(--fs-xs); line-height: 1.6; white-space: pre-line; overflow-wrap: anywhere; }
+.wa-label { margin-top: var(--s5); font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* reveal helper is applied by JS only; content stays visible without JS */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  .roll .col { transition: none; }
+}
 </style>
 </head>
 <body>
-<div class="demo-bar">Демо-сайт для портфолио. Клиника вымышленная, цены примерные.</div>
-<div class="wrap">
-  <header><a class="logo" href="#"><i></i>Ак Тиш</a><a class="tel" href="#calc">+996 555 00 00 00</a></header>
-  <div class="hero">
-    <div>
-      <h1>Узнайте цену лечения до того, как сядете в кресло</h1>
-      <p class="lead">Отметьте, что нужно сделать. Сумма считается сразу, а врач подтвердит её на бесплатном осмотре.</p>
-      <div class="trust">
-        <div><b>12 лет</b>работаем в Бишкеке</div>
-        <div><b>4,8</b>в 2GIS</div>
-        <div><b>0 сом</b>за первый осмотр</div>
-      </div>
-    </div>
-    <div class="calc" id="calc">
-      <h2>Калькулятор лечения</h2>
-      <p class="s">Нажмите плюс, чтобы добавить услугу</p>
-      <div id="list"></div>
-      <div class="total">
-        <div><div class="v" id="tot">0 сом</div><div class="l">примерная стоимость</div></div>
-        <a class="cta" id="send" href="#calc">Записаться с этим расчётом</a>
-      </div>
-      <p class="note" id="note">Расчёт уйдёт администратору вместе с заявкой.</p>
-    </div>
+
+<div class="strip" role="note">Демо-сайт для портфолио. Клиника вымышленная, цены примерные.</div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="mark" href="#top" aria-label="Ак Тиш, на главную">Ак Тиш</a>
+    <nav aria-label="Разделы">
+      <ul class="nav-links">
+        <li><a href="#calc">Цены</a></li>
+        <li><a href="#visit">Первый визит</a></li>
+        <li><a href="#clinic">Клиника</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+      </ul>
+    </nav>
+    <button class="btn btn-primary" type="button" data-book>Записаться</button>
   </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1 id="hero-title" class="js-hero-line">Сначала цена, <em>потом</em> лечение</h1>
+        <p class="hero-lede js-hero-line">Стоматология «Ак Тиш» в Первомайском районе Бишкека. Первый осмотр со снимком бесплатный, а план лечения с ценой вы получаете до того, как врач возьмёт инструмент.</p>
+        <div class="hero-actions js-hero-line">
+          <button class="btn btn-primary" type="button" data-book>Записаться на осмотр</button>
+          <a class="btn btn-ghost" href="#calc">Посчитать стоимость
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="hero-frame js-hero-img">
+          <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&q=75&auto=format" alt="Светлый стоматологический кабинет с креслом и лампой" width="1600" height="1067" fetchpriority="high">
+        </div>
+        <p class="hero-note">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <span>ул. Киевская, Первомайский район</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section class="calc section" id="calc" aria-labelledby="calc-title">
+    <div class="wrap">
+      <div class="calc-head js-reveal">
+        <h2 class="h2" id="calc-title">Сколько стоит <em>лечение</em></h2>
+        <p class="lede">Отметьте, что вам нужно, и итог посчитается сразу. Цены примерные: точную сумму врач назовёт после осмотра и закрепит в плане лечения.</p>
+      </div>
+
+      <div class="calc-grid">
+        <div>
+          <ul class="svc-list" id="svcList"></ul>
+          <div class="calc-mini" aria-hidden="true">
+            <span>Итого: <strong id="miniTotal">0 сом</strong></span>
+            <a href="#panel" tabindex="-1">К расчёту</a>
+          </div>
+        </div>
+
+        <aside class="panel" id="panel" aria-labelledby="panel-label">
+          <p class="panel-label" id="panel-label">Ваш примерный расчёт</p>
+          <div class="total">
+            <div class="roll" id="roll" aria-hidden="true"></div>
+            <span class="total-cur">сом</span>
+          </div>
+          <p class="vh" id="totalLive" aria-live="polite"></p>
+          <ul class="breakdown" id="breakdown" hidden></ul>
+          <p class="bd-empty" id="bdEmpty" hidden>Пока ничего не выбрано. Добавьте услуги в списке, и здесь появится расчёт.</p>
+          <button class="btn btn-light" type="button" id="bookCalc">Записаться с этим расчётом</button>
+          <p class="panel-fine">Осмотр и снимок бесплатно. После осмотра вы получите план, где цена каждого шага записана заранее.</p>
+          <button class="reset" type="button" id="reset">Сбросить расчёт</button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- First visit -->
+  <section class="section" id="visit" aria-labelledby="visit-title">
+    <div class="wrap steps-grid">
+      <div class="steps-side js-reveal">
+        <h2 class="h2" id="visit-title">Как проходит <em>первый</em> визит</h2>
+        <p class="lede">Четыре шага от заявки до плана лечения. На каждом шаге вы знаете, что будет дальше и сколько это стоит.</p>
+        <button class="btn btn-primary" type="button" data-book>Записаться на осмотр</button>
+      </div>
+      <div class="steps-wrap">
+      <div class="steps-track" aria-hidden="true"><span class="steps-fill" id="stepsFill"></span></div>
+      <ol class="steps-list" id="steps">
+        <li class="step js-step">
+          <span class="step-n" aria-hidden="true">1</span>
+          <div>
+            <h3>Заявка</h3>
+            <p>Оставьте имя и телефон на сайте. Можно приложить расчёт из калькулятора, чтобы администратор сразу понимал, с чем вы придёте.</p>
+          </div>
+        </li>
+        <li class="step js-step">
+          <span class="step-n" aria-hidden="true">2</span>
+          <div>
+            <h3>Звонок администратора за 15 минут</h3>
+            <p>В рабочее время администратор перезвонит в течение 15 минут, ответит на вопросы и подберёт удобный день и час.</p>
+          </div>
+        </li>
+        <li class="step js-step">
+          <span class="step-n" aria-hidden="true">3</span>
+          <div>
+            <h3>Осмотр и снимок</h3>
+            <p>Врач осмотрит зубы и сделает снимок. Вы видите снимок на экране, а врач объясняет простыми словами, что на нём.</p>
+            <span class="step-tag">Бесплатно</span>
+          </div>
+        </li>
+        <li class="step js-step">
+          <span class="step-n" aria-hidden="true">4</span>
+          <div>
+            <h3>План лечения с ценой, которая не вырастет</h3>
+            <p>Вы получаете план на руки: что лечить, в каком порядке и сколько стоит каждый шаг. Сумма в плане не меняется по ходу лечения. Решение начинать или нет остаётся за вами.</p>
+          </div>
+        </li>
+      </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clinic -->
+  <section class="gallery section" id="clinic" aria-labelledby="clinic-title">
+    <div class="wrap">
+      <div class="gal-head js-reveal">
+        <h2 class="h2" id="clinic-title">Спокойный кабинет и <em>понятный</em> разговор</h2>
+        <p class="lede">Здесь не торопят. Сначала врач слушает и объясняет, потом предлагает варианты, и только после этого лечит.</p>
+      </div>
+      <div class="gal">
+        <figure class="fig f1 js-fig">
+          <div class="fig-frame"><img src="https://images.unsplash.com/photo-1777331903190-341a3dd0441b?w=1600&q=75&auto=format" alt="Стоматолог разговаривает с пациенткой в кресле" width="1600" height="1067" loading="lazy"></div>
+          <figcaption>Сначала разговор: что беспокоит, чего вы опасаетесь, какие есть варианты.</figcaption>
+        </figure>
+        <figure class="fig f2 js-fig">
+          <div class="fig-frame"><img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1600&q=75&auto=format" alt="Врач осматривает зубы пациента с зеркалом" width="1600" height="1067" loading="lazy"></div>
+          <figcaption>Осмотр без спешки.</figcaption>
+        </figure>
+        <figure class="fig f3 js-fig">
+          <div class="fig-frame"><img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1600&q=75&auto=format" alt="Врач рассматривает рентгеновский снимок зубов" width="1600" height="1067" loading="lazy"></div>
+          <figcaption>Снимок разбираем вместе с вами.</figcaption>
+        </figure>
+        <figure class="fig f4 js-fig">
+          <div class="fig-frame"><img src="https://images.unsplash.com/photo-1593022356769-11f762e25ed9?w=1600&q=75&auto=format" alt="Модель челюсти с зубным имплантом" width="1600" height="1067" loading="lazy"></div>
+          <figcaption>На модели показываем, как устроен имплант, до того как о нём говорить.</figcaption>
+        </figure>
+        <p class="gal-quote js-reveal">Вы понимаете, что происходит у вас во рту, и заранее знаете итоговую сумму.</p>
+        <figure class="fig f5 js-fig">
+          <div class="fig-frame"><img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=1600&q=75&auto=format" alt="Стоматологическое кресло в светлом кабинете" width="1600" height="1067" loading="lazy"></div>
+          <figcaption>Кабинет: светло, тихо, всё под рукой.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacts -->
+  <section class="section" id="contacts" aria-labelledby="contacts-title">
+    <div class="wrap contact-grid">
+      <div class="js-reveal">
+        <h2 class="h2" id="contacts-title">Как нас <em>найти</em></h2>
+        <div class="addr">
+          <div class="addr-row">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <div>
+              <strong>Бишкек, ул. Киевская</strong>
+              <span>Первомайский район</span>
+            </div>
+          </div>
+          <div class="addr-row">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            <div>
+              <strong class="od-nowrap">+996 000 000 000</strong>
+              <span>Номер для демо. На настоящем сайте здесь будет телефон клиники</span>
+            </div>
+          </div>
+        </div>
+        <div class="addr-actions">
+          <button class="btn btn-primary" type="button" data-book>Записаться на осмотр</button>
+          <a class="btn btn-ghost" href="https://2gis.kg/bishkek/search/%D1%83%D0%BB.%20%D0%9A%D0%B8%D0%B5%D0%B2%D1%81%D0%BA%D0%B0%D1%8F" target="_blank" rel="noopener">Улица на карте 2ГИС</a>
+        </div>
+      </div>
+
+      <div class="hours js-reveal" aria-labelledby="hours-title">
+        <h3 class="vh" id="hours-title">Часы работы</h3>
+        <div class="status" id="status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="statusText">Часы работы</span>
+        </div>
+        <p class="status-sub" id="statusSub">Пн–Сб 9:00–20:00, воскресенье выходной</p>
+        <ul class="days" id="days">
+          <li data-day="1"><span class="dn">Понедельник</span><span class="t">9:00–20:00</span></li>
+          <li data-day="2"><span class="dn">Вторник</span><span class="t">9:00–20:00</span></li>
+          <li data-day="3"><span class="dn">Среда</span><span class="t">9:00–20:00</span></li>
+          <li data-day="4"><span class="dn">Четверг</span><span class="t">9:00–20:00</span></li>
+          <li data-day="5"><span class="dn">Пятница</span><span class="t">9:00–20:00</span></li>
+          <li data-day="6"><span class="dn">Суббота</span><span class="t">9:00–20:00</span></li>
+          <li data-day="0" class="off"><span class="dn">Воскресенье</span><span class="t">выходной</span></li>
+        </ul>
+        <p class="tz-note">Время указано по Бишкеку.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA + footer -->
+  <footer class="final" aria-labelledby="final-title">
+    <div class="wrap">
+      <h2 class="h2 js-reveal" id="final-title">Начните с <em>бесплатного</em> осмотра</h2>
+      <p class="lede js-reveal">Осмотр и снимок ничего не стоят и ни к чему не обязывают. Вы уходите с планом и ценой, а решение принимаете сами.</p>
+      <div class="final-actions js-reveal">
+        <button class="btn btn-light" type="button" data-book>Записаться на осмотр</button>
+        <a class="btn btn-ghost" href="#calc">Посчитать стоимость</a>
+      </div>
+
+      <div class="foot">
+        <div>
+          <h3>Клиника</h3>
+          <ul>
+            <li><a href="#calc">Цены</a></li>
+            <li><a href="#visit">Первый визит</a></li>
+            <li><a href="#clinic">Кабинет</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Адрес</h3>
+          <p>Бишкек, ул. Киевская</p>
+          <p>Первомайский район</p>
+        </div>
+        <div>
+          <h3>Часы</h3>
+          <p>Пн–Сб 9:00–20:00</p>
+          <p>Вс выходной</p>
+        </div>
+        <div>
+          <h3>О сайте</h3>
+          <p>Демо-сайт для портфолио. Клиника вымышленная, цены примерные.</p>
+        </div>
+      </div>
+
+      <p class="wordmark" aria-hidden="true">Ак Тиш</p>
+      <div class="legal">
+        <span>© 2026 «Ак Тиш», демо-проект</span>
+        <span>Фото: Unsplash</span>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<div class="m-cta" id="mCta">
+  <button class="btn btn-primary" type="button" data-book>Записаться на осмотр</button>
 </div>
 
-<section style="background:var(--ice)">
-  <div class="wrap">
-    <h3 class="t">Как проходит первый визит</h3>
-    <div class="steps">
-      <div><b>Заявка</b><p>Оставляете расчёт на сайте или пишете в WhatsApp.</p></div>
-      <div><b>Звонок</b><p>Администратор подбирает удобное время в течение 15 минут.</p></div>
-      <div><b>Осмотр и снимок</b><p>Врач показывает снимок и объясняет, что лечить в первую очередь.</p></div>
-      <div><b>План и цена</b><p>Получаете план лечения с ценой, которая не вырастет по ходу.</p></div>
+<!-- Booking dialog -->
+<dialog class="dlg" id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg-in">
+    <div id="dlgForm">
+      <div class="dlg-top">
+        <h2 id="dlgTitle">Запись на осмотр</h2>
+        <button class="x" type="button" data-close aria-label="Закрыть">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <p class="dlg-sub">Оставьте имя и телефон. Администратор перезвонит и подберёт время.</p>
+      <div class="calc-sum" id="calcSum" hidden></div>
+      <div class="field">
+        <label for="fName">Имя <span class="req" aria-hidden="true">*</span><span class="vh">обязательно</span></label>
+        <input id="fName" name="name" type="text" autocomplete="given-name" required aria-describedby="fNameErr">
+        <p class="err" id="fNameErr" hidden></p>
+      </div>
+      <div class="field">
+        <label for="fPhone">Телефон <span class="req" aria-hidden="true">*</span><span class="vh">обязательно</span></label>
+        <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+996 555 123 456" required aria-describedby="fPhoneErr">
+        <p class="err" id="fPhoneErr" hidden></p>
+      </div>
+      <button class="btn btn-primary" type="button" id="send">Отправить заявку</button>
+      <p class="dlg-fine">Нажимая кнопку, вы соглашаетесь на обратный звонок.</p>
+    </div>
+
+    <div id="dlgOk" hidden>
+      <div class="dlg-top">
+        <div class="ok-icon" aria-hidden="true">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </div>
+        <button class="x" type="button" data-close aria-label="Закрыть">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <h2 id="okTitle" tabindex="-1">Это демо, заявка никуда не ушла</h2>
+      <p class="dlg-sub">На настоящем сайте заявка вместе с расчётом сразу придёт в WhatsApp клиники, и администратор перезвонит вам в течение 15 минут в рабочее время.</p>
+      <p class="wa-label">Так сообщение выглядело бы для клиники:</p>
+      <div class="wa" id="waText"></div>
+      <button class="btn btn-primary" type="button" data-close>Понятно</button>
     </div>
   </div>
-</section>
+</dialog>
 
-<section>
-  <div class="wrap">
-    <h3 class="t">Врачи</h3>
-    <div class="docs">
-      <div class="doc"><div class="a">Б</div><div><b>Бакыт Осмонов</b><span>Хирург-имплантолог, 15 лет</span></div></div>
-      <div class="doc"><div class="a">Ж</div><div><b>Жылдыз Асанова</b><span>Терапевт, лечение без боли</span></div></div>
-      <div class="doc"><div class="a">Т</div><div><b>Тимур Ким</b><span>Ортодонт, брекеты и элайнеры</span></div></div>
-    </div>
-  </div>
-</section>
-
-<footer><div class="wrap foot">
-  <div><b>Ак Тиш</b>ул. Киевская, 50, Бишкек<br>Пн–Сб 9:00–20:00</div>
-  <div><b>Связаться</b>WhatsApp, Instagram, 2GIS</div>
-</div></footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
-const S=[["Консультация и осмотр","со снимком",0],["Профессиональная чистка","ультразвук + Air Flow",2500],["Лечение кариеса","пломба светового отверждения",3000],["Лечение каналов","за один канал",4500],["Удаление зуба","простое",1500],["Имплант","под ключ, с коронкой",45000],["Отбеливание","кабинетное",9000]];
-const q=S.map(()=>0);
-const list=document.getElementById('list');
-S.forEach((s,i)=>{
-  const d=document.createElement('div');d.className='item';
-  d.innerHTML=`<div class="n">${s[0]}<small>${s[1]}</small></div><div class="p">${s[2]?s[2].toLocaleString('ru-RU')+' с':'бесплатно'}</div><div class="qty"><button aria-label="Убрать: ${s[0]}" data-i="${i}" data-d="-1">−</button><output id="q${i}">0</output><button aria-label="Добавить: ${s[0]}" data-i="${i}" data-d="1">+</button></div>`;
-  list.appendChild(d);
-});
-list.addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  const i=+b.dataset.i;q[i]=Math.max(0,Math.min(9,q[i]+ +b.dataset.d));
-  document.getElementById('q'+i).textContent=q[i];
-  const t=S.reduce((a,s,j)=>a+s[2]*q[j],0);
-  document.getElementById('tot').textContent=t.toLocaleString('ru-RU')+' сом';
-});
-document.getElementById('send').addEventListener('click',e=>{
-  e.preventDefault();
-  const picked=S.filter((s,j)=>q[j]).map((s,j)=>s[0]);
-  document.getElementById('note').textContent=picked.length?'На реальном сайте откроется WhatsApp клиники с текстом: «Хочу записаться: '+S.filter((s,j)=>q[j]).map(s=>s[0]).join(', ')+'».':'Сначала добавьте хотя бы одну услугу.';
-});
+(function () {
+  'use strict';
+  var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- helpers ---------- */
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function som(n) { return fmt(n) + ' сом'; }
+  var ICON_MINUS = '<svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+  var ICON_PLUS = '<svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  var ICON_ERR = '<svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>';
+
+  /* ---------- calculator state ---------- */
+  var services = [
+    { id: 'exam',   name: 'Консультация и осмотр со снимком', note: 'Первый визит, снимок входит', price: 0,     max: 1,  count: 1 },
+    { id: 'clean',  name: 'Профессиональная чистка',          note: 'Ультразвук и полировка',      price: 2500,  max: 2,  count: 1 },
+    { id: 'caries', name: 'Лечение кариеса',                   note: 'За один зуб, с пломбой',      price: 3000,  max: 16, count: 0 },
+    { id: 'canal',  name: 'Лечение канала',                    note: 'Цена за один канал',          price: 4500,  max: 12, count: 0 },
+    { id: 'remove', name: 'Удаление зуба',                     note: 'Простое удаление, с анестезией', price: 1500, max: 8, count: 0 },
+    { id: 'implant',name: 'Имплант под ключ с коронкой',       note: 'Имплант, абатмент и коронка', price: 45000, max: 8,  count: 0 },
+    { id: 'white',  name: 'Отбеливание',                       note: 'Кабинетное, одна процедура',  price: 9000,  max: 2,  count: 0 }
+  ];
+  var defaults = services.map(function (s) { return s.count; });
+
+  var list = document.getElementById('svcList');
+  list.innerHTML = services.map(function (s) {
+    var priceHtml = s.price === 0
+      ? '<span class="od-nowrap">0 сом</span><span class="free">бесплатно</span>'
+      : '<span class="od-nowrap">' + som(s.price) + '</span>';
+    return '<li class="svc" data-id="' + s.id + '">' +
+      '<div class="svc-name"><p class="svc-title" id="n-' + s.id + '">' + s.name + '</p><p class="svc-note">' + s.note + '</p></div>' +
+      '<div class="svc-price num">' + priceHtml + '</div>' +
+      '<div class="ctr" role="group" aria-labelledby="n-' + s.id + '">' +
+        '<button type="button" data-act="dec" aria-label="Убрать: ' + s.name + '">' + ICON_MINUS + '</button>' +
+        '<output aria-live="off">0</output>' +
+        '<button type="button" data-act="inc" aria-label="Добавить: ' + s.name + '">' + ICON_PLUS + '</button>' +
+      '</div></li>';
+  }).join('');
+
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    var row = btn.closest('.svc');
+    var s = services.find(function (x) { return x.id === row.dataset.id; });
+    if (!s) return;
+    s.count = Math.max(0, Math.min(s.max, s.count + (btn.dataset.act === 'inc' ? 1 : -1)));
+    render();
+    if (btn.disabled) { var other = row.querySelector('button[data-act="' + (btn.dataset.act === 'inc' ? 'dec' : 'inc') + '"]'); if (other) other.focus(); }
+  });
+
+  var roll = document.getElementById('roll');
+  var live = document.getElementById('totalLive');
+  var bd = document.getElementById('breakdown');
+  var bdEmpty = document.getElementById('bdEmpty');
+  var bookCalc = document.getElementById('bookCalc');
+  var mini = document.getElementById('miniTotal');
+  var rollShape = '';
+
+  function total() { return services.reduce(function (a, s) { return a + s.price * s.count; }, 0); }
+  function selected() { return services.filter(function (s) { return s.count > 0; }); }
+
+  function setRoll(n) {
+    var str = fmt(n);
+    var shape = str.replace(/\d/g, '0');
+    if (shape !== rollShape) {
+      var html = '';
+      for (var i = 0; i < str.length; i++) {
+        if (/\d/.test(str[i])) {
+          var col = '';
+          for (var k = 0; k < 10; k++) col += '<span>' + k + '</span>';
+          html += '<span class="d"><span class="col" style="transition-delay:' + (i * 35) + 'ms">' + col + '</span></span>';
+        } else html += '<span class="sep"></span>';
+      }
+      roll.innerHTML = html;
+      rollShape = shape;
+      // new columns start at 0; reflow so they roll to their value
+      void roll.offsetWidth;
+    }
+    var cols = roll.querySelectorAll('.col');
+    var digits = str.replace(/\D/g, '');
+    for (var j = 0; j < cols.length; j++) cols[j].style.setProperty('--v', digits[j]);
+  }
+
+  function render() {
+    var rows = list.querySelectorAll('.svc');
+    rows.forEach(function (row) {
+      var s = services.find(function (x) { return x.id === row.dataset.id; });
+      row.querySelector('output').textContent = s.count;
+      row.querySelector('[data-act="dec"]').disabled = s.count <= 0;
+      row.querySelector('[data-act="inc"]').disabled = s.count >= s.max;
+      row.classList.toggle('is-on', s.count > 0);
+    });
+    var t = total();
+    var sel = selected();
+    setRoll(t);
+    live.textContent = 'Итого ' + som(t);
+    mini.textContent = som(t);
+    if (sel.length) {
+      bd.innerHTML = sel.map(function (s) {
+        return '<li><span class="bd-name">' + s.name + (s.count > 1 ? '<span class="bd-qty">× ' + s.count + '</span>' : '') + '</span>' +
+          '<span class="bd-sum">' + (s.price === 0 ? 'бесплатно' : som(s.price * s.count)) + '</span></li>';
+      }).join('');
+      bd.hidden = false; bdEmpty.hidden = true;
+      bookCalc.disabled = false;
+    } else {
+      bd.innerHTML = ''; bd.hidden = true; bdEmpty.hidden = false;
+      bookCalc.disabled = true;
+    }
+  }
+
+  document.getElementById('reset').addEventListener('click', function () {
+    services.forEach(function (s) { s.count = 0; });
+    render();
+    var first = list.querySelector('[data-act="inc"]'); if (first) first.focus();
+  });
+  render();
+
+  /* ---------- dialog ---------- */
+  var dlg = document.getElementById('dlg');
+  var formView = document.getElementById('dlgForm');
+  var okView = document.getElementById('dlgOk');
+  var title = document.getElementById('dlgTitle');
+  var calcSum = document.getElementById('calcSum');
+  var fName = document.getElementById('fName');
+  var fPhone = document.getElementById('fPhone');
+  var send = document.getElementById('send');
+  var waText = document.getElementById('waText');
+  var opener = null;
+  var withCalc = false;
+  var mCta = document.getElementById('mCta');
+
+  function validName() {
+    var v = fName.value.trim();
+    return v.length >= 2 ? '' : (v.length === 0 ? 'Напишите, как к вам обращаться.' : 'Имя слишком короткое, нужно хотя бы 2 буквы.');
+  }
+  function validPhone() {
+    var d = fPhone.value.replace(/\D/g, '');
+    if (!d.length) return 'Укажите телефон, чтобы администратор мог перезвонить.';
+    if (d.length < 9 || d.length > 12) return 'Проверьте номер: нужно 9 цифр, например 555 123 456, можно с +996.';
+    return '';
+  }
+  function showErr(input, msg) {
+    var el = document.getElementById(input.id + 'Err');
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (!el) return;
+    if (msg) { el.innerHTML = ICON_ERR + '<span></span>'; el.querySelector('span').textContent = msg; el.hidden = false; }
+    else { el.hidden = true; el.textContent = ''; }
+  }
+  fName.addEventListener('blur', function () { if (fName.value || fName.getAttribute('aria-invalid') === 'true') showErr(fName, validName()); });
+  fPhone.addEventListener('blur', function () { if (fPhone.value || fPhone.getAttribute('aria-invalid') === 'true') showErr(fPhone, validPhone()); });
+  [fName, fPhone].forEach(function (inp) {
+    inp.addEventListener('input', function () { if (inp.getAttribute('aria-invalid') === 'true') showErr(inp, inp === fName ? validName() : validPhone()); });
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+  });
+
+  function resetForm() {
+    fName.value = ''; fPhone.value = '';
+    showErr(fName, ''); showErr(fPhone, '');
+    fName.removeAttribute('aria-invalid'); fPhone.removeAttribute('aria-invalid');
+    send.disabled = false; send.classList.remove('is-loading'); send.textContent = 'Отправить заявку';
+    formView.hidden = false; okView.hidden = true;
+  }
+
+  function buildSum() {
+    var sel = selected();
+    var rows = sel.map(function (s) {
+      return '<li><span>' + s.name + (s.count > 1 ? ' × ' + s.count : '') + '</span><span>' + (s.price === 0 ? 'бесплатно' : som(s.price * s.count)) + '</span></li>';
+    }).join('');
+    calcSum.innerHTML = '<ul>' + rows + '</ul><div class="sum-total"><span>Итого примерно</span><span>' + som(total()) + '</span></div>';
+  }
+
+  function openDlg(btn, calc) {
+    opener = btn; withCalc = !!calc && selected().length > 0;
+    resetForm();
+    title.textContent = withCalc ? 'Запись с расчётом' : 'Запись на осмотр';
+    if (withCalc) { buildSum(); calcSum.hidden = false; } else { calcSum.hidden = true; calcSum.innerHTML = ''; }
+    mCta.classList.remove('is-on');
+    dlg.showModal();
+    requestAnimationFrame(function () { fName.focus(); });
+  }
+
+  function closeDlg() {
+    if (!dlg.open) return;
+    var done = function () {
+      dlg.classList.remove('is-closing');
+      dlg.close();
+    };
+    if (reduceMQ.matches) { done(); return; }
+    dlg.classList.add('is-closing');
+    setTimeout(done, 170);
+  }
+  dlg.addEventListener('close', function () {
+    updateMCta();
+    var target = (opener && document.body.contains(opener) && opener.offsetParent !== null) ? opener : document.querySelector('.hero [data-book]');
+    if (target) target.focus();
+  });
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); closeDlg(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target.closest('[data-close]')) { closeDlg(); return; }
+    if (e.target === dlg) closeDlg();
+  });
+
+  function submit() {
+    if (send.disabled) return;
+    var e1 = validName(), e2 = validPhone();
+    showErr(fName, e1); showErr(fPhone, e2);
+    if (e1) { fName.focus(); return; }
+    if (e2) { fPhone.focus(); return; }
+    send.disabled = true; send.classList.add('is-loading');
+    send.innerHTML = '<span class="spin" aria-hidden="true"></span><span>Готовим заявку</span>';
+    setTimeout(function () {
+      var lines = ['Здравствуйте! Меня зовут ' + fName.value.trim() + ', телефон ' + fPhone.value.trim() + '.', 'Хочу записаться на бесплатный осмотр.'];
+      if (withCalc) {
+        lines.push('', 'Мой расчёт с сайта:');
+        selected().forEach(function (s) { lines.push('• ' + s.name + (s.count > 1 ? ' × ' + s.count : '') + ': ' + (s.price === 0 ? 'бесплатно' : som(s.price * s.count))); });
+        lines.push('Итого примерно: ' + som(total()));
+      }
+      waText.textContent = lines.join('\n');
+      formView.hidden = true; okView.hidden = false;
+      document.getElementById('okTitle').focus();
+    }, reduceMQ.matches ? 200 : 900);
+  }
+  send.addEventListener('click', submit);
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-book]');
+    if (b) { e.preventDefault(); openDlg(b, false); }
+  });
+  bookCalc.addEventListener('click', function () { if (!bookCalc.disabled) openDlg(bookCalc, true); });
+
+  /* ---------- nav + mobile CTA ---------- */
+  var nav = document.getElementById('nav');
+  var hero = document.querySelector('.hero');
+  var finalSec = document.querySelector('.final');
+  var heroOut = false, finalIn = false;
+  function updateMCta() { mCta.classList.toggle('is-on', heroOut && !finalIn && !dlg.open); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) {
+      heroOut = !en[0].isIntersecting; nav.classList.toggle('is-stuck', heroOut); updateMCta();
+    }, { rootMargin: '-120px 0px 0px 0px' }).observe(hero);
+    new IntersectionObserver(function (en) { finalIn = en[0].isIntersecting; updateMCta(); }, { threshold: 0.15 }).observe(finalSec);
+  } else { heroOut = true; updateMCta(); }
+
+  /* ---------- hours (Bishkek time) ---------- */
+  (function hours() {
+    var now = new Date(), day, h, m;
+    try {
+      var parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Bishkek', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(now);
+      var map = {}; parts.forEach(function (p) { map[p.type] = p.value; });
+      day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(map.weekday);
+      h = parseInt(map.hour, 10) % 24; m = parseInt(map.minute, 10);
+    } catch (err) { day = now.getDay(); h = now.getHours(); m = now.getMinutes(); }
+    if (day < 0) day = now.getDay();
+    var li = document.querySelector('#days li[data-day="' + day + '"]');
+    if (li) { li.classList.add('is-today'); li.setAttribute('aria-current', 'date'); }
+    var workDay = day >= 1 && day <= 6;
+    var mins = h * 60 + m;
+    var open = workDay && mins >= 540 && mins < 1200;
+    var status = document.getElementById('status');
+    var st = document.getElementById('statusText');
+    var sub = document.getElementById('statusSub');
+    if (open) {
+      st.textContent = 'Сейчас открыто';
+      var left = 1200 - mins;
+      sub.textContent = left <= 60 ? 'Закроемся в 20:00, осталось меньше часа' : 'Работаем сегодня до 20:00';
+    } else {
+      status.classList.add('is-closed');
+      st.textContent = 'Сейчас закрыто';
+      var next;
+      if (workDay && mins < 540) next = 'Откроемся сегодня в 9:00';
+      else if (day === 6 || day === 0) next = 'Откроемся в понедельник в 9:00';
+      else next = 'Откроемся завтра в 9:00';
+      sub.textContent = next + '. Заявку можно оставить сейчас';
+    }
+  })();
+
+  /* ---------- motion (GSAP) ---------- */
+  window.addEventListener('load', function () {
+    if (reduceMQ.matches || !window.gsap || !window.ScrollTrigger) return;
+    var gsap = window.gsap;
+    gsap.registerPlugin(window.ScrollTrigger);
+
+    gsap.from('.js-hero-line', { y: 28, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 });
+    gsap.from('.js-hero-img', { scale: 0.94, opacity: 0, duration: 1.1, ease: 'power3.out', delay: 0.1 });
+    gsap.fromTo('.js-hero-img img', { yPercent: -3, scale: 1.1 }, { yPercent: 4, scale: 1.1, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+    gsap.utils.toArray('.js-reveal').forEach(function (el) {
+      gsap.from(el, { y: 32, opacity: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    });
+
+    gsap.from('.svc', { y: 16, opacity: 0, duration: 0.5, ease: 'power2.out', stagger: 0.04, scrollTrigger: { trigger: '#svcList', start: 'top 80%', once: true } });
+
+    gsap.fromTo('#stepsFill', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '#steps', start: 'top 65%', end: 'bottom 65%', scrub: true } });
+    gsap.utils.toArray('.js-step').forEach(function (el) {
+      gsap.from(el, { y: 40, opacity: 0.15, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 80%', once: true } });
+    });
+
+    gsap.utils.toArray('.js-fig').forEach(function (fig) {
+      var frame = fig.querySelector('.fig-frame');
+      gsap.fromTo(frame, { scale: 0.9, opacity: 0.4 }, { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: fig, start: 'top 95%', end: 'top 45%', scrub: true } });
+      gsap.fromTo(fig, { opacity: 1 }, { opacity: 0.35, ease: 'none', immediateRender: false, scrollTrigger: { trigger: fig, start: 'bottom 25%', end: 'bottom top', scrub: true } });
+    });
+
+    gsap.from('.wordmark', { yPercent: 30, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.wordmark', start: 'top 95%', once: true } });
+  });
+})();
 </script>
 </body>
 </html>
