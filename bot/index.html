@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бот записи для СТО</title>
+<meta name="description" content="Попробуйте Telegram-бота записи на ремонт: клиент записывается сам, мастер получает заявку.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf3;--panel:#ffffff;--ink:#1b2433;--mute:#667085;--blue:#2b78c5;--bubble:#ffffff;--mine:#d8ecff;--chat:#c9d6e3;--amber:#f2a33a;--line:#d4dbe5}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Golos Text",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+.demo-bar{background:var(--ink);color:#cfd6e2;font-size:13px;text-align:center;padding:8px 16px}
+.wrap{max-width:1080px;margin:0 auto;padding:36px 20px 60px;display:grid;grid-template-columns:380px 1fr;gap:48px;align-items:start}
+@media(max-width:880px){.wrap{grid-template-columns:1fr;gap:32px}}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;letter-spacing:-.03em;font-weight:800;margin-bottom:14px}
+.lead{color:var(--mute);font-size:18px;max-width:520px;margin-bottom:26px}
+
+.phone{background:var(--ink);border-radius:38px;padding:12px;box-shadow:0 30px 60px -28px rgba(27,36,51,.55)}
+.scr{background:var(--chat);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;height:640px}
+@media(max-width:880px){.scr{height:560px}}
+.top{background:var(--panel);padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.ava{width:40px;height:40px;border-radius:50%;background:var(--amber);display:grid;place-items:center;font-weight:800;color:var(--ink)}
+.top b{display:block;font-size:15px}.top span{font-size:12px;color:var(--mute)}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:84%;padding:9px 12px;border-radius:14px;font-size:15px;white-space:pre-line;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.m.bot{background:var(--bubble);align-self:flex-start;border-bottom-left-radius:4px}
+.m.me{background:var(--mine);align-self:flex-end;border-bottom-right-radius:4px}
+.kb{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 10px 12px}
+.kb button{background:rgba(255,255,255,.85);border:0;border-radius:10px;padding:11px 8px;font:500 14px "Golos Text";color:var(--blue);cursor:pointer}
+.kb button:hover{background:#fff}
+.kb button.wide{grid-column:1/-1}
+
+.owner{background:var(--panel);border-radius:22px;padding:22px;margin-bottom:28px}
+.owner h2{font-size:18px;margin-bottom:4px}
+.owner p.s{color:var(--mute);font-size:14px;margin-bottom:14px}
+.empty{color:var(--mute);font-size:15px;border:1px dashed var(--line);border-radius:14px;padding:16px}
+.order{border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:12px 14px;font-size:15px;white-space:pre-line;margin-bottom:10px;animation:in .35s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.order{animation:none}}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}
+@media(max-width:520px){.feat{grid-template-columns:1fr}}
+.feat b{display:block;margin-bottom:2px}
+.feat p{color:var(--mute);font-size:15px}
+</style>
+</head>
+<body>
+<div class="demo-bar">Демо Telegram-бота. Сервис вымышленный, нажимайте кнопки в телефоне.</div>
+<div class="wrap">
+  <div class="phone" aria-label="Демо чата с ботом">
+    <div class="scr">
+      <div class="top"><div class="ava">М</div><div><b>Мотор СТО · запись</b><span>бот</span></div></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="kb" id="kb"></div>
+    </div>
+  </div>
+
+  <div>
+    <h1>Клиент записывается сам, мастер видит заявку сразу</h1>
+    <p class="lead">Попробуйте записаться на ремонт в телефоне слева. Справа появится то, что получит владелец СТО.</p>
+    <div class="owner">
+      <h2>Чат владельца</h2>
+      <p class="s">Сюда приходит каждая заявка с номером клиента</p>
+      <div id="orders"><div class="empty">Пока заявок нет. Запишитесь в боте слева.</div></div>
+    </div>
+    <div class="feat">
+      <div><b>Работает ночью</b><p>Клиент записывается в 23:00, утром запись уже в списке.</p></div>
+      <div><b>Напоминание</b><p>За день до визита бот сам напомнит клиенту о записи.</p></div>
+      <div><b>Прайс в кнопках</b><p>Цены на замену масла, шиномонтаж и диагностику без звонков.</p></div>
+      <div><b>Рассылка</b><p>Через полгода бот предложит клиенту следующее ТО.</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const msgs=document.getElementById('msgs'),kb=document.getElementById('kb'),orders=document.getElementById('orders');
+let st={};
+function say(t,who='bot'){const d=document.createElement('div');d.className='m '+who;d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+function keys(list,fn){kb.innerHTML='';list.forEach(k=>{const b=document.createElement('button');b.textContent=k;if(list.length%2&&k===list[list.length-1])b.className='wide';b.onclick=()=>{say(k,'me');kb.innerHTML='';setTimeout(()=>fn(k),450)};kb.appendChild(b)})}
+function start(){
+  st={};msgs.innerHTML='';
+  say('Салам! Я бот СТО «Мотор» на Жибек Жолу.\nЗапишу вас на ремонт за минуту.');
+  setTimeout(()=>{say('Что нужно сделать?');keys(['Замена масла','Шиномонтаж','Диагностика','Ходовая','Прайс-лист'],svc)},500);
+}
+function svc(k){
+  if(k==='Прайс-лист'){say('Замена масла: от 800 с\nШиномонтаж R13–R16: 1 200 с за 4 колеса\nКомпьютерная диагностика: 1 000 с\nХодовая: осмотр бесплатно');setTimeout(()=>keys(['Замена масла','Шиномонтаж','Диагностика','Ходовая'],svc),400);return}
+  st.svc=k;say('Какая машина? Марка и год.');
+  keys(['Toyota Camry 2012','Honda Fit 2008','Lexus RX 2015','Другая'],car);
+}
+function car(k){st.car=k;say('Когда удобно приехать?');keys(['Сегодня 17:00','Завтра 10:00','Завтра 15:00','Сб 11:00'],time)}
+function time(k){st.time=k;say('Отправьте номер, по нему мастер подтвердит запись.');keys(['📱 Отправить номер'],phone)}
+function phone(){
+  st.phone='+996 700 12 34 56';say(st.phone,'me');
+  setTimeout(()=>{
+    say('Готово! Вы записаны:\n'+st.svc+', '+st.car+'\n'+st.time+'\n\nНапомню за день. Адрес: Жибек Жолу, 120, 2GIS по кнопке ниже.');
+    if(orders.querySelector('.empty'))orders.innerHTML='';
+    const o=document.createElement('div');o.className='order';
+    o.textContent='Новая запись\n'+st.svc+' · '+st.car+'\n'+st.time+'\nКлиент: '+st.phone;
+    orders.prepend(o);
+    keys(['Записаться ещё раз'],start);
+  },500);
+}
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nura Beauty, салон у ЦУМа в Бишкеке</title>
+<meta name="description" content="Маникюр, волосы, брови и ресницы у ЦУМа. Свободное время на сегодня видно сразу, запись в один клик.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="Nura Beauty, салон у ЦУМа">
+<meta property="og:description" content="Свободное время на сегодня и запись в один клик.">
+<meta property="og:image" content="../img/s-hero.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<p class="demo-note">Демо-сайт для портфолио. Салон вымышленный, цены примерные.</p>
+
+<header class="nav">
+  <div class="container">
+    <a class="wordmark" href="#main">Nura Beauty</a>
+    <nav class="nav-links" aria-label="Разделы">
+      <span class="state" id="open-state">Открыто до 21:00</span>
+      <a href="#prices">Цены</a>
+      <a href="#visit">Адрес</a>
+      <a class="btn btn--primary" href="#today">Выбрать время</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="h1">
+    <div class="container hero-grid">
+      <div class="settle">
+        <h1 id="h1" style="--i:0">Маникюр и волосы у ЦУМа</h1>
+        <p class="lead" style="--i:1">Нажмите свободное время справа. Подтвердим запись в WhatsApp за десять минут.</p>
+        <figure class="hero-photo" data-slot="hero" data-alt="Мастер делает маникюр" style="--i:2">
+          <img src="../img/s-hero.webp" width="1800" height="1200" alt="Мастер покрывает ногти гель-лаком" fetchpriority="high">
+        </figure>
+      </div>
+
+      <div class="board settle" id="today" aria-labelledby="board-h">
+        <div class="board-head" style="--i:1"><h2 id="board-h">Свободно сегодня</h2><time id="board-date"></time></div>
+        <div class="master" style="--i:2"><div><h3>Айжан</h3><p>Маникюр и педикюр</p></div><div class="slots" data-master="Айжан" data-service="маникюр"></div></div>
+        <div class="master" style="--i:3"><div><h3>Мээрим</h3><p>Стрижка и окрашивание</p></div><div class="slots" data-master="Мээрим" data-service="стрижку"></div></div>
+        <div class="master" style="--i:4"><div><h3>Нургуль</h3><p>Брови и ресницы</p></div><div class="slots" data-master="Нургуль" data-service="брови"></div></div>
+        <div style="--i:5">
+          <div class="board-foot">
+            <p class="pick" id="pick" aria-live="polite">Выберите время у мастера.</p>
+            <button class="btn btn--primary" id="book" type="button" disabled>Записаться</button>
+          </div>
+          <p class="live" id="live" role="status"></p>
+          <p class="notice" id="notice" hidden></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="room" aria-label="Зал салона">
+    <figure style="margin:0">
+      <div class="room-frame" data-reveal data-slot="room" data-alt="Зал салона">
+        <img src="../img/s-room.webp" width="1600" height="1111" alt="Зал с креслами и круглыми зеркалами" loading="lazy">
+      </div>
+      <figcaption class="caption">Восемь кресел на втором этаже, вход со двора. Инструменты стерилизуем при вас.</figcaption>
+    </figure>
+  </section>
+
+  <section class="prices container" id="prices" aria-labelledby="prices-h">
+    <div class="prices-grid">
+      <div>
+        <h2 id="prices-h">Цена в прайсе и есть итог</h2>
+        <div class="seg" role="tablist" aria-label="Услуги">
+          <span class="ind" aria-hidden="true"></span>
+          <button role="tab" id="t-nails" aria-selected="true" aria-controls="p-nails" data-photo="0">Ногти</button>
+          <button role="tab" id="t-hair" aria-selected="false" aria-controls="p-hair" tabindex="-1" data-photo="1">Волосы</button>
+          <button role="tab" id="t-brows" aria-selected="false" aria-controls="p-brows" tabindex="-1" data-photo="2">Брови и ресницы</button>
+        </div>
+        <div class="panel" role="tabpanel" id="p-nails" aria-labelledby="t-nails">
+          <div class="rows">
+            <div style="--i:0"><span>Маникюр без покрытия</span><span>500 с</span></div>
+            <div style="--i:1"><span>Маникюр с гель-лаком</span><span>900 с</span></div>
+            <div style="--i:2"><span>Педикюр с покрытием</span><span>1 400 с</span></div>
+            <div style="--i:3"><span>Наращивание</span><span>от 1 800 с</span></div>
+          </div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-hair" aria-labelledby="t-hair" hidden>
+          <div class="rows">
+            <div style="--i:0"><span>Женская стрижка</span><span>от 1 200 с</span></div>
+            <div style="--i:1"><span>Укладка</span><span>от 800 с</span></div>
+            <div style="--i:2"><span>Окрашивание в один тон</span><span>от 3 500 с</span></div>
+            <div style="--i:3"><span>Сложное окрашивание</span><span>от 6 000 с</span></div>
+          </div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-brows" aria-labelledby="t-brows" hidden>
+          <div class="rows">
+            <div style="--i:0"><span>Коррекция и окрашивание</span><span>700 с</span></div>
+            <div style="--i:1"><span>Ламинирование бровей</span><span>1 200 с</span></div>
+            <div style="--i:2"><span>Наращивание ресниц</span><span>от 1 500 с</span></div>
+            <div style="--i:3"><span>Ламинирование ресниц</span><span>1 300 с</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="price-photo" aria-hidden="true">
+        <img class="on" src="../img/s-pink.webp" width="1000" height="1596" alt="" loading="lazy">
+        <img src="../img/s-cut.webp" width="1200" height="800" alt="" loading="lazy">
+        <img src="../img/s-lash.webp" width="1200" height="1800" alt="" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section class="work container" aria-labelledby="work-h">
+    <div class="work-head">
+      <h2 id="work-h">Работы мастеров за неделю</h2>
+      <p class="lead">Больше работ в Instagram салона, там же отвечаем на вопросы.</p>
+    </div>
+    <div class="work-grid">
+      <a class="shot shot--wide" href="#today" data-slot="work-1" data-alt="Окрашивание"><img src="../img/s-blow.webp" width="1200" height="801" alt="Укладка после окрашивания" loading="lazy"></a>
+      <div class="work-side">
+        <a class="shot shot--tall" href="#today" data-slot="work-2" data-alt="Дизайн ногтей"><img src="../img/s-tortoise.webp" width="1000" height="1500" alt="Черепаховый дизайн ногтей" loading="lazy"></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" id="visit" aria-labelledby="visit-h">
+    <div class="container visit-grid">
+      <div>
+        <h2 id="visit-h">Как нас найти</h2>
+        <p class="address">Токтогула, у ЦУМа</p>
+        <p class="lead">Первомайский район. Вход со двора, второй этаж, парковка у ЦУМа.</p>
+        <div class="next">
+          <h3>Ближайшее свободное время</h3>
+          <div class="slots" id="next-slots"></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:var(--space-md)">Часы на неделю</h3>
+        <div class="week" id="week"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="container">
+    <p class="foot-line">Приходите к девяти, кофе уже готов.</p>
+    <nav class="foot-links" aria-label="Ссылки">
+      <a href="#today">Записаться</a><a href="#prices">Цены</a><a href="#visit">Адрес и часы</a><a href="#main">Наверх</a>
+    </nav>
+    <p class="legal">Демо-проект. Фотографии: Unsplash, заменяются на фото салона.</p>
+  </div>
+</footer>
+
+<div class="phone-bar" id="phone-bar"><a class="btn btn--primary" href="#today">Выбрать время</a></div>
+
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pad = (n) => String(n).padStart(2, '0');
+const now = new Date();
+const days = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const hoursOf = (d) => d === 0 ? [10, 19] : [9, 21];
+
+// entrance: one settle
+const enter = () => document.body.classList.add('in');
+requestAnimationFrame(() => requestAnimationFrame(enter)); setTimeout(enter, 150);
+
+// date, open state
+document.getElementById('board-date').textContent = now.getDate() + ' ' + months[now.getMonth()] + ', ' + days[now.getDay()];
+const [o, c] = hoursOf(now.getDay()); const h = now.getHours();
+const st = document.getElementById('open-state');
+if (h >= o && h < c) st.textContent = 'Открыто до ' + c + ':00'; else { st.textContent = 'Откроемся в ' + pad(o) + ':00'; st.classList.add('state--out'); }
+
+// slots from the clock: today's remaining half hours, some already taken
+function seeded(i) { const x = Math.sin(i * 9301 + now.getDate() * 49297) * 233280; return x - Math.floor(x); }
+let start = Math.max(o, h + 1); if (start >= c - 1) start = o; // after closing: show tomorrow-style list from opening
+const boards = [...document.querySelectorAll('.board .slots')];
+boards.forEach((box, bi) => {
+  let shown = 0;
+  for (let t = start * 2; t < (c - 1) * 2 && shown < 7; t++) {
+    if (seeded(t + bi * 31) < 0.45) continue;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'slot'; b.textContent = pad(Math.floor(t / 2)) + ':' + (t % 2 ? '30' : '00');
+    b.setAttribute('aria-pressed', 'false');
+    if (seeded(t * 3 + bi) < 0.22) { b.disabled = true; b.setAttribute('aria-label', b.textContent + ', занято'); }
+    box.appendChild(b); shown++;
+  }
+});
+
+// pick a slot
+const pick = document.getElementById('pick'), book = document.getElementById('book'), notice = document.getElementById('notice');
+let chosen = null;
+document.querySelector('.board').addEventListener('click', (e) => {
+  const b = e.target.closest('.slot'); if (!b || b.disabled) return;
+  document.querySelectorAll('.board .slot').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  const box = b.parentElement;
+  chosen = { el: b, time: b.textContent, master: box.dataset.master, service: box.dataset.service };
+  pick.innerHTML = 'Вы выбрали: <strong>' + chosen.service + ' у ' + chosen.master + ' в ' + chosen.time + '</strong>';
+  book.disabled = false; book.textContent = 'Записаться на ' + chosen.time;
+  notice.hidden = true;
+});
+book.addEventListener('click', () => {
+  if (!chosen) return;
+  notice.hidden = false;
+  notice.textContent = 'Это демо, заявка никуда не ушла. На настоящем сайте администратор получит её в WhatsApp или Telegram, а время у ' + chosen.master + ' станет занятым.';
+});
+
+// live: someone books a free time, three times at most, then it stops
+const live = document.getElementById('live');
+let ticks = 0;
+function takeOne() {
+  if (ticks++ >= 3 || document.hidden) return;
+  const free = [...document.querySelectorAll('.board .slot:not(:disabled)')].filter((x) => x.getAttribute('aria-pressed') !== 'true');
+  if (free.length < 4) return;
+  const b = free[Math.floor(Math.random() * free.length)];
+  b.disabled = true; b.setAttribute('aria-label', b.textContent + ', занято');
+  if (!reduce) { b.classList.add('just-taken'); b.addEventListener('animationend', () => b.classList.remove('just-taken'), { once: true }); }
+  live.classList.remove('on'); void live.offsetWidth;
+  live.textContent = 'Только что заняли ' + b.textContent + ' у ' + b.parentElement.dataset.master + '.';
+  live.classList.add('on');
+  setTimeout(takeOne, 9000);
+}
+setTimeout(takeOne, 6000);
+
+// switcher with a sliding indicator
+const tabs = [...document.querySelectorAll('[role="tab"]')], ind = document.querySelector('.seg .ind'), photos = [...document.querySelectorAll('.price-photo img')];
+function moveInd(t) { ind.style.transform = 'translateX(' + t.offsetLeft + 'px) scaleX(' + (t.offsetWidth / 100) + ')'; }
+function select(t, focus) {
+  tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; const p = document.getElementById(x.getAttribute('aria-controls')); p.hidden = !on; if (on && !reduce) { p.classList.remove('entering'); void p.offsetWidth; p.classList.add('entering'); } });
+  photos.forEach((p, i) => p.classList.toggle('on', i === +t.dataset.photo));
+  moveInd(t); if (focus) t.focus();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => select(t));
+  t.addEventListener('keydown', (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); select(tabs[(i + d + tabs.length) % tabs.length], true); } });
+});
+requestAnimationFrame(() => moveInd(tabs[0])); addEventListener('resize', () => moveInd(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
+document.fonts && document.fonts.ready.then(() => moveInd(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
+
+// the one reveal
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -15% 0px' });
+document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+// week from the clock
+const week = document.getElementById('week');
+for (let i = 0; i < 7; i++) {
+  const d = new Date(now); d.setDate(now.getDate() + i);
+  const [a, z] = hoursOf(d.getDay());
+  const row = document.createElement('div'); if (i === 0) row.className = 'today';
+  row.innerHTML = '<span>' + days[d.getDay()][0].toUpperCase() + days[d.getDay()].slice(1) + ', ' + d.getDate() + ' ' + months[d.getMonth()] + '</span><span>' + pad(a) + ':00 до ' + z + ':00</span>';
+  week.appendChild(row);
+}
+
+// nearest free times, linked to the board
+const next = document.getElementById('next-slots');
+[...document.querySelectorAll('.board .slot:not(:disabled)')].sort((a, b) => a.textContent.localeCompare(b.textContent)).slice(0, 4).forEach((s) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'slot'; b.textContent = s.textContent;
+  b.setAttribute('aria-label', s.textContent + ' у ' + s.parentElement.dataset.master);
+  b.addEventListener('click', () => { document.getElementById('today').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); if (!s.disabled) s.click(); });
+  next.appendChild(b);
+});
+
+// phone bar after the board scrolls away
+const bar = document.getElementById('phone-bar'), board = document.getElementById('today'), visit = document.getElementById('visit');
+let boardOn = true, visitOn = false;
+new IntersectionObserver(([e]) => { boardOn = e.isIntersecting; bar.classList.toggle('show', !boardOn && !visitOn); }).observe(board);
+new IntersectionObserver(([e]) => { visitOn = e.isIntersecting; bar.classList.toggle('show', !boardOn && !visitOn); }).observe(visit);
+</script>
+<script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
+</body>
+</html>
