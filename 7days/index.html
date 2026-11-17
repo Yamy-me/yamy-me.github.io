@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7 Days: автомойка 24/7 в Бишкеке, улица Тон, 28к</title>
+<meta name="description" content="Автомойка 7 Days в Бишкеке на улице Тон, 28к. Работаем круглосуточно, без выходных. Онлайн-запись через WhatsApp.">
+<meta name="theme-color" content="#0d1013">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;700;800&subset=cyrillic&display=swap" rel="stylesheet">
+<style>
+/* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio, geometry.
+   Put this @layer first; product CSS outside the layer wins ordinary layout rules.
+   Native hidden and closed-dialog states take precedence over component display rules. */
+@layer od-layout {
+  [hidden]:not([hidden="until-found" i]) { display: none !important; }
+  dialog:not([open]) { display: none !important; }
+
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-fill    { flex: 1 1 0; min-width: 0; }
+  .od-fixed   { flex: none; }
+  .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+
+  .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+
+  .od-icon { display: inline-block; inline-size: var(--od-icon-size, 1em); block-size: var(--od-icon-size, 1em); flex: none; }
+
+  .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .od-clamp-2 { -webkit-line-clamp: 2; }
+  .od-clamp-3 { -webkit-line-clamp: 3; }
+  .od-lines-2 { min-height: calc(2 * 1.4em); }
+  .od-nowrap  { white-space: nowrap; }
+  .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
+
+  .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+
+  .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+             padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+  .od-rail::-webkit-scrollbar { display: none; }
+  :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+  :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+
+  .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+:root [hidden]:where(:not([hidden="until-found" i])) { display: none; }
+/* /OD-LAYOUT-PRIMITIVES v1 */
+
+/* ===== Tokens ===== */
+:root {
+  /* мокрый асфальт ночью */
+  --asphalt: #0d1013;
+  --asphalt-2: #141a1f;
+  --asphalt-3: #1b232a;
+  --line: #2a343d;
+  --text: #e9eff3;
+  --muted: #9eabb6;      /* 7.6:1 на --asphalt */
+  --ice: #6fd6ff;        /* единственный акцент */
+  --ice-hover: #a8e7ff;
+  --on-ice: #03202c;
+  --danger: #ff9d8a;     /* текст ошибок, 8:1 на фоне */
+
+  --f-display: "Unbounded", "Arial Black", sans-serif;
+  --f-text: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-body: 17px;
+  --fs-small: 15px;
+  --fs-h3: 20px;
+  --fs-h2: clamp(30px, 5.2vw, 52px);
+  --fs-mega: clamp(80px, 23vw, 360px);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 128px;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+
+  --t-fast: 160ms;
+  --t-med: 240ms;
+  --ease-out: cubic-bezier(.2,.7,.2,1);
+
+  --wrap: 1200px;
+  --pad: 20px;
+}
+@media (min-width: 768px) { :root { --pad: 40px; --fs-body: 18px; } }
+
+/* ===== Base ===== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background-color: var(--asphalt);
+  color: var(--text);
+  font-family: var(--f-text);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+/* блики фонарей на мокром асфальте + зерно покрытия */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 82% 8%, rgba(111,214,255,.10), transparent 70%),
+    radial-gradient(30% 60% at 18% 100%, rgba(233,239,243,.05), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+img { max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; font-family: var(--f-display); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--ice); outline-offset: 3px; border-radius: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--pad); }
+.section { padding-block: var(--s8); }
+@media (min-width: 1024px) { .section { padding-block: var(--s9); } }
+.section-head { margin-bottom: var(--s6); max-width: 34ch; }
+.section-head h2 { font-size: var(--fs-h2); }
+.section-head p { margin-top: var(--s3); color: var(--muted); max-width: 60ch; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 52px; padding: 0 var(--s5);
+  border-radius: var(--r-sm);
+  font-family: var(--f-text); font-weight: 600; font-size: 17px; line-height: 1.2;
+  text-decoration: none; cursor: pointer; border: 2px solid transparent;
+  transition: background-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+}
+.btn-primary { background: var(--ice); color: var(--on-ice); }
+.btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--ice-hover); color: var(--on-ice); }
+  .btn-ghost:hover { border-color: var(--ice); color: var(--text); }
+}
+.btn .od-icon { --od-icon-size: 22px; }
+
+/* ===== Header ===== */
+.site-header { position: relative; z-index: 2; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding-block: var(--s3); }
+.logo { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; text-decoration: none; font-family: var(--f-display); font-weight: 800; font-size: 20px; letter-spacing: -0.02em; white-space: nowrap; }
+.logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ice); box-shadow: 0 0 0 4px rgba(111,214,255,.18); flex: none; }
+.nav { display: flex; gap: var(--s1); }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s2); text-decoration: none; font-size: 15px; font-weight: 500; color: var(--text); border-radius: var(--r-sm); }
+@media (hover: hover) { .nav a:hover { color: var(--ice); } }
+@media (min-width: 768px) { .nav { gap: var(--s3); } .nav a { padding: 0 var(--s3); font-size: 16px; } }
+
+/* ===== Hero ===== */
+.hero { padding-top: var(--s6); padding-bottom: var(--s8); position: relative; overflow: hidden; }
+@media (min-width: 1024px) { .hero { padding-top: var(--s7); padding-bottom: var(--s9); } }
+.status { display: inline-flex; align-items: center; gap: var(--s2); min-height: 36px; padding: 0 var(--s3); border: 1px solid var(--line); border-radius: 999px; font-size: var(--fs-small); color: var(--text); background: rgba(20,26,31,.6); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ice); flex: none; }
+.hero h1 { margin-top: var(--s5); font-weight: 700; }
+.h1-top { display: block; font-size: clamp(28px, 6vw, 64px); font-weight: 500; letter-spacing: -0.01em; }
+.h1-mega {
+  display: block;
+  font-size: var(--fs-mega);
+  font-weight: 800;
+  line-height: .92;
+  letter-spacing: -0.05em;
+  color: var(--ice);
+  white-space: nowrap;
+  margin-top: var(--s2);
+}
+/* отражение в луже */
+.puddle-wrap {
+  font-family: var(--f-display); font-size: var(--fs-mega); font-weight: 800;
+  line-height: .92; letter-spacing: -0.05em; white-space: nowrap;
+  height: .4em; overflow: hidden; margin-top: 2px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  user-select: none; pointer-events: none;
+}
+.puddle { display: block; color: var(--ice); opacity: .24; filter: blur(2px); transform: scaleY(-1); transform-origin: 50% 50%; }
+.hero-name { margin-top: var(--s5); font-family: var(--f-display); font-weight: 700; font-size: clamp(24px, 4vw, 40px); letter-spacing: -0.02em; }
+.hero-sub { margin-top: var(--s3); max-width: 44ch; font-size: clamp(17px, 2.1vw, 21px); color: var(--muted); }
+.hero-actions { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s3); }
+@media (max-width: 479px) { .hero-actions .btn { width: 100%; } }
+
+/* ===== Booking ===== */
+.booking-grid { display: grid; gap: var(--s6); grid-template-columns: minmax(0, 1fr); }
+.booking-grid > *, .booking-form, .summary, .step, .services > *, .times > * { min-width: 0; }
+.wrap { min-width: 0; }
+@media (min-width: 1024px) {
+  .booking-grid { grid-template-columns: minmax(0, 1fr) 380px; gap: var(--s7); align-items: start; }
+  .summary { position: sticky; top: var(--s5); }
+}
+.step { border: 0; padding: 0; margin: 0 0 var(--s6); min-width: 0; }
+.step legend { padding: 0; display: flex; align-items: center; gap: var(--s3); font-family: var(--f-display); font-weight: 700; font-size: var(--fs-h3); margin-bottom: var(--s4); }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--ice); color: var(--ice); font-size: 14px; flex: none; }
+.step-hint { color: var(--muted); font-size: var(--fs-small); margin: calc(-1 * var(--s2)) 0 var(--s4); }
+
+/* радио-кнопки в виде плиток */
+.choice { position: relative; display: block; }
+.choice input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.choice .face {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  min-height: 48px; padding: var(--s2) var(--s4);
+  border: 1.5px solid var(--line); border-radius: var(--r-sm);
+  background: var(--asphalt-2); color: var(--text);
+  font-weight: 500; font-size: 16px; line-height: 1.3; cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+}
+@media (hover: hover) { .choice input:not(:disabled) + .face:hover { border-color: var(--ice); } }
+.choice input:checked + .face { background: var(--ice); border-color: var(--ice); color: var(--on-ice); }
+.choice input:focus-visible + .face { outline: 3px solid var(--ice); outline-offset: 3px; }
+.choice input:disabled + .face { cursor: not-allowed; color: #5f6b75; background: transparent; border-style: dashed; text-decoration: line-through; }
+
+.services { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
+.services .face { justify-content: flex-start; text-align: left; }
+
+.days { --od-gap: 8px; --od-rail-pad: 0px; padding-bottom: var(--s1); max-width: 100%; min-width: 0; overscroll-behavior-x: contain; }
+.days .face { flex-direction: column; min-width: 84px; min-height: 64px; padding: var(--s2) var(--s3); gap: 0; }
+.day-top { display: block; font-weight: 600; font-size: 15px; }
+.day-date { display: block; font-size: 14px; opacity: .85; white-space: nowrap; }
+
+.times { display: grid; gap: var(--s2); grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 340px) { .times { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 600px) { .times { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.times .face { font-variant-numeric: tabular-nums; white-space: nowrap; padding-inline: var(--s1); }
+.times-note { margin-top: var(--s3); color: var(--muted); font-size: var(--fs-small); }
+
+.field label { font-weight: 500; font-size: 16px; }
+.field .req { color: var(--ice); }
+.input {
+  width: 100%; min-height: 52px; padding: 0 var(--s4);
+  border: 1.5px solid var(--line); border-radius: var(--r-sm);
+  background: var(--asphalt-2); color: var(--text);
+  font: inherit; font-size: 17px;
+  transition: border-color var(--t-fast) var(--ease-out);
+}
+.input::placeholder { color: #7d8a95; }
+.input:focus-visible { outline: 3px solid var(--ice); outline-offset: 2px; border-color: var(--ice); }
+.input[aria-invalid="true"] { border-color: var(--danger); }
+.error { color: var(--danger); font-size: var(--fs-small); margin-top: var(--s2); display: flex; gap: var(--s2); align-items: flex-start; }
+.error .od-icon { --od-icon-size: 18px; margin-top: 2px; }
+
+.summary { background: var(--asphalt-2); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--s5); }
+.summary h3 { font-size: var(--fs-h3); }
+.summary-now { color: var(--muted); font-size: var(--fs-small); margin-top: var(--s2); }
+.sum-list { margin: var(--s5) 0; padding: 0; display: grid; gap: var(--s3); }
+.sum-row { display: grid; gap: 0; padding-bottom: var(--s3); border-bottom: 1px solid var(--line); }
+.sum-row dt { color: var(--muted); font-size: 14px; }
+.sum-row dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.sum-row dd.empty { color: #7d8a95; font-weight: 400; }
+.summary .btn { width: 100%; }
+.btn { max-width: 100%; white-space: normal; text-align: center; }
+.summary-note { margin-top: var(--s3); color: var(--muted); font-size: 14px; line-height: 1.5; }
+.summary-error { margin-top: var(--s3); }
+
+/* ===== Prices ===== */
+.prices { display: grid; gap: var(--s7); }
+@media (min-width: 768px) { .prices { grid-template-columns: 1fr 1fr; gap: var(--s7); } }
+.price-group h3 { font-size: clamp(22px, 2.6vw, 28px); padding-bottom: var(--s4); border-bottom: 2px solid var(--ice); }
+.price-list { list-style: none; margin: 0; padding: 0; }
+.price-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s4); padding: var(--s4) 0; border-bottom: 1px solid var(--line); }
+.price-name { font-size: 18px; font-weight: 500; }
+.price-val { white-space: nowrap; color: var(--muted); font-size: 16px; }
+.price-val.has { color: var(--text); font-family: var(--f-display); font-weight: 700; font-size: 20px; }
+.price-val small { font-family: var(--f-text); font-weight: 400; font-size: 14px; color: var(--muted); }
+.price-foot { margin-top: var(--s5); color: var(--muted); font-size: var(--fs-small); max-width: 60ch; }
+
+/* ===== Photo ===== */
+.photo {
+  position: relative; margin: 0;
+  border-radius: var(--r-md); overflow: hidden;
+  border: 1px solid var(--line);
+  aspect-ratio: 3 / 2;
+  background: var(--asphalt-2);
+}
+.photo.is-loaded { aspect-ratio: auto; }
+.photo img { display: block; width: 100%; height: auto; opacity: 0; transition: opacity var(--t-med) var(--ease-out); }
+.photo.is-loaded img { opacity: 1; }
+.photo.is-loaded .ph { display: none; }
+.ph {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: var(--s2);
+  padding: clamp(20px, 4vw, 48px);
+  background:
+    repeating-linear-gradient(100deg, transparent 0 46px, rgba(111,214,255,.05) 46px 48px),
+    radial-gradient(70% 60% at 70% 20%, rgba(111,214,255,.14), transparent 70%),
+    var(--asphalt-3);
+}
+.ph-mark { font-family: var(--f-display); font-weight: 800; font-size: clamp(56px, 14vw, 180px); line-height: .9; letter-spacing: -0.05em; color: transparent; -webkit-text-stroke: 1.5px rgba(111,214,255,.55); white-space: nowrap; }
+.ph-text { color: var(--muted); font-size: var(--fs-small); }
+
+/* ===== Contacts ===== */
+.contacts { display: grid; gap: var(--s6); }
+@media (min-width: 900px) { .contacts { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; } }
+.c-list { margin: 0; padding: 0; display: grid; gap: var(--s5); }
+.c-item { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--s3); align-items: start; }
+.c-item .od-icon { --od-icon-size: 24px; color: var(--ice); margin-top: 3px; }
+.c-item dt { color: var(--muted); font-size: 14px; }
+.c-item dd { margin: 0; font-size: clamp(18px, 2.2vw, 22px); font-weight: 500; }
+.c-item dd a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-decoration-color: var(--ice); text-underline-offset: 4px; text-decoration-thickness: 2px; }
+@media (hover: hover) { .c-item dd a:hover { color: var(--ice); } }
+.c-cta { display: grid; gap: var(--s4); padding: var(--s5); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--asphalt-2); }
+.c-cta p { font-family: var(--f-display); font-weight: 700; font-size: clamp(22px, 2.8vw, 30px); line-height: 1.2; }
+
+/* ===== Footer ===== */
+.site-footer { border-top: 1px solid var(--line); }
+.site-footer .wrap { padding-block: var(--s5); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s2) var(--s5); color: var(--muted); font-size: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="7 Days, на главную"><span class="logo-dot" aria-hidden="true"></span>7 Days</a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#booking">Запись</a>
+      <a href="#prices">Цены</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- 1. Первый экран -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <p class="status" data-hero><span class="status-dot" aria-hidden="true"></span>Открыто сейчас и всегда</p>
+      <h1 id="hero-title">
+        <span class="h1-top" data-hero>Автомойка</span>
+        <span class="h1-mega" data-hero-mega>24/7</span>
+      </h1>
+      <div class="puddle-wrap" aria-hidden="true" data-hero-mega><span class="puddle">24/7</span></div>
+      <p class="hero-name" data-hero>7 Days</p>
+      <p class="hero-sub" data-hero>Автомойка на улице Тон, 28к. Работаем круглосуточно, без выходных.</p>
+      <div class="hero-actions" data-hero>
+        <a class="btn btn-primary js-wa-simple" href="https://wa.me/996506950707" target="_blank" rel="noopener">
+          <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.6-2-1-1 .8a4 4 0 0 1-1.7-1.7l.8-1-1-2z"/></svg>
+          Записаться в WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="#booking">Выбрать время онлайн</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Онлайн-запись -->
+  <section class="section" id="booking" aria-labelledby="booking-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2 id="booking-title">Онлайн-запись</h2>
+        <p>Выберите услугу, день и час. Заявка уйдёт в WhatsApp готовым сообщением, ответим там же.</p>
+      </div>
+
+      <div class="booking-grid">
+        <div class="booking-form" data-reveal>
+          <fieldset class="step" id="step-service" aria-describedby="err-service">
+            <legend><span class="step-num" aria-hidden="true">1</span>Услуга</legend>
+            <div class="services" id="services"></div>
+            <p class="error" id="err-service" hidden></p>
+          </fieldset>
+
+          <fieldset class="step" id="step-day">
+            <legend><span class="step-num" aria-hidden="true">2</span>День</legend>
+            <div class="days od-rail" id="days"></div>
+          </fieldset>
+
+          <fieldset class="step" id="step-time" aria-describedby="err-time">
+            <legend><span class="step-num" aria-hidden="true">3</span>Время</legend>
+            <p class="step-hint">Слоты каждый час, круглые сутки. Время по Бишкеку.</p>
+            <div class="times" id="times"></div>
+            <p class="times-note" id="times-note" hidden>На сегодня свободных часов не осталось. Выберите завтра.</p>
+            <p class="error" id="err-time" hidden></p>
+          </fieldset>
+
+          <div class="step od-field" style="--od-gap: 8px">
+            <label for="car"><span class="step-num" aria-hidden="true" style="display:inline-flex;margin-right:12px;vertical-align:middle">4</span>Марка авто <span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="car" name="car" type="text" autocomplete="off" placeholder="Например, Toyota Camry" required aria-describedby="err-car" maxlength="60">
+            <p class="error" id="err-car" hidden></p>
+          </div>
+        </div>
+
+        <aside class="summary" aria-labelledby="sum-title" data-reveal>
+          <h3 id="sum-title">Ваша запись</h3>
+          <p class="summary-now" id="now-line">Сейчас в Бишкеке --:--</p>
+          <dl class="sum-list">
+            <div class="sum-row"><dt>Услуга</dt><dd id="sum-service" class="empty">не выбрана</dd></div>
+            <div class="sum-row"><dt>День</dt><dd id="sum-day" class="empty">не выбран</dd></div>
+            <div class="sum-row"><dt>Время</dt><dd id="sum-time" class="empty">не выбрано</dd></div>
+            <div class="sum-row"><dt>Авто</dt><dd id="sum-car" class="empty">не указано</dd></div>
+          </dl>
+          <a class="btn btn-primary" id="book-btn" href="https://wa.me/996506950707" target="_blank" rel="noopener">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.6-2-1-1 .8a4 4 0 0 1-1.7-1.7l.8-1-1-2z"/></svg>
+            Записаться в WhatsApp
+          </a>
+          <p class="error summary-error" id="err-summary" role="alert" hidden></p>
+          <p class="summary-note">Откроется WhatsApp с готовым текстом заявки, останется нажать «Отправить».</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Прайс -->
+  <section class="section" id="prices" aria-labelledby="prices-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2 id="prices-title">Цены</h2>
+        <p>Стоимость зависит от размера машины и загрязнения. Точную цену назовём в WhatsApp.</p>
+      </div>
+      <div class="prices">
+        <div class="price-group" data-reveal>
+          <h3>Мойка</h3>
+          <ul class="price-list">
+            <li class="price-row"><span class="price-name">Комплексная мойка</span><span class="price-val has"><small>от </small>700 с</span></li>
+            <li class="price-row"><span class="price-name">Бесконтактная мойка</span><span class="price-val">уточняйте</span></li>
+            <li class="price-row"><span class="price-name">Мойка двигателя</span><span class="price-val">уточняйте</span></li>
+            <li class="price-row"><span class="price-name">Мойка грузовиков</span><span class="price-val">уточняйте</span></li>
+          </ul>
+        </div>
+        <div class="price-group" data-reveal>
+          <h3>Уход</h3>
+          <ul class="price-list">
+            <li class="price-row"><span class="price-name">Химчистка салона</span><span class="price-val">уточняйте</span></li>
+            <li class="price-row"><span class="price-name">Полировка кузова</span><span class="price-val">уточняйте</span></li>
+            <li class="price-row"><span class="price-name">Тонирование стёкол</span><span class="price-val">уточняйте</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Фото -->
+  <section class="section" id="photo" aria-labelledby="photo-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2 id="photo-title">Тон, 28к</h2>
+        <p>Заезжайте в любое время, ночью тоже.</p>
+      </div>
+      <figure class="photo" id="photo-frame" data-reveal>
+        <div class="ph" aria-hidden="true">
+          <span class="ph-mark">7 Days</span>
+          <span class="ph-text">Здесь будет фото вашей мойки</span>
+        </div>
+        <img id="shop-img" src="../img/a-shop.webp" alt="Автомойка 7 Days на улице Тон, 28к" decoding="async" loading="lazy">
+      </figure>
+    </div>
+  </section>
+
+  <!-- 5. Контакты -->
+  <section class="section" id="contacts" aria-labelledby="contacts-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2 id="contacts-title">Контакты</h2>
+      </div>
+      <div class="contacts">
+        <dl class="c-list" data-reveal>
+          <div class="c-item">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <div><dt>Адрес</dt><dd>Бишкек, улица Тон, 28к</dd></div>
+          </div>
+          <div class="c-item">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <div><dt>Режим работы</dt><dd>Каждый день, круглосуточно</dd></div>
+          </div>
+          <div class="c-item">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>
+            <div><dt>Instagram</dt><dd><a href="https://instagram.com/automoika24.7" target="_blank" rel="noopener">@automoika24.7</a></dd></div>
+          </div>
+        </dl>
+        <div class="c-cta" data-reveal>
+          <p>Напишите, когда удобно. Мы на месте в любой час.</p>
+          <a class="btn btn-primary js-wa-simple" href="https://wa.me/996506950707" target="_blank" rel="noopener">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.6-2-1-1 .8a4 4 0 0 1-1.7-1.7l.8-1-1-2z"/></svg>
+            Написать в WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>7 Days, автомойка 24/7 в Бишкеке</span>
+    <span>Пример сайта. Цены и фото заменим на ваши.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var WA = "https://wa.me/996506950707";
+  var SERVICES = [
+    "Комплексная мойка", "Бесконтактная мойка", "Мойка двигателя", "Мойка грузовиков",
+    "Химчистка салона", "Полировка кузова", "Тонирование стёкол"
+  ];
+  var WD_SHORT = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
+  var WD_FULL = ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"];
+  var MON_GEN = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+  var MON_SHORT = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
+
+  var state = { service: "", day: 0, time: "", car: "", tried: false, carTouched: false };
+
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  // Время Бишкека: UTC+6 круглый год
+  function nowBishkek() {
+    var d = new Date(Date.now() + 6 * 3600 * 1000);
+    return { y: d.getUTCFullYear(), m: d.getUTCMonth(), d: d.getUTCDate(), h: d.getUTCHours(), min: d.getUTCMinutes() };
+  }
+  function dayInfo(i) {
+    var n = nowBishkek();
+    var dt = new Date(Date.UTC(n.y, n.m, n.d + i));
+    var wd = dt.getUTCDay(), date = dt.getUTCDate(), mon = dt.getUTCMonth();
+    var top = i === 0 ? "Сегодня" : i === 1 ? "Завтра" : WD_SHORT[wd].charAt(0).toUpperCase() + WD_SHORT[wd].slice(1);
+    var prefix = i === 0 ? "сегодня" : i === 1 ? "завтра" : WD_FULL[wd];
+    return { top: top, short: date + " " + MON_SHORT[mon], full: prefix + ", " + date + " " + MON_GEN[mon] };
+  }
+
+  function choiceHTML(name, value, label, checked, disabled, extra) {
+    var id = name + "-" + String(value).replace(/[^a-z0-9]/gi, "");
+    return '<label class="choice" for="' + id + '">' +
+      '<input type="radio" id="' + id + '" name="' + name + '" value="' + value + '"' +
+      (checked ? " checked" : "") + (disabled ? " disabled" : "") + '>' +
+      '<span class="face">' + (extra || label) + '</span></label>';
+  }
+
+  function renderServices() {
+    $("services").innerHTML = SERVICES.map(function (s, i) {
+      return choiceHTML("service", i, s, state.service === s, false);
+    }).join("");
+  }
+
+  function renderDays() {
+    var html = "";
+    for (var i = 0; i < 7; i++) {
+      var info = dayInfo(i);
+      html += choiceHTML("day", i, info.top, state.day === i, false,
+        '<span class="day-top">' + info.top + '</span><span class="day-date">' + info.short + '</span>');
+    }
+    $("days").innerHTML = html;
+  }
+
+  function renderTimes() {
+    var n = nowBishkek();
+    var html = "", free = 0;
+    for (var h = 0; h < 24; h++) {
+      var t = pad(h) + ":00";
+      var past = state.day === 0 && h <= n.h;
+      if (!past) free++;
+      if (past && state.time === t) state.time = "";
+      html += choiceHTML("time", h, t, state.time === t, past, '<span>' + t + '</span>');
+    }
+    $("times").innerHTML = html;
+    $("times-note").hidden = free !== 0;
+  }
+
+  function setSum(id, value, emptyText) {
+    var el = $(id);
+    el.textContent = value || emptyText;
+    el.classList.toggle("empty", !value);
+  }
+
+  function message() {
+    return "Здравствуйте! Хочу записаться на мойку в 7 Days: услуга: " + state.service +
+      ", день: " + dayInfo(state.day).full + ", время: " + state.time + ", авто: " + state.car;
+  }
+
+  function showError(id, text) {
+    var el = $(id);
+    if (!el) return;
+    if (text) {
+      el.innerHTML = '<svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span></span>';
+      el.querySelector("span").textContent = text;
+      el.hidden = false;
+    } else {
+      el.hidden = true;
+      el.textContent = "";
+    }
+  }
+
+  function validate(showAll) {
+    var errs = [];
+    var eService = !state.service ? "Выберите услугу, которую хотите записать." : "";
+    var eTime = !state.time ? "Выберите свободный час. Прошедшие часы сегодня недоступны." : "";
+    var eCar = !state.car ? "Укажите марку авто, например Toyota Camry." : "";
+    if (eService) errs.push("услугу");
+    if (eTime) errs.push("время");
+    if (eCar) errs.push("марку авто");
+    if (showAll || state.tried) {
+      showError("err-service", eService);
+      showError("err-time", eTime);
+    }
+    if (showAll || state.tried || state.carTouched) {
+      showError("err-car", eCar);
+      $("car").setAttribute("aria-invalid", eCar ? "true" : "false");
+    }
+    if (state.tried) {
+      showError("err-summary", errs.length ? "Осталось указать: " + errs.join(", ") + "." : "");
+    }
+    return errs.length === 0;
+  }
+
+  function update() {
+    setSum("sum-service", state.service, "не выбрана");
+    setSum("sum-day", dayInfo(state.day).full, "не выбран");
+    setSum("sum-time", state.time, "не выбрано");
+    setSum("sum-car", state.car, "не указано");
+    var ok = validate(false);
+    $("book-btn").href = ok ? WA + "?text=" + encodeURIComponent(message()) : WA;
+    var n = nowBishkek();
+    $("now-line").textContent = "Сейчас в Бишкеке " + pad(n.h) + ":" + pad(n.min);
+  }
+
+  // события: делегирование со стабильных контейнеров
+  $("services").addEventListener("change", function (e) {
+    if (e.target.name === "service") { state.service = SERVICES[+e.target.value]; update(); }
+  });
+  $("days").addEventListener("change", function (e) {
+    if (e.target.name === "day") { state.day = +e.target.value; renderTimes(); update(); }
+  });
+  $("times").addEventListener("change", function (e) {
+    if (e.target.name === "time") { state.time = pad(+e.target.value) + ":00"; update(); }
+  });
+  var car = $("car");
+  car.addEventListener("input", function () { state.car = car.value.trim(); update(); });
+  car.addEventListener("blur", function () { state.carTouched = true; update(); });
+
+  $("book-btn").addEventListener("click", function (e) {
+    state.tried = true;
+    state.car = car.value.trim();
+    if (!validate(true)) {
+      e.preventDefault();
+      update();
+      var first = !state.service ? $("services").querySelector("input") :
+                  !state.time ? $("times").querySelector("input:not(:disabled)") : car;
+      if (first) first.focus();
+      return;
+    }
+    this.href = WA + "?text=" + encodeURIComponent(message());
+  });
+
+  // простые ссылки WhatsApp без формы
+  var simple = document.querySelectorAll(".js-wa-simple");
+  for (var i = 0; i < simple.length; i++) {
+    simple[i].href = WA + "?text=" + encodeURIComponent("Здравствуйте! Хочу записаться на мойку в 7 Days.");
+  }
+
+  renderServices();
+  renderDays();
+  renderTimes();
+  update();
+
+  // раз в минуту обновляем часы и прошедшие слоты
+  setInterval(function () { renderDays(); renderTimes(); update(); }, 60000);
+
+  // фото с заглушкой
+  var img = $("shop-img"), frame = $("photo-frame");
+  function onImg() { if (img.naturalWidth > 0) frame.classList.add("is-loaded"); }
+  img.addEventListener("load", onImg);
+  img.addEventListener("error", function () { img.hidden = true; });
+  if (img.complete) { if (img.naturalWidth > 0) onImg(); else img.hidden = true; }
+
+  // GSAP: мягкие появления, отключаются при prefers-reduced-motion
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce && window.gsap) {
+    var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    tl.eventCallback("onComplete", function () { gsap.set("[data-hero],[data-hero-mega]", { clearProps: "transform,opacity" }); });
+    tl.from("[data-hero-mega]", { y: 40, opacity: 0, duration: 0.8, stagger: 0.08 }, 0)
+      .from("[data-hero]", { y: 16, opacity: 0, duration: 0.4, stagger: 0.05 }, 0.15);
+    if (window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      // контент виден всегда: gsap.from запускается только при входе в экран,
+      // до этого элемент не скрыт; по окончании инлайн-стили снимаются
+      gsap.utils.toArray("[data-reveal]").forEach(function (el) {
+        ScrollTrigger.create({
+          trigger: el, start: "top 95%", once: true,
+          onEnter: function () {
+            gsap.from(el, { y: 24, opacity: 0, duration: 0.4, ease: "power2.out", clearProps: "transform,opacity" });
+          }
+        });
+      });
+    }
+  }
+})();
+</script>
+</body>
+</html>
