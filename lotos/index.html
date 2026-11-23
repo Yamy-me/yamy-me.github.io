@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lotos: цветы на проспекте Чуй в Бишкеке</title>
+<meta name="description" content="Цветочный магазин Lotos в Бишкеке: букеты на заказ, розы, комнатные растения, доставка по городу. Открыто каждый день с 9:00 до 01:00.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/hero.webp">
+<script>
+  /* Motion is opt-in: hidden start states exist only when motion is allowed and GSAP actually starts. */
+  (function () {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var r = document.documentElement;
+    r.classList.add('anim');
+    setTimeout(function () { if (!window.__lotosAnim) r.classList.remove('anim'); }, 2500);
+  })();
+</script>
+<style>
+/* OD-LAYOUT-PRIMITIVES v1 */
+@layer od-layout {
+  [hidden]:not([hidden="until-found" i]) { display: none !important; }
+  dialog:not([open]) { display: none !important; }
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-field   { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-field) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+  .od-icon { display: inline-block; inline-size: var(--od-icon-size, 1em); block-size: var(--od-icon-size, 1em); flex: none; }
+  .od-nowrap  { white-space: nowrap; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+:root [hidden]:where(:not([hidden="until-found" i])) { display: none; }
+/* /OD-LAYOUT-PRIMITIVES v1 */
+
+:root {
+  --paper: #F3F4F0;
+  --surface: #E7EAE3;
+  --ink: #18201B;
+  --muted: #47514A;
+  --line: rgba(24, 32, 27, .16);
+  --accent: #A3261D;
+  --accent-hover: #861E16;
+  --on-accent: #FFFFFF;
+
+  --display: "Cormorant Garamond", "Times New Roman", serif;
+  --body: "Manrope", system-ui, sans-serif;
+
+  --r: 8px;
+  --wrap: 1280px;
+  --gutter: 24px;
+  --section: 128px;
+
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --fast: 200ms;
+  --bar-h: 80px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; letter-spacing: -.01em; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.skip { position: absolute; left: 16px; top: -80px; background: var(--ink); color: var(--paper); padding: 12px 16px; border-radius: var(--r); z-index: 30; }
+.skip:focus { top: 16px; }
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.section { padding-block: var(--section); }
+.lead { color: var(--muted); font-size: 18px; max-width: 52ch; }
+.h2 { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.08; max-width: 18ch; }
+.h2 em { font-style: italic; font-weight: 500; }
+.img-frame { border-radius: var(--r); overflow: hidden; background: var(--surface); }
+
+/* Buttons: one primary, one secondary */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  min-height: 52px; padding: 0 28px;
+  border-radius: var(--r); border: 1.5px solid var(--accent);
+  font: 600 16px/1 var(--body); letter-spacing: .01em; white-space: nowrap;
+  text-decoration: none; cursor: pointer;
+  transition: background-color var(--fast) var(--ease-out), color var(--fast) var(--ease-out), border-color var(--fast) var(--ease-out), transform 120ms var(--ease-out);
+}
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-secondary { background: transparent; color: var(--accent); }
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-secondary:hover { background: var(--accent); color: var(--on-accent); }
+}
+.btn:active { transform: translateY(1px); }
+.btn .od-icon { --od-icon-size: 18px; }
+
+/* Header */
+.site-header { padding-block: 16px; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 64px; }
+.logo { font: italic 500 34px/1 var(--display); text-decoration: none; letter-spacing: -.01em; display: inline-flex; align-items: center; min-height: 44px; }
+.nav { display: flex; align-items: center; gap: 8px; }
+.nav a:not(.btn) { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; text-decoration: none; font-weight: 500; font-size: 15px; color: var(--ink); border-radius: var(--r); }
+@media (hover: hover) { .nav a:not(.btn):hover { color: var(--accent); } }
+.nav .btn { min-height: 44px; padding: 0 20px; font-size: 15px; margin-left: 8px; }
+
+/* Hero */
+.hero { padding-block: 24px 112px; }
+.hero .wrap { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: center; }
+.hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.hero h1 { font-size: clamp(44px, 5.6vw, 84px); line-height: 1.02; letter-spacing: -.02em; }
+.hero h1 em { font-style: italic; font-weight: 500; }
+.hero .lead { font-size: 19px; max-width: 38ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px; }
+.hero-media { border-radius: var(--r); overflow: hidden; }
+.hero-media img { transform-origin: 50% 60%; }
+
+/* Bouquets */
+.section-head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 64px; }
+.bouquets-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.bouquets-grid > :nth-child(even) { margin-top: 72px; }
+.tile { color: var(--ink); text-decoration: none; display: grid; gap: 16px; border-radius: var(--r); }
+.tile .img-frame img { transition: transform 600ms var(--ease-out); }
+@media (hover: hover) { .tile:hover .img-frame img { transform: scale(1.04); } .tile:hover .tile-cta { color: var(--accent-hover); } }
+.tile-name { font: 600 28px/1.15 var(--display); }
+.tile-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; font-size: 15px; font-weight: 600; color: var(--accent); }
+.tile-cta .od-icon { --od-icon-size: 18px; transition: transform var(--fast) var(--ease-out); }
+@media (hover: hover) { .tile:hover .tile-cta .od-icon { transform: translateX(4px); } }
+.price-note { margin-top: 56px; color: var(--muted); font-size: 16px; }
+.price-note a { color: var(--accent); font-weight: 600; text-underline-offset: 3px; }
+
+/* Process */
+.process { background: var(--surface); }
+.steps { display: grid; grid-template-columns: 1.15fr 1.15fr .8fr; gap: 40px; align-items: start; }
+.steps > :nth-child(2) { margin-top: 96px; }
+.step { display: grid; gap: 24px; }
+.step h3 { font-size: 30px; line-height: 1.15; }
+.step p { color: var(--muted); max-width: 40ch; }
+.step-num { font: italic 500 22px/1 var(--display); color: var(--accent); }
+
+/* Plants */
+.plants-layout { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.plants-copy { grid-column: 1 / span 5; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; position: sticky; top: 48px; }
+.plants-a { grid-column: 6 / span 4; margin-top: 160px; }
+.plants-b { grid-column: 10 / span 3; }
+.plants-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.plants-list li { padding-left: 20px; position: relative; color: var(--muted); }
+.plants-list li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 1.5px; background: var(--accent); }
+
+/* Order */
+.order { background: var(--surface); }
+.order-layout { display: grid; grid-template-columns: 7fr 5fr; gap: 80px; align-items: center; }
+.order-form { display: grid; gap: 24px; margin-top: 40px; max-width: 560px; }
+.field { display: grid; gap: 8px; }
+.field label { font-weight: 600; font-size: 16px; }
+.field .req { color: var(--accent); }
+.field .help { color: var(--muted); font-size: 15px; }
+.control {
+  width: 100%; min-height: 52px; padding: 12px 16px;
+  font: 400 17px/1.4 var(--body); color: var(--ink);
+  background: #FBFBF9; border: 1.5px solid rgba(24, 32, 27, .28); border-radius: var(--r);
+  transition: border-color var(--fast) var(--ease-out);
+}
+textarea.control { min-height: 104px; resize: vertical; }
+select.control {
+  appearance: none; -webkit-appearance: none; padding-right: 48px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2318201B' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center; background-size: 20px;
+}
+.control::placeholder { color: #66706A; }
+@media (hover: hover) { .control:hover { border-color: rgba(24, 32, 27, .5); } }
+.control:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--ink); }
+.field.is-invalid .control { border-color: var(--accent); }
+.error { color: var(--accent); font-size: 15px; font-weight: 600; }
+.error::before { content: "! "; }
+.picked { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 4px 4px 16px; border: 1.5px dashed rgba(24, 32, 27, .3); border-radius: var(--r); font-size: 15px; }
+.picked b { font-weight: 700; }
+.link-btn { background: none; border: 0; color: var(--accent); font: 600 15px var(--body); cursor: pointer; padding: 0 12px; border-radius: var(--r); text-decoration: underline; text-underline-offset: 3px; }
+.summary { padding: 16px 20px; border: 1.5px solid var(--accent); border-radius: var(--r); background: #FBFBF9; }
+.summary p { font-weight: 700; margin-bottom: 8px; }
+.summary ul { margin: 0; padding-left: 20px; }
+.summary a { color: var(--accent); text-underline-offset: 3px; }
+.form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.form-foot .help { color: var(--muted); font-size: 15px; max-width: 32ch; }
+.success { padding: 16px 20px; border-radius: var(--r); background: var(--ink); color: var(--paper); }
+.success a { color: #FFFFFF; font-weight: 700; text-underline-offset: 3px; }
+
+/* Find us */
+.find-layout { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+.find-head { grid-column: 1 / -1; margin-bottom: 40px; }
+.find-media { grid-column: 1 / span 6; }
+.find-info { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 40px; }
+.facts { display: grid; gap: 28px; margin: 0; }
+.facts div { display: grid; gap: 4px; }
+.facts dt { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-size: 18px; line-height: 1.5; }
+.find-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); padding-block: 48px; }
+.site-footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
+.foot-note { color: var(--muted); font-size: 15px; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.foot-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-weight: 600; text-decoration: none; border-radius: var(--r); }
+@media (hover: hover) { .foot-links a:hover { color: var(--accent); } }
+
+/* Sticky mobile bar */
+.mobile-bar { display: none; }
+
+/* Motion start states: only with html.anim (set only when motion is allowed) */
+html.anim [data-hero], html.anim [data-reveal] { opacity: 0; transform: translateY(24px); }
+html.anim [data-clip] { clip-path: inset(100% 0% 0% 0%); }
+html.anim .hero-media img { transform: scale(1.08); }
+
+/* Tablet */
+@media (max-width: 1023px) {
+  :root { --section: 96px; }
+  .hero .wrap { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .nav a:not(.btn) { display: none; }
+  .bouquets-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+  .bouquets-grid > :nth-child(even) { margin-top: 48px; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .steps > :nth-child(2) { margin-top: 64px; }
+  .steps > :nth-child(3) { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+  .plants-copy { grid-column: 1 / -1; position: static; margin-bottom: 24px; }
+  .plants-a { grid-column: 1 / span 7; margin-top: 0; }
+  .plants-b { grid-column: 8 / span 5; margin-top: 96px; }
+  .order-layout { grid-template-columns: 1fr; gap: 56px; }
+  .order-media { max-width: 520px; }
+  .find-media { grid-column: 1 / -1; }
+  .find-info { grid-column: 1 / -1; margin-top: 24px; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  :root { --gutter: 16px; --section: 72px; }
+  body { font-size: 16px; padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); }
+  .site-header { padding-block: 8px; }
+  .nav { display: none; }
+  .hero { padding-block: 8px 72px; }
+  .hero .wrap { grid-template-columns: 1fr; gap: 32px; }
+  .hero h1 { font-size: clamp(40px, 11vw, 52px); }
+  .hero .lead { font-size: 17px; }
+  .hero-actions { width: 100%; }
+  .hero-actions .btn { flex: 1 1 100%; }
+  .section-head { margin-bottom: 40px; }
+  .bouquets-grid { gap: 32px 12px; }
+  .bouquets-grid > :nth-child(even) { margin-top: 0; }
+  .tile { gap: 12px; }
+  .tile-name { font-size: 22px; }
+  .tile-cta { font-size: 14px; }
+  .price-note { margin-top: 40px; }
+  .steps { grid-template-columns: 1fr; gap: 56px; }
+  .steps > :nth-child(2) { margin-top: 0; }
+  .steps > :nth-child(3) { grid-template-columns: 1fr; }
+  .steps > :nth-child(3) .img-frame { max-width: 280px; }
+  .step h3 { font-size: 26px; }
+  .plants-a { grid-column: 1 / span 7; }
+  .plants-b { grid-column: 8 / span 5; margin-top: 64px; }
+  .plants-layout { gap: 12px; }
+  .order-layout { gap: 48px; }
+  .order-form { margin-top: 32px; }
+  .form-foot .btn { width: 100%; }
+  .find-head { margin-bottom: 24px; }
+  .find-actions .btn { flex: 1 1 100%; }
+  .site-footer { padding-block: 32px; }
+
+  .mobile-bar {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(243, 244, 240, .96);
+    border-top: 1px solid var(--line);
+    transition: transform 250ms var(--ease-out), visibility 0s linear 0s;
+  }
+  .mobile-bar .btn { width: 100%; }
+  .mobile-bar.is-away { transform: translateY(110%); visibility: hidden; transition: transform 180ms ease-in, visibility 0s linear 180ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+  .tile .img-frame img { transform: none !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Lotos, на главную">Lotos</a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="#bouquets">Букеты</a>
+      <a href="#process">Как собираем</a>
+      <a href="#plants">Растения</a>
+      <a href="#contacts">Контакты</a>
+      <a class="btn btn-primary" href="#order">Заказать букет</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow" data-hero>Цветочный магазин Lotos</p>
+        <h1 id="hero-title" data-hero>Цветы на проспекте Чуй <em>в&nbsp;Бишкеке</em></h1>
+        <p class="lead" data-hero>Букеты, комнатные растения и доставка по городу. Открыто каждый день с&nbsp;<span class="od-nowrap">9:00</span> до&nbsp;<span class="od-nowrap">01:00</span>.</p>
+        <div class="hero-actions" data-hero>
+          <a class="btn btn-primary" href="#order">Заказать букет</a>
+          <a class="btn btn-secondary" href="https://wa.me/996703400089?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%B8%D1%88%D1%83%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20Lotos." target="_blank" rel="noopener">Написать в WhatsApp</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img class="od-media" src="img/hero.webp" width="1800" height="1200" fetchpriority="high" alt="Флорист Lotos подрезает стебли цветов для букета">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bouquets" aria-labelledby="bouquets-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2" id="bouquets-title" data-reveal>Букеты на&nbsp;заказ</h2>
+        <p class="lead" data-reveal>Выберите букет, который нравится, и флорист соберёт похожий из свежих цветов.</p>
+      </div>
+      <div class="bouquets-grid">
+        <a class="tile" href="#order" data-pick="Микс из роз" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media od-media-cover" style="--od-ratio: 4 / 5" src="img/b-roses-mix.webp" width="960" height="960" loading="lazy" alt="Букет из роз разных оттенков"></div>
+          <div class="tile-name">Микс из&nbsp;роз</div>
+          <div class="tile-cta">Заказать такой <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        </a>
+        <a class="tile" href="#order" data-pick="Георгины" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media od-media-cover" style="--od-ratio: 4 / 5" src="img/b-dahlias.webp" width="960" height="948" loading="lazy" alt="Букет с георгинами"></div>
+          <div class="tile-name">Георгины</div>
+          <div class="tile-cta">Заказать такой <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        </a>
+        <a class="tile" href="#order" data-pick="Оранжевые розы" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media od-media-cover" style="--od-ratio: 4 / 5" src="img/b-roses-orange.webp" width="960" height="720" loading="lazy" alt="Букет из оранжевых роз"></div>
+          <div class="tile-name">Оранжевые розы</div>
+          <div class="tile-cta">Заказать такой <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        </a>
+        <a class="tile" href="#order" data-pick="Тюльпаны" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media od-media-cover" style="--od-ratio: 4 / 5" src="img/b-tulips.webp" width="960" height="1693" loading="lazy" alt="Букет из тюльпанов"></div>
+          <div class="tile-name">Тюльпаны</div>
+          <div class="tile-cta">Заказать такой <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        </a>
+      </div>
+      <p class="price-note" data-reveal>Цены зависят от цветов и размера букета. Цену подскажем в&nbsp;<a href="https://wa.me/996703400089?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%B8%D1%88%D1%83%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20Lotos." target="_blank" rel="noopener">WhatsApp</a>.</p>
+    </div>
+  </section>
+
+  <section class="section process" id="process" aria-labelledby="process-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="h2" id="process-title" data-reveal>Как собираем <em>букет</em></h2>
+      </div>
+      <ol class="steps" style="list-style:none;padding:0;margin:0">
+        <li class="step" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media" src="img/stems-bucket.webp" width="1200" height="900" loading="lazy" alt="Свежие цветы в ведре перед сборкой букета"></div>
+          <div class="od-stack" style="--od-gap:12px">
+            <span class="step-num">01</span>
+            <h3>Расскажите, для кого</h3>
+            <p>Напишите, кому букет и какой у вас бюджет. Мы пришлём фото цветов, которые есть сегодня.</p>
+          </div>
+        </li>
+        <li class="step" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media" src="img/wrapping.webp" width="1200" height="800" loading="lazy" alt="Флорист упаковывает букет в крафтовую бумагу"></div>
+          <div class="od-stack" style="--od-gap:12px">
+            <span class="step-num">02</span>
+            <h3>Собираем и показываем</h3>
+            <p>Флорист собирает букет и присылает фото готового, чтобы вы увидели его до отправки.</p>
+          </div>
+        </li>
+        <li class="step" data-reveal>
+          <div class="img-frame" data-clip><img class="od-media" src="img/in-hand.webp" width="960" height="1702" loading="lazy" alt="Готовый букет в руке"></div>
+          <div class="od-stack" style="--od-gap:12px">
+            <span class="step-num">03</span>
+            <h3>Доставляем</h3>
+            <p>Привезём по Бишкеку или подготовим к самовывозу. Забрать можно до часу ночи.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="plants" aria-labelledby="plants-title">
+    <div class="wrap plants-layout">
+      <div class="plants-copy">
+        <h2 class="h2" id="plants-title" data-reveal>Комнатные растения и&nbsp;подарки</h2>
+        <p class="lead" data-reveal>Растения в горшках для дома и в подарок. К букету можно добавить мягкую игрушку.</p>
+        <ul class="plants-list" data-reveal>
+          <li>Комнатные растения в горшках</li>
+          <li>Розы поштучно и в букетах</li>
+          <li>Мягкие игрушки к букету</li>
+        </ul>
+        <a class="btn btn-secondary" href="https://wa.me/996703400089?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%B8%D1%88%D1%83%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20Lotos." target="_blank" rel="noopener" data-reveal>Написать в WhatsApp</a>
+      </div>
+      <div class="plants-a img-frame" data-clip><img class="od-media" src="img/plant-pot.webp" width="960" height="1291" loading="lazy" alt="Комнатное растение в горшке"></div>
+      <div class="plants-b img-frame" data-clip><img class="od-media" src="img/jug.webp" width="960" height="1440" loading="lazy" alt="Цветы и растения в горшках"></div>
+    </div>
+  </section>
+
+  <section class="section order" id="order" aria-labelledby="order-title">
+    <div class="wrap order-layout">
+      <div>
+        <h2 class="h2" id="order-title" data-reveal>Заказать букет</h2>
+        <p class="lead" style="margin-top:16px" data-reveal>Заполните три поля, и мы откроем WhatsApp с готовым сообщением. Цену подскажем в ответ.</p>
+
+        <form class="order-form" id="order-form" novalidate data-reveal>
+          <div class="summary" id="form-summary" tabindex="-1" hidden>
+            <p>Проверьте, пожалуйста:</p>
+            <ul id="summary-list"></ul>
+          </div>
+
+          <div class="field" id="field-what">
+            <label for="what">Что нужно <span class="req" aria-hidden="true">*</span></label>
+            <select class="control" id="what" name="what" required aria-describedby="what-error">
+              <option value="">Выберите</option>
+              <option>Букет</option>
+              <option>Розы</option>
+              <option>Комнатное растение</option>
+              <option>Букет с игрушкой</option>
+            </select>
+            <div class="picked" id="picked" hidden>
+              <span>Как на фото: <b id="picked-name"></b></span>
+              <button type="button" class="link-btn od-touch" id="picked-clear">Убрать</button>
+            </div>
+            <p class="error" id="what-error" role="alert" hidden></p>
+          </div>
+
+          <div class="field" id="field-when">
+            <label for="when">Когда и куда <span class="req" aria-hidden="true">*</span></label>
+            <span class="help" id="when-help">Например: завтра к 18:00, улица и дом. Или «самовывоз».</span>
+            <textarea class="control" id="when" name="when" rows="3" required aria-describedby="when-help when-error"></textarea>
+            <p class="error" id="when-error" role="alert" hidden></p>
+          </div>
+
+          <div class="field" id="field-name">
+            <label for="name">Имя <span class="req" aria-hidden="true">*</span></label>
+            <input class="control" id="name" name="name" type="text" autocomplete="given-name" required aria-describedby="name-error">
+            <p class="error" id="name-error" role="alert" hidden></p>
+          </div>
+
+          <div class="form-foot">
+            <button class="btn btn-primary" type="submit">Отправить в WhatsApp</button>
+            <span class="help">Откроется WhatsApp в новой вкладке. Сообщение можно поправить перед отправкой.</span>
+          </div>
+
+          <p class="success" id="form-success" role="status" hidden>Открыли WhatsApp с вашим сообщением. Если вкладка не открылась, <a id="success-link" href="https://wa.me/996703400089" target="_blank" rel="noopener">нажмите здесь</a>.</p>
+        </form>
+      </div>
+      <div class="order-media img-frame" data-clip>
+        <img class="od-media" src="img/poppies.webp" width="960" height="1380" loading="lazy" alt="Букет с маками">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contacts" aria-labelledby="contacts-title">
+    <div class="wrap find-layout">
+      <div class="find-head">
+        <h2 class="h2" id="contacts-title" data-reveal>Как нас найти</h2>
+      </div>
+      <div class="find-media img-frame" data-clip>
+        <img class="od-media" src="img/shop-vase.webp" width="960" height="720" loading="lazy" alt="Букет в стеклянной вазе в магазине Lotos">
+      </div>
+      <div class="find-info">
+        <dl class="facts">
+          <div data-reveal>
+            <dt>Адрес</dt>
+            <dd>Проспект Чуй, у&nbsp;Осмонкула, Свердловский район. В здании «Я&nbsp;Оптовик», 1&nbsp;этаж.</dd>
+          </div>
+          <div data-reveal>
+            <dt>Часы работы</dt>
+            <dd>Каждый день с&nbsp;<span class="od-nowrap">9:00</span> до&nbsp;<span class="od-nowrap">01:00</span></dd>
+          </div>
+          <div data-reveal>
+            <dt>Доставка</dt>
+            <dd>Доставляем цветы по Бишкеку. Самовывоз из магазина.</dd>
+          </div>
+          <div data-reveal>
+            <dt>Оплата</dt>
+            <dd>Наличные, перевод с карты, QR</dd>
+          </div>
+        </dl>
+        <div class="find-actions" data-reveal>
+          <a class="btn btn-primary" href="https://wa.me/996703400089?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%B8%D1%88%D1%83%20%D1%81%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20Lotos." target="_blank" rel="noopener">Написать в WhatsApp</a>
+          <a class="btn btn-secondary" href="https://2gis.kg/bishkek/firm/70000001099449254" target="_blank" rel="noopener">Открыть в 2GIS</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="od-stack" style="--od-gap:4px">
+      <a class="logo" href="#top">Lotos</a>
+      <span class="foot-note">Цветочный магазин на проспекте Чуй, Бишкек</span>
+    </div>
+    <nav class="foot-links" aria-label="Мы в соцсетях">
+      <a href="https://instagram.com/lotos_flowers_2025" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/996703400089" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://2gis.kg/bishkek/firm/70000001099449254" target="_blank" rel="noopener">2GIS</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="mobile-bar" id="mobile-bar">
+  <a class="btn btn-primary" href="#order">Заказать букет</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var WA = 'https://wa.me/996703400089';
+
+  /* ---------- Order form ---------- */
+  var form = document.getElementById('order-form');
+  var what = document.getElementById('what');
+  var when = document.getElementById('when');
+  var name = document.getElementById('name');
+  var picked = document.getElementById('picked');
+  var pickedName = document.getElementById('picked-name');
+  var summary = document.getElementById('form-summary');
+  var summaryList = document.getElementById('summary-list');
+  var success = document.getElementById('form-success');
+  var successLink = document.getElementById('success-link');
+  var pickedBouquet = '';
+
+  var messages = {
+    what: 'Выберите, что нужно: букет, розы, растение или букет с игрушкой.',
+    when: 'Напишите, когда и куда доставить, или укажите «самовывоз».',
+    name: 'Укажите имя, чтобы флорист знал, как к вам обращаться.'
+  };
+
+  function errorFor(field) {
+    var v = field.value.trim();
+    if (field === what) return v ? '' : messages.what;
+    if (field === when) return v.length >= 3 ? '' : messages.when;
+    if (field === name) return v.length >= 2 ? '' : messages.name;
+    return '';
+  }
+
+  function show(field, msg) {
+    var box = document.getElementById(field.id + '-error');
+    var wrap = field.closest('.field');
+    field.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (wrap) wrap.classList.toggle('is-invalid', !!msg);
+    if (box) { box.textContent = msg; box.hidden = !msg; }
+  }
+
+  function validate(field) { var msg = errorFor(field); show(field, msg); return !msg; }
+
+  [what, when, name].forEach(function (f) {
+    f.addEventListener('input', function () {
+      f.dataset.touched = '1';
+      if (f.getAttribute('aria-invalid') === 'true') validate(f);
+    });
+    f.addEventListener('change', function () { f.dataset.touched = '1'; validate(f); });
+    f.addEventListener('blur', function () { if (f.dataset.touched) validate(f); });
+  });
+
+  what.addEventListener('change', function () {
+    if (what.value.indexOf('Букет') !== 0) { pickedBouquet = ''; picked.hidden = true; }
+  });
+
+  document.addEventListener('click', function (e) {
+    var tile = e.target.closest('[data-pick]');
+    if (!tile) return;
+    pickedBouquet = tile.getAttribute('data-pick');
+    pickedName.textContent = pickedBouquet;
+    picked.hidden = false;
+    if (what.value.indexOf('Букет') !== 0) what.value = 'Букет';
+    show(what, '');
+    success.hidden = true;
+  });
+
+  document.getElementById('picked-clear').addEventListener('click', function () {
+    pickedBouquet = '';
+    picked.hidden = true;
+    what.focus();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    success.hidden = true;
+    var bad = [what, when, name].filter(function (f) { return !validate(f); });
+    summaryList.textContent = '';
+    if (bad.length) {
+      if (bad.length > 1) {
+        bad.forEach(function (f) {
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.href = '#' + f.id;
+          a.textContent = errorFor(f);
+          a.addEventListener('click', function (ev) { ev.preventDefault(); f.focus(); });
+          li.appendChild(a);
+          summaryList.appendChild(li);
+        });
+        summary.hidden = false;
+        summary.focus();
+      } else {
+        summary.hidden = true;
+        bad[0].focus();
+      }
+      return;
+    }
+    summary.hidden = true;
+    var item = what.value;
+    if (pickedBouquet && item.indexOf('Букет') === 0) item += ' (как на фото на сайте: ' + pickedBouquet + ')';
+    var text = [
+      'Здравствуйте! Хочу сделать заказ в Lotos.',
+      'Что нужно: ' + item,
+      'Когда и куда: ' + when.value.trim(),
+      'Имя: ' + name.value.trim()
+    ].join('\n');
+    var url = WA + '?text=' + encodeURIComponent(text);
+    successLink.href = url;
+    window.open(url, '_blank', 'noopener');
+    success.hidden = false;
+  });
+
+  /* ---------- Sticky mobile bar: steps aside while the form is on screen ---------- */
+  var bar = document.getElementById('mobile-bar');
+  var orderSection = document.getElementById('order');
+  if ('IntersectionObserver' in window && bar && orderSection) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { bar.classList.toggle('is-away', en.isIntersecting); });
+    }, { threshold: 0.15 }).observe(orderSection);
+  }
+
+  /* ---------- Motion (only when allowed and GSAP loaded) ---------- */
+  var root = document.documentElement;
+  if (!root.classList.contains('anim')) return;
+  if (!window.gsap || !window.ScrollTrigger) { root.classList.remove('anim'); return; }
+  window.__lotosAnim = true;
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .fromTo('[data-hero]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, 0.1)
+    .fromTo('.hero-media', { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'power2.inOut' }, 0)
+    .fromTo('.hero-media img', { scale: 1.08 }, { scale: 1, duration: 1.4 }, 0);
+
+  ScrollTrigger.batch('[data-reveal]', {
+    start: 'top 90%',
+    once: true,
+    onEnter: function (els) {
+      gsap.fromTo(els, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out', overwrite: true });
+    }
+  });
+
+  ScrollTrigger.batch('[data-clip]', {
+    start: 'top 88%',
+    once: true,
+    onEnter: function (els) {
+      gsap.fromTo(els, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, stagger: 0.08, ease: 'power2.inOut', overwrite: true });
+    }
+  });
+
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>
